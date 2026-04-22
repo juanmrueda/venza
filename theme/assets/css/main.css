@@ -243,103 +243,121 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
    ============================================================ */
 .home-hero {
     position: relative;
-    min-height: 70vh;
+    min-height: 75vh;
     overflow: hidden;
     background: var(--color-navy);
 }
-.home-hero__media { position: absolute; inset: 0; }
-.home-hero__media img,
-.home-hero__media video { width: 100%; height: 100%; object-fit: cover; }
-
-/* Placeholder hasta que llegue el video */
-.home-hero__placeholder {
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, var(--color-navy) 0%, #1a1240 40%, #2d4a7a 100%);
-    display: flex; align-items: center; justify-content: center;
+/* PLACEHOLDER: fondo agua con banner hasta que llegue el video */
+.home-hero__bg {
+    position: absolute; inset: 0;
+    background: url('../images/banners/coco.jpg') center center / cover no-repeat;
 }
-.home-hero__placeholder-inner {
-    display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
-    opacity: 0.15;
+.home-hero__bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom,
+        rgba(43,37,94,0.3) 0%,
+        rgba(43,37,94,0.1) 50%,
+        rgba(43,37,94,0.6) 100%);
 }
-.home-hero__logo-bg { width: 320px; filter: brightness(0) invert(1); }
-
-.home-hero__overlay {
+/* Video: cuando llegue, reemplazar .home-hero__bg con <video> */
+.home-hero__bg video {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%; object-fit: cover;
+}
+.home-hero__gradient { display: none; } /* legacy */
+.home-hero__bottom {
     position: relative;
     z-index: 2;
     display: flex;
     align-items: flex-end;
-    min-height: 70vh;
-    padding-bottom: 3rem;
+    min-height: 75vh;
+    padding-bottom: 2.5rem;
 }
-.home-hero__tagline-box {
-    background: rgba(255,255,255,0.92);
-    padding: 1.25rem 2rem;
+.home-hero__tagline-strip {
+    background: rgba(255,255,255,0.93);
+    padding: 1.1rem 2rem;
     border-radius: var(--radius-md);
-    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    font-size: clamp(0.8rem, 1.3vw, 0.95rem);
     color: var(--color-navy);
-    max-width: 680px;
-    border-left: 4px solid var(--color-green);
-    backdrop-filter: blur(4px);
+    max-width: 720px;
+    backdrop-filter: blur(6px);
+    line-height: 1.6;
 }
-.home-hero__tagline-box strong { color: var(--color-green); }
+.home-hero__tagline-strip strong { color: var(--color-green); font-weight: 700; }
+.home-hero__tagline-strip em { font-style: italic; color: var(--color-navy); }
 
 /* ============================================================
-   HOME — PRODUCTOS DESTACADOS
+   HOME — PRODUCTOS
    ============================================================ */
+.home-productos { padding: 5rem 0; background: var(--color-white); }
 
-.productos-destacados { padding: 5rem 0; }
 .section-title {
     font-family: var(--font-display);
-    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-size: clamp(2.5rem, 5vw, 4rem);
     color: var(--color-navy);
     text-align: center;
     margin-bottom: 3rem;
-    letter-spacing: -0.01em;
 }
 .section-subtitle {
     text-align: center;
     color: var(--color-text-light);
-    margin-top: -2rem;
-    margin-bottom: 2.5rem;
+    margin-top: -2.5rem;
+    margin-bottom: 3rem;
+    font-size: 1rem;
 }
-.producto-linea-label {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-green);
-    margin-bottom: 0.5rem;
-}
-.producto-card-featured {
+
+/* Fila de producto */
+.home-producto-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4rem;
+    gap: 5rem;
     align-items: center;
-    padding: 4rem 0;
-    border-bottom: 1px solid var(--color-bg-light);
+    padding: 3.5rem 0;
+    border-bottom: 1px solid #f0f2f8;
 }
-.producto-card-featured--reverse {
-    direction: rtl;
+.home-producto-row:last-child { border-bottom: none; }
+.home-producto-row--reverse { direction: rtl; }
+.home-producto-row--reverse > * { direction: ltr; }
+
+.home-producto-row__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.producto-card-featured--reverse > * { direction: ltr; }
-.producto-card-featured:last-child { border-bottom: none; }
-.producto-card-featured__img {
-    width: 100%;
-    max-height: 420px;
+.home-producto-row__img {
+    max-width: 100%;
+    max-height: 380px;
     object-fit: contain;
-    filter: drop-shadow(0 16px 40px rgba(43,37,94,0.15));
-    transition: transform 0.4s ease;
+    filter: drop-shadow(0 20px 50px rgba(43,37,94,0.18));
+    transition: transform 0.45s ease;
 }
-.producto-card-featured__img:hover { transform: scale(1.03); }
-.producto-card-featured__content { display: flex; flex-direction: column; gap: 1rem; }
-.producto-card-featured__content h3 {
+.home-producto-row__img:hover { transform: translateY(-6px) scale(1.02); }
+
+.home-producto-row__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.home-producto-linea {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-green);
+}
+.home-producto-nombre {
     font-family: var(--font-display);
-    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
     color: var(--color-navy);
-    line-height: 1.2;
+    line-height: 1.15;
 }
-.producto-card-featured__content p { color: var(--color-gray); font-size: 1rem; line-height: 1.7; }
+.home-producto-desc {
+    color: var(--color-gray);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    max-width: 440px;
+}
 
 /* ============================================================
    PRODUCTO — HERO
@@ -697,57 +715,100 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     padding: 5rem 0;
     background: var(--color-bg-light);
 }
-.home-beneficios__grid {
+.home-beneficios__layout {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: 1fr 260px 1fr;
     gap: 3rem;
     align-items: center;
-    margin-top: 2rem;
+    margin-top: 1rem;
 }
-.home-beneficio-col { display: flex; flex-direction: column; gap: 2rem; }
-.home-beneficio-col--right .home-beneficio-item { text-align: right; flex-direction: row-reverse; }
-.home-beneficio-item { display: flex; align-items: flex-start; gap: 1rem; }
-.home-beneficio-item__icon {
-    font-size: 1.3rem; flex-shrink: 0;
-    width: 44px; height: 44px;
-    background: var(--color-white); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: var(--shadow-card);
+.home-beneficios__col {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
 }
-.home-beneficio-item h4 { font-size: 0.9rem; font-weight: 700; color: var(--color-navy); margin-bottom: 0.2rem; }
-.home-beneficio-item p { font-size: 0.82rem; color: var(--color-gray); line-height: 1.5; }
-.home-beneficios__producto-center { width: 200px; flex-shrink: 0; }
-.home-beneficios__producto-img {
-    width: 100%; object-fit: contain;
+.home-beneficios__col--right .home-beneficio { text-align: right; }
+.home-beneficio { display: flex; flex-direction: column; gap: 0.3rem; }
+.home-beneficio h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-navy);
+}
+.home-beneficio p {
+    font-size: 0.82rem;
+    color: var(--color-gray);
+    line-height: 1.55;
+}
+.home-beneficios__producto {
+    display: flex;
+    justify-content: center;
+}
+.home-beneficios__img {
+    width: 100%;
+    max-width: 240px;
+    object-fit: contain;
     filter: drop-shadow(0 20px 40px rgba(43,37,94,0.2));
 }
 
 /* ============================================================
    HOME — VENZA HOY
    ============================================================ */
-.home-venza-hoy { padding: 5rem 0; }
+.home-venza-hoy { padding: 5rem 0; background: var(--color-white); }
+.home-venza-hoy__subtitle {
+    text-align: center;
+    color: var(--color-gray);
+    font-size: 0.95rem;
+    margin-top: -2.5rem;
+    margin-bottom: 3rem;
+}
 .venza-hoy-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 1.5rem;
 }
 .venza-hoy-card {
-    background: var(--color-white);
     border-radius: var(--radius-lg);
     overflow: hidden;
     box-shadow: var(--shadow-card);
+    background: var(--color-white);
     transition: transform var(--transition), box-shadow var(--transition);
+    display: flex;
+    flex-direction: column;
 }
-.venza-hoy-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
-.venza-hoy-card__image img { width: 100%; height: 200px; object-fit: cover; }
+.venza-hoy-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+.venza-hoy-card__img-wrap { overflow: hidden; }
+.venza-hoy-card__img {
+    width: 100%; height: 200px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    display: block;
+}
+.venza-hoy-card:hover .venza-hoy-card__img { transform: scale(1.04); }
 .venza-hoy-card__placeholder {
     width: 100%; height: 200px;
-    background: linear-gradient(135deg, var(--color-bg-light), var(--color-blue-light));
+    background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-blue-light) 100%);
+    opacity: 0.6;
 }
-.venza-hoy-card__content { padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
-.venza-hoy-card__content h3 { font-size: 1rem; font-weight: 700; color: var(--color-navy); }
-.venza-hoy-card__content p { font-size: 0.875rem; color: var(--color-gray); line-height: 1.5; }
+.venza-hoy-card__body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+}
+.venza-hoy-card__body h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-navy);
+    line-height: 1.3;
+}
+.venza-hoy-card__body p {
+    font-size: 0.82rem;
+    color: var(--color-gray);
+    line-height: 1.55;
+    flex: 1;
+}
+.venza-hoy-card__body .btn { align-self: flex-start; }
 
 /* ============================================================
    BENEFICIOS (página)
@@ -788,7 +849,19 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     .beneficio-item--reverse { direction: ltr; }
 }
 
+@media (max-width: 1024px) {
+    .home-beneficios__layout { grid-template-columns: 1fr; }
+    .home-beneficios__producto { order: -1; }
+    .home-beneficios__col--right .home-beneficio { text-align: left; }
+    .home-producto-row { gap: 3rem; }
+}
+
 @media (max-width: 768px) {
+    .home-producto-row { grid-template-columns: 1fr; gap: 2rem; }
+    .home-producto-row--reverse { direction: ltr; }
+    .home-producto-row__img { max-height: 280px; }
+    .venza-hoy-grid { grid-template-columns: 1fr; }
+    .home-beneficios__layout { grid-template-columns: 1fr; gap: 2rem; }
     .nav-toggle { display: flex; }
     .site-nav {
         display: none;

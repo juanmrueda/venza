@@ -1,0 +1,51 @@
+# WordPress core — no versionar
+wordpress/
+wp-admin/
+wp-includes/
+wp-*.php
+xmlrpc.php
+license.txt
+readme.html
+
+# WordPress uploads
+wp-content/uploads/
+
+# Plugins (se instalan desde WP admin)
+wp-content/plugins/
+
+# Otros temas
+wp-content/themes/twenty*/
+
+# Configuración local sensible
+wp-config.php
+wp-config-local.php
+.env
+.env.local
+
+# Logs
+*.log
+debug.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (si usamos herramientas de build en el futuro)
+node_modules/
+package-lock.json
+
+# Build
+dist/
+*.min.css.map
+*.min.js.map
+
+# Deploy
+deploy/*.pem
+deploy/*.key

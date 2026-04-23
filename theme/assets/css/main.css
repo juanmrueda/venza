@@ -2355,11 +2355,26 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
    BENEFICIOS (mock actualizado)
    ============================================================ */
 .beneficios-page {
+    --beneficios-bg-strength: 0.35;
     position: relative;
     isolation: isolate;
     overflow: hidden;
     padding: clamp(2.5rem, 5vw, 4.6rem) 0 clamp(3rem, 6vw, 5.2rem);
     background: #e8f1fb;
+}
+
+.beneficios-page__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -4;
+    overflow: hidden;
+}
+
+.beneficios-page__bg img,
+.beneficios-page__bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .beneficios-page::before {
@@ -2389,6 +2404,17 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     background-size: 460px 260px, 540px 300px, 500px 280px;
     background-position: 0 0, 100% 24%, 38% 72%;
     background-repeat: repeat-y;
+}
+
+.beneficios-page--bg-image::before,
+.beneficios-page--bg-video::before {
+    background:
+        linear-gradient(180deg, rgba(223, 237, 248, 0.8) 0%, rgba(232, 241, 251, 0.82) 42%, rgba(234, 242, 252, 0.86) 100%);
+}
+
+.beneficios-page--bg-image::after,
+.beneficios-page--bg-video::after {
+    opacity: var(--beneficios-bg-strength, 0.35);
 }
 
 .beneficios-page__header {

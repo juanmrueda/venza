@@ -9,6 +9,7 @@ define('VENZA_URI', get_template_directory_uri());
 require_once VENZA_DIR . '/inc/cpt.php';
 require_once VENZA_DIR . '/inc/helpers.php';
 require_once VENZA_DIR . '/inc/acf-producto-home.php';
+require_once VENZA_DIR . '/inc/acf-page-beneficios.php';
 
 // Soporte del tema
 add_action('after_setup_theme', function () {

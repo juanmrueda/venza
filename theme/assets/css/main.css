@@ -2203,6 +2203,11 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     line-height: 1.1;
 }
 
+.producto-frescura-descripcion__texto-inner p {
+    font-size: inherit;
+    line-height: inherit;
+}
+
 .producto-frescura-descripcion__texto-inner p + p {
     margin-top: 1.25rem;
 }
@@ -2288,7 +2293,8 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
         font-size: clamp(1.5rem, 3.3vw, 3.2rem);
     }
 
-    .producto-frescura-descripcion__texto-inner {
+    .producto-frescura-descripcion__texto-inner,
+    .producto-frescura-descripcion__texto-inner p {
         font-size: clamp(1.8rem, 3.2vw, 3.8rem);
     }
 }

@@ -15,7 +15,7 @@
             if (has_custom_logo()) {
                 the_custom_logo();
             } else {
-                echo '<img src="' . VENZA_URI . '/assets/images/logo.svg" alt="Venza" width="120" height="40">';
+                echo '<img src="' . VENZA_URI . '/assets/images/logos/logoVenza.svg" alt="Venza" width="120" height="40">';
             }
             ?>
         </a>
@@ -26,7 +26,7 @@
                 'theme_location' => 'primary',
                 'menu_class'     => 'nav-menu',
                 'container'      => false,
-                'fallback_cb'    => false,
+                'fallback_cb'    => 'venza_primary_menu_fallback',
             ]);
             ?>
         </nav>

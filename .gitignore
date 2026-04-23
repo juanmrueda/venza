@@ -49,3 +49,10 @@ dist/
 # Deploy
 deploy/*.pem
 deploy/*.key
+
+# Design references (no deploy)
+theme/assets/videos/media1.mp4
+Assets/
+
+# Claude Code local config
+.claude/

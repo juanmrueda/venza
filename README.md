@@ -6,27 +6,55 @@
 
 ---
 
+## Estado actual (23 abr 2026)
+
+| Sección | Estado |
+|---------|--------|
+| Servidor Digital Ocean | ✅ Configurado |
+| WordPress + SSL | ✅ Funcionando |
+| Tema custom activo | ✅ |
+| Plugins (ACF, CF7, Yoast) | ✅ Instalados |
+| 6 productos en WP con imágenes | ✅ |
+| Home page | ✅ Completa (ajustada 1:1 contra arte aprobado) |
+| Header + Footer global | ✅ Ajustados según referencia visual |
+| Productos (archivo `/productos/`) | ✅ Implementado y editable desde admin |
+| Páginas internas restantes | En progreso |
+
+---
+
+## Cambios recientes (23 abr 2026)
+
+- Home ajustado para respetar el layout de referencia (`Assets/Venza WB_Página_01.jpg`).
+- Header actualizado con color de fondo `#eef4ff`, línea inferior `#8cbce1` y color de texto "Síguenos" `#210a67`.
+- Reemplazo de logo y redes con assets entregados en carpeta de logos.
+- Footer global ajustado para quedar alineado al diseño aprobado.
+- Hero temporal montado con `theme/assets/images/banners/bannerhomedemo.svg` mientras llega el video final.
+- `/productos/` migrado de maqueta estática a versión dinámica editable desde WordPress admin.
+- Se agregaron campos ACF locales para la portada de productos y nuevos template parts dinámicos.
+
+---
+
 ## Mapa del sitio
 
-| Página | URL | Template WP | Descripción |
-|--------|-----|-------------|-------------|
-| Home | `/` | `front-page.php` | Hero, Productos destacados, Beneficios, Galería |
-| Productos (archivo) | `/productos/` | `archive-producto.php` | Grid de todos los productos |
-| Producto — Crema Humectante | `/productos/crema-humectante/` | `single-producto.php` | Hero, beneficios, tamaños, más productos |
-| Producto — Frescura Extrema | `/productos/frescura-extrema/` | `single-producto.php` | ídem |
-| Producto — Vitamina E | `/productos/vitamina-e/` | `single-producto.php` | ídem |
-| Producto — Sábila | `/productos/sabila/` | `single-producto.php` | ídem |
-| Producto — Coco | `/productos/coco/` | `single-producto.php` | ídem |
-| Producto — Avena | `/productos/avena/` | `single-producto.php` | ídem |
-| Beneficios | `/beneficios/` | `page-beneficios.php` | Página editorial de beneficios |
-| Noticias (archivo) | `/noticias/` | `archive-noticia.php` | 3 categorías: Lanzamientos, Activaciones, Repositorio |
-| Noticias — Categoría | `/noticias/categoria/lanzamientos/` | `taxonomy-noticia_cat.php` | Listado filtrado |
-| Noticia individual | `/noticias/nombre-noticia/` | `single-noticia.php` | Artículo con imágenes |
-| Blog (archivo) | `/blog/` | `home.php` | Posts lifestyle |
-| Blog individual | `/blog/nombre-post/` | `single.php` | Artículo con fotos intercaladas |
-| Descubre Venza | `/descubre-venza/` | `page-descubre-venza.php` | Video hero + carrusel YouTube |
-| Quiz de piel | `/descubre-venza/quiz/` | `page-quiz.php` | Semi-app: 6 preguntas → recomendación |
-| Contacto | `/contacto/` | `page-contacto.php` | Formulario de contacto |
+| Página | URL | Template WP | Estado |
+|--------|-----|-------------|--------|
+| Home | `/` | `front-page.php` | ✅ |
+| Productos (archivo) | `/productos/` | `archive-producto.php` | ✅ Editable (ACF + contenido dinámico) |
+| Producto — Crema Humectante | `/productos/crema-humectante/` | `single-producto.php` | Pendiente |
+| Producto — Frescura Extrema | `/productos/frescura-extrema/` | `single-producto.php` | Pendiente |
+| Producto — Vitamina E | `/productos/vitamina-e/` | `single-producto.php` | Pendiente |
+| Producto — Sábila | `/productos/sabila/` | `single-producto.php` | Pendiente |
+| Producto — Coco | `/productos/coco/` | `single-producto.php` | Pendiente |
+| Producto — Avena | `/productos/avena/` | `single-producto.php` | Pendiente |
+| Beneficios | `/beneficios/` | `page-beneficios.php` | Pendiente |
+| Noticias (archivo) | `/noticias/` | `archive-noticia.php` | Pendiente |
+| Noticias — Categoría | `/noticias/categoria/lanzamientos/` | `taxonomy-noticia_cat.php` | Pendiente |
+| Noticia individual | `/noticias/nombre-noticia/` | `single-noticia.php` | Pendiente |
+| Blog (archivo) | `/blog/` | `home.php` | Pendiente |
+| Blog individual | `/blog/nombre-post/` | `single.php` | Pendiente |
+| Descubre Venza | `/descubre-venza/` | `page-descubre-venza.php` | Pendiente |
+| Quiz de piel | `/descubre-venza/quiz/` | `page-quiz.php` | Pendiente |
+| Contacto | `/contacto/` | `page-contacto.php` | Pendiente |
 
 **Navegación principal:**  
 `Inicio` / `Productos ▾` / `Beneficios` / `Noticias` / `Blog` / `Descubre Venza` / `Contacto`
@@ -37,9 +65,10 @@
 
 ```
 WordPress 6.x (latest)
-├── PHP 8.2+
+├── PHP 8.2+ (ppa:ondrej/php)
 ├── MySQL 8.0+
-├── Nginx (servidor)
+├── Nginx — Ubuntu 22.04 LTS, Digital Ocean
+├── SSL: Cloudflare Origin Certificate (Full Strict, 15 años)
 │
 ├── Tema custom: /wp-content/themes/venza/
 │   ├── PHP templates (sin page builder)
@@ -52,8 +81,59 @@ WordPress 6.x (latest)
 │   └── Yoast SEO — SEO básico
 │
 └── Custom Post Types
-    ├── producto (con taxonomía: linea_producto)
-    └── noticia (con taxonomía: noticia_cat)
+    ├── producto (slug: productos, taxonomía: linea_producto)
+    └── noticia (slug: noticias, taxonomía: noticia_cat)
+```
+
+---
+
+## Design system
+
+```css
+--color-navy:       #2B255E;   /* Azul marino — titulos, nav */
+--color-green:      #4EB89F;   /* Verde Venza — acentos, botones */
+--color-blue-light: #8CBCE1;   /* Azul claro — detalles */
+--color-bg-light:   #eef3fb;   /* Fondo secciones alternas */
+--color-gray:       #717171;   /* Texto secundario */
+--font-display:     'Montage', Georgia, serif;
+--font-body:        'Satoshi', 'Gotham', system-ui, sans-serif;
+```
+
+Fuentes servidas localmente desde `theme/assets/fonts/`.
+
+---
+
+## Servidor
+
+| Dato | Valor |
+|------|-------|
+| Proveedor | Digital Ocean |
+| IP | 142.93.15.66 |
+| SO | Ubuntu 22.04 LTS |
+| WP root | /var/www/html |
+| Repo | /var/repo/venza |
+| Tema (symlink) | /var/repo/venza/theme → /var/www/html/wp-content/themes/venza |
+
+---
+
+## Workflow de deploy
+
+```
+Local (c:/dev/Venza)
+    │
+    ├── git add + git commit
+    └── git push origin main
+                │
+                └── SSH → 142.93.15.66
+                        └── cd /var/repo/venza && git pull origin main
+```
+
+```bash
+# Deploy rápido desde local:
+bash deploy/deploy.sh
+
+# O manual:
+ssh root@142.93.15.66 "cd /var/repo/venza && git pull origin main"
 ```
 
 ---
@@ -61,218 +141,121 @@ WordPress 6.x (latest)
 ## Estructura de carpetas
 
 ```
-/wp-content/themes/venza/         ← Todo esto vive en este repo (carpeta /theme)
-├── style.css                     ← Header del tema (nombre, versión)
-├── functions.php                 ← Bootstrap del tema
-├── index.php                     ← Fallback
-├── front-page.php                ← Home
+/wp-content/themes/venza/         ← Todo esto vive en /theme en el repo
+├── style.css
+├── functions.php
+├── index.php
+├── front-page.php                ← ✅ Home completa
 ├── header.php
 ├── footer.php
-├── page.php                      ← Página genérica
-├── single.php                    ← Blog individual
-├── home.php                      ← Blog archivo (listado)
+├── page.php
+├── single.php                    ← Blog individual (pendiente)
+├── home.php                      ← Blog archivo (pendiente)
 ├── 404.php
 │
-├── single-producto.php           ← Template único para los 6 productos
-├── archive-producto.php          ← Grid de productos
-├── single-noticia.php
-├── archive-noticia.php
-├── taxonomy-noticia_cat.php      ← Noticias por categoría
+├── single-producto.php           ← Pendiente
+├── archive-producto.php          ← ✅ Home de productos editable
+├── single-noticia.php            ← Pendiente
+├── archive-noticia.php           ← Pendiente
+├── taxonomy-noticia_cat.php      ← Pendiente
 │
-├── page-beneficios.php           ← Slug: beneficios
-├── page-descubre-venza.php       ← Slug: descubre-venza
-├── page-quiz.php                 ← Slug: quiz
-├── page-contacto.php             ← Slug: contacto
+├── page-beneficios.php           ← Pendiente
+├── page-descubre-venza.php       ← Pendiente
+├── page-quiz.php                 ← Pendiente
+├── page-contacto.php             ← Pendiente
 │
 ├── assets/
-│   ├── css/
-│   │   └── main.css              ← Un solo CSS compilado (sin preprocessor)
+│   ├── css/main.css              ← Design system completo ✅
 │   ├── js/
-│   │   ├── main.js               ← JS global (nav, sliders, etc.)
-│   │   └── quiz.js               ← Lógica del quiz de piel (autocontenido)
-│   └── images/                   ← Solo assets estáticos del tema (logo, iconos SVG)
+│   │   ├── main.js
+│   │   └── quiz.js               ← Lógica quiz completa ✅
+│   ├── fonts/                    ← Montage, Satoshi, Gotham ✅
+│   └── images/
+│       ├── logo.svg              ← ✅
+│       ├── productos/            ← 6 PNGs fondo transparente ✅
+│       └── banners/              ← JPGs hero por producto ✅
 │
 ├── inc/
-│   ├── cpt.php                   ← Registro Custom Post Types y taxonomías
-│   ├── acf-fields.php            ← Exportación JSON de campos ACF
-│   └── helpers.php               ← Funciones reutilizables
+│   ├── cpt.php                   ← CPTs y taxonomías ✅
+│   ├── acf-fields.php
+│   ├── acf-producto-home.php     ← ✅ Campos ACF de home productos
+│   └── helpers.php
 │
 └── template-parts/
     ├── global/
-    │   ├── nav.php
+    │   ├── nav.php               ← ✅
     │   └── social-links.php
     ├── home/
-    │   ├── hero.php
-    │   ├── productos-destacados.php
-    │   ├── beneficios-strip.php
-    │   └── galeria-hoy.php
+    │   ├── hero.php              ← ✅ (placeholder coco.jpg → reemplazar con video)
+    │   ├── productos-destacados.php ← ✅
+    │   ├── beneficios-strip.php  ← ✅
+    │   └── galeria-hoy.php       ← ✅
     ├── producto/
-    │   ├── hero.php
-    │   ├── beneficios-pills.php
-    │   ├── tamanos.php
-    │   └── mas-productos.php
-    ├── noticias/
-    │   ├── card.php
-    │   └── categorias-tabs.php
-    └── quiz/
-        ├── step-1-piel.php
-        ├── step-2-cabello.php
-        ├── step-3-aroma.php
-        ├── step-4-sensacion.php
-        ├── step-5-entorno.php
-        ├── step-6-frecuencia.php
-        └── resultado.php
+    │   ├── hero.php              ← ✅ dinámico
+    │   ├── home-beneficios.php   ← ✅ dinámico editable
+    │   ├── home-descripcion.php  ← ✅ dinámico editable
+    │   ├── home-claim.php        ← ✅ dinámico editable
+    │   ├── disponibilidad.php    ← ✅ dinámico editable
+    │   └── mas-productos.php     ← ✅ dinámico editable
+    ├── noticias/                 ← Pendiente
+    └── quiz/                    ← Pendiente (JS listo, faltan templates PHP)
 ```
 
 ---
 
-## Paleta de colores (a confirmar con brand guide)
-
-```css
---color-navy:        #1B1464;   /* Azul marino oscuro — titulos, nav */
---color-blue-mid:    #3B82C4;   /* Azul medio — acentos */
---color-blue-light:  #E8F4FD;   /* Azul muy claro — fondos de sección */
---color-blue-btn:    #5BB8E8;   /* Azul botones */
---color-white:       #FFFFFF;
---color-text:        #1B1464;   /* Mismo navy para cuerpo de texto */
-```
-
-> ⚠️ Confirmar con brand guide oficial cuando el cliente lo entregue.
-
-## Tipografía (a confirmar)
-
-| Uso | Fuente provisional | Peso |
-|-----|--------------------|------|
-| Títulos display grandes | Playfair Display (serif) | 700, 900 |
-| Subtítulos / UI | Nunito (sans-serif) | 400, 600, 700 |
-| Cuerpo | Nunito | 400 |
-
-> ⚠️ Reemplazar con fuentes oficiales del cliente cuando las entregue.
-
----
-
-## Quiz de tipo de piel — Lógica
+## Quiz de tipo de piel
 
 Ver: [`docs/quiz-logic.md`](docs/quiz-logic.md)
 
-**6 preguntas:**
-1. ¿Cuál es tu tipo de piel? (Normal / Grasa / Combinada / Seca)
-2. Color de cabello (Rubio / Negro / Castaño / Canoso)
-3. Aroma favorito (Herbal/Menta / Coco / Cítrico / Sábila / Frutal / Floral)
-4. Sensación post-baño (Muy hidratada / Brillante y ligera / Calmada / Fresca)
-5. Entorno natural que relaja (imagen de paisaje)
-6. Frecuencia de baño (Más de 1x día / 1x día / Poco más de 1x / Solo cuando puedo)
-
-**Resultado → 1 de 6 jabones:**
+**6 preguntas → 1 de 6 jabones:**  
 Crema Humectante / Frescura Extrema / Vitamina E / Sábila / Coco / Avena
 
-Implementación: Vanilla JS puro. Sistema de puntaje por respuesta. Sin backend. Sin cookies obligatorias.
+Implementación: Vanilla JS puro (`quiz.js`). Sistema de puntaje por respuesta. Sin backend. Sin cookies obligatorias. Resultado solo en pantalla.
 
 ---
+
+## Assets recibidos ✅
+- Logo Venza (SVG + PNG transparente)
+- Fuentes: Montage, Satoshi, Gotham
+- 6 productos PNG fondo transparente
+- Banners hero por producto (JPG)
+- Packs de algunos productos
 
 ## Assets pendientes del cliente
-
-### Urgente (bloquean el inicio)
-- [ ] Logo Venza — SVG + PNG transparente
-- [ ] Nombre oficial de las fuentes (o archivos si tienen licencia)
-- [ ] Paleta de colores oficial (brand guide o valores hex)
-
-### Esta semana
-- [ ] Fotos de 6 productos — PNG fondo transparente, alta res
-- [ ] Fotos hero/lifestyle de cada producto (fondos de banners)
-- [ ] Fotos de la sección "Beneficios" (página 08)
-- [ ] Textos reales de cada producto (no Lorem Ipsum)
+- [ ] Video hero principal (actualmente placeholder `bannerhomedemo.svg`)
+- [ ] Crema Humectante — banner + pack
+- [ ] Coco — packs adicionales
+- [ ] Fotos lifestyle para Descubre Venza
+- [ ] Imágenes para el quiz (aromas, entornos, tipos de piel)
+- [ ] URL canal YouTube de Venza
+- [ ] Email destino formulario de contacto
+- [ ] Textos reales de cada producto
 - [ ] Links a tiendas externas por producto y país
-- [ ] URL del canal YouTube de Venza
-- [ ] Email destino del formulario de contacto
-- [ ] Tabla de lógica del Quiz (qué respuestas → qué jabón)
-- [ ] Fotos/imágenes para el Quiz (swatches de piel, cabello, aromas, entornos)
-- [ ] Artículos reales de Noticias y Blog (o placeholders aprobados)
-
----
-
-## Servidor — Digital Ocean
-
-**Droplet recomendado:**
-- **Plan:** Basic — $12/mes (2 vCPU, 2GB RAM, 50GB SSD, 2TB transfer)
-- **SO:** Ubuntu 22.04 LTS
-- **Stack:** Nginx + PHP 8.2 + MySQL 8.0 + SSL (Let's Encrypt)
-- **Región:** más cercana al cliente (NYC o SF si es Centroamérica)
-
-**DNS:**
-```
-venza.ipalmera.com  →  A record  →  [IP del Droplet]
-```
-
-**Usuario SSH de deploy:**
-```
-usuario: deploy
-acceso: solo al directorio del tema
-método: clave SSH ED25519 dedicada a este proyecto
-```
-
-Ver instrucciones completas en: [`deploy/server-setup.sh`](deploy/server-setup.sh)
-
----
-
-## Workflow de desarrollo
-
-```
-Local (c:/dev/Venza)
-    │
-    ├── git add + git commit
-    │
-    └── git push origin main
-                │
-                └── SSH → servidor
-                        └── git pull (en /wp-content/themes/venza/)
-```
-
-**Comandos de deploy:**
-```bash
-# Desde local, un solo comando:
-bash deploy/deploy.sh
-```
-
----
-
-## Plugins — instalación manual en WP admin
-
-| Plugin | Versión | Propósito | Costo |
-|--------|---------|-----------|-------|
-| Advanced Custom Fields | Latest free | Campos de productos y noticias | Gratis |
-| Contact Form 7 | Latest | Formulario de contacto | Gratis |
-| Yoast SEO | Latest free | SEO básico, sitemaps | Gratis |
-| Smush (opcional) | Latest free | Compresión de imágenes | Gratis |
+- [ ] Artículos para Noticias y Blog
 
 ---
 
 ## Timeline
 
-| Día | Fecha | Entregable |
-|-----|-------|------------|
-| 1 | Mié 22 Abr | Setup servidor + tema base + header/footer + Home |
-| 2 | Jue 23 Abr | Template producto (×6) + Beneficios |
-| 3 | Vie 24 Abr | Noticias (listado + categoría + individual) + Blog |
-| 4 | Sáb 25 Abr | Descubre Venza + Quiz completo |
-| 5 | Dom 26 Abr | Contacto + responsive todo el sitio |
-| 6 | Lun 27 Abr | Carga de contenido real + QA + fixes |
-| 7 | Mar 28 Abr | Deploy / revisión final con cliente |
+| Día | Fecha | Entregable | Estado |
+|-----|-------|------------|--------|
+| 1 | Mié 22 Abr | Servidor + WP + Home page | ✅ |
+| 2 | Jue 23 Abr | Template producto (×6) + Beneficios | |
+| 3 | Vie 24 Abr | Noticias + Blog | |
+| 4 | Sáb 25 Abr | Descubre Venza + Quiz | |
+| 5 | Dom 26 Abr | Contacto + responsive QA | |
+| 6 | Lun 27 Abr | Carga contenido real + fixes | |
+| 7 | Mar 28 Abr | Deploy final + revisión cliente | |
 
 ---
 
-## Comandos útiles
+## Plugins instalados
 
-```bash
-# Conectar al servidor
-ssh deploy@venza.ipalmera.com -i ~/.ssh/venza_deploy
-
-# Deploy rápido
-bash deploy/deploy.sh
-
-# Ver logs del servidor
-ssh deploy@venza.ipalmera.com "sudo tail -f /var/log/nginx/error.log"
-```
+| Plugin | Propósito |
+|--------|-----------|
+| Advanced Custom Fields (free) | Campos custom de productos y noticias |
+| Contact Form 7 | Formulario de contacto |
+| Yoast SEO | SEO básico, sitemaps |
 
 ---
 

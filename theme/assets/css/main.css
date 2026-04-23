@@ -2066,7 +2066,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 /* ============================================================
    PRODUCTO INTERNO - FRESCURA EXTREMA (Pagina 03)
    ============================================================ */
-.producto-single--frescura-extrema {
+.producto-single {
     background: #eef4ff;
 }
 
@@ -2268,21 +2268,21 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     line-height: 1.35;
 }
 
-.producto-single--frescura-extrema .producto-disponibilidad {
+.producto-single .producto-disponibilidad {
     background: #eef4ff;
     padding: 2.1rem 1rem 2.8rem;
     color: #1a1a1a;
     text-align: center;
 }
 
-.producto-single--frescura-extrema .producto-disponibilidad p {
+.producto-single .producto-disponibilidad p {
     font-family: var(--font-body);
     font-weight: 300;
     font-size: clamp(1.2rem, 1.9vw, 2.25rem);
     line-height: 1.25;
 }
 
-.producto-single--frescura-extrema .producto-disponibilidad strong {
+.producto-single .producto-disponibilidad strong {
     color: #2b255e;
     font-weight: 700;
 }

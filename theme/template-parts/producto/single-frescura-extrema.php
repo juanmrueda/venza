@@ -1,9 +1,9 @@
 <?php
-$get_image_url = static function ($meta_key, $fallback_path) {
-    $value = venza_get_meta_value($meta_key);
+$producto_slug = get_post_field('post_name', get_the_ID());
 
+$get_media_url = static function ($value) {
     if (is_array($value)) {
-        if (!empty($value['url'])) {
+        if (!empty($value['url']) && is_string($value['url'])) {
             return $value['url'];
         }
         if (!empty($value['ID'])) {
@@ -25,52 +25,208 @@ $get_image_url = static function ($meta_key, $fallback_path) {
         return $value;
     }
 
-    return get_theme_file_uri($fallback_path);
+    return '';
 };
 
-$hero_banner = $get_image_url('producto_single_banner_imagen', 'assets/images/banners/frescura-extrema.jpg');
-$hero_claim = venza_get_meta_value('producto_single_claim_texto') ?: 'Más fresco, imposible.';
+$get_theme_asset_url = static function ($relative_path) {
+    if (!is_string($relative_path) || $relative_path === '') {
+        return '';
+    }
 
-$gradient_color = venza_get_meta_value('producto_single_gradient_color') ?: '#acdcef';
-$gradient_style = '--producto-gradient: ' . esc_attr($gradient_color) . ';';
+    $absolute_path = get_theme_file_path($relative_path);
+    if ($absolute_path && file_exists($absolute_path)) {
+        return get_theme_file_uri($relative_path);
+    }
 
-$intro_linea = venza_get_meta_value('producto_nombre_linea') ?: 'Jabón Antibacterial';
-$intro_imagen = get_theme_file_uri('assets/images/productos/prod-frescura-extrema.png');
+    return '';
+};
+
+$get_meta_image_url = static function ($meta_key, $fallback_url = '') use ($get_media_url) {
+    $url = $get_media_url(venza_get_meta_value($meta_key));
+    if ($url) {
+        return $url;
+    }
+
+    return is_string($fallback_url) ? $fallback_url : '';
+};
+
+$hero_banner_fallbacks = [
+    'frescura-extrema' => 'assets/images/banners/frescura-extrema.jpg',
+    'vitamina-e'       => 'assets/images/banners/vitamina-e.jpg',
+    'sabila'           => 'assets/images/banners/sabila.jpg',
+    'coco'             => 'assets/images/banners/coco.jpg',
+    'avena'            => 'assets/images/banners/avena.jpg',
+    'crema-humectante' => 'assets/images/banners/productos-home-crema-body.jpg',
+];
+$hero_banner_fallback = $get_theme_asset_url($hero_banner_fallbacks[$producto_slug] ?? '');
+if (!$hero_banner_fallback) {
+    $hero_banner_fallback = $get_theme_asset_url('assets/images/banners/frescura-extrema.jpg');
+}
+$hero_banner = $get_meta_image_url('producto_single_banner_imagen', $hero_banner_fallback);
+
+$hero_claim = venza_get_meta_value('producto_single_claim_texto');
+if (!$hero_claim) {
+    $hero_claim = venza_get_meta_value('producto_home_subtitulo');
+}
+if (!$hero_claim) {
+    $hero_claim = venza_get_meta_value('producto_hero_subtitulo');
+}
+if (!$hero_claim) {
+    $hero_claim = get_the_excerpt();
+}
+
+$gradient_color = venza_get_meta_value('producto_single_gradient_color')
+    ?: venza_get_meta_value('producto_color_acento')
+    ?: '#acdcef';
+$gradient_style = '--producto-gradient: ' . $gradient_color . ';';
+
+$intro_linea = venza_get_meta_value('producto_nombre_linea') ?: 'Jabon antibacterial';
+$intro_image_fallbacks = [
+    'frescura-extrema' => 'assets/images/productos/prod-frescura-extrema.png',
+];
+$intro_image_fallback_rel = $intro_image_fallbacks[$producto_slug] ?? ('assets/images/productos/' . $producto_slug . '.png');
+$intro_image_fallback = $get_theme_asset_url($intro_image_fallback_rel);
+if (!$intro_image_fallback) {
+    $intro_image_fallback = get_the_post_thumbnail_url(get_the_ID(), 'full') ?: '';
+}
+$intro_imagen = $get_meta_image_url('producto_single_intro_imagen', $intro_image_fallback);
 
 $descripcion = venza_get_meta_value('producto_descripcion_larga');
 if (!$descripcion) {
-    $descripcion = '
-        <p>Venza Frescura Extrema refresca, tonifica y mejora la microcirculación sanguínea.</p>
-        <p>Por su fórmula enriquecida con extractos de eucalipto y menta, este jabón se convierte en un poderoso estimulante que entrega una sensación de alivio refrescante y relajante.</p>
-    ';
+    $descripcion = venza_get_meta_value('producto_home_descripcion_texto');
 }
-$descripcion_imagen = get_theme_file_uri('assets/images/banners/foto-frescura-extrema.jpg');
+if (!$descripcion) {
+    $content = get_the_content(null, false, get_the_ID());
+    if (is_string($content) && trim(wp_strip_all_tags($content)) !== '') {
+        $descripcion = apply_filters('the_content', $content);
+    }
+}
+if (!$descripcion) {
+    $descripcion = '<p>' . esc_html('Conoce los beneficios de ' . get_the_title() . ' para el cuidado diario de tu piel.') . '</p>';
+}
 
-$tamanos = [
-    [
-        'nombre' => 'Individual',
-        'descripcion' => '110g',
-        'imagen' => get_theme_file_uri('assets/images/packs/frescura-extrema-individual.png'),
-        'nota' => '',
-    ],
-    [
-        'nombre' => '3 pack 330g',
-        'descripcion' => '3 barras de 110g',
-        'imagen' => get_theme_file_uri('assets/images/packs/frescura-extrema-3pack.png'),
-        'nota' => '',
-    ],
-    [
-        'nombre' => '4 pack 440g',
-        'descripcion' => '4 barras de 110g',
-        'imagen' => get_theme_file_uri('assets/images/packs/frescura-extrema-4pack.png'),
-        'nota' => 'Presentación exclusiva de supermercados',
-    ],
+$descripcion_image_fallbacks = [
+    'frescura-extrema' => 'assets/images/banners/foto-frescura-extrema.jpg',
 ];
+$descripcion_image_fallback_rel = $descripcion_image_fallbacks[$producto_slug] ?? ($hero_banner_fallbacks[$producto_slug] ?? '');
+$descripcion_image_fallback = $get_theme_asset_url($descripcion_image_fallback_rel);
+if (!$descripcion_image_fallback) {
+    $descripcion_image_fallback = $hero_banner ?: $intro_imagen;
+}
+$descripcion_imagen = $get_meta_image_url('producto_single_descripcion_imagen', $descripcion_image_fallback);
+
+$build_default_tamanos = static function ($slug, $fallback_image = '') use ($get_theme_asset_url) {
+    $defaults = [];
+
+    $individual = $get_theme_asset_url('assets/images/packs/' . $slug . '-individual.png');
+    if (!$individual) {
+        $individual = $get_theme_asset_url('assets/images/productos/' . $slug . '.png');
+    }
+    if (!$individual && $fallback_image) {
+        $individual = $fallback_image;
+    }
+    if ($individual) {
+        $defaults[] = [
+            'nombre'      => 'Individual',
+            'descripcion' => '110g',
+            'imagen'      => $individual,
+            'nota'        => '',
+        ];
+    }
+
+    $pack3 = $get_theme_asset_url('assets/images/packs/' . $slug . '-3pack.png');
+    if ($pack3) {
+        $defaults[] = [
+            'nombre'      => '3 pack 330g',
+            'descripcion' => '3 barras de 110g',
+            'imagen'      => $pack3,
+            'nota'        => '',
+        ];
+    }
+
+    $pack4 = $get_theme_asset_url('assets/images/packs/' . $slug . '-4pack.png');
+    if ($pack4) {
+        $defaults[] = [
+            'nombre'      => '4 pack 440g',
+            'descripcion' => '4 barras de 110g',
+            'imagen'      => $pack4,
+            'nota'        => '',
+        ];
+    }
+
+    return $defaults;
+};
+
+$normalize_tamano = static function ($item) use ($get_media_url) {
+    if (!is_array($item)) {
+        return null;
+    }
+
+    $nombre = isset($item['nombre']) ? trim((string) $item['nombre']) : '';
+    $descripcion = isset($item['descripcion']) ? trim((string) $item['descripcion']) : '';
+    $nota = isset($item['nota']) ? trim((string) $item['nota']) : '';
+    $imagen = isset($item['imagen']) ? $get_media_url($item['imagen']) : '';
+
+    if ($nombre === '' && $descripcion === '' && $imagen === '') {
+        return null;
+    }
+
+    return [
+        'nombre'      => $nombre,
+        'descripcion' => $descripcion,
+        'imagen'      => $imagen,
+        'nota'        => $nota,
+    ];
+};
+
+$tamanos_defaults = $build_default_tamanos($producto_slug, $intro_imagen);
+$tamanos_raw = venza_get_meta_value('producto_tamanos');
+$tamanos = [];
+
+if (is_array($tamanos_raw)) {
+    foreach ($tamanos_raw as $item) {
+        $tamano = $normalize_tamano($item);
+        if ($tamano) {
+            $tamanos[] = $tamano;
+        }
+    }
+}
+
+if (!empty($tamanos) && !empty($tamanos_defaults)) {
+    foreach ($tamanos as $index => &$tamano) {
+        $fallback = $tamanos_defaults[$index] ?? null;
+        if (!$fallback) {
+            continue;
+        }
+
+        foreach (['nombre', 'descripcion', 'imagen', 'nota'] as $field) {
+            if (empty($tamano[$field]) && !empty($fallback[$field])) {
+                $tamano[$field] = $fallback[$field];
+            }
+        }
+    }
+    unset($tamano);
+}
+
+if (empty($tamanos)) {
+    $tamanos = $tamanos_defaults;
+}
+
+if (empty($tamanos) && $intro_imagen) {
+    $tamanos[] = [
+        'nombre'      => 'Individual',
+        'descripcion' => '',
+        'imagen'      => $intro_imagen,
+        'nota'        => '',
+    ];
+}
 ?>
 
 <section class="producto-frescura-hero">
     <img src="<?php echo esc_url($hero_banner); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
-    <div class="producto-frescura-hero__claim"><?php echo esc_html($hero_claim); ?></div>
+    <?php if ($hero_claim) : ?>
+        <div class="producto-frescura-hero__claim"><?php echo esc_html($hero_claim); ?></div>
+    <?php endif; ?>
 </section>
 
 <section class="producto-frescura-identidad">
@@ -86,7 +242,7 @@ $tamanos = [
     </div>
 </section>
 
-<section class="producto-frescura-descripcion" style="<?php echo $gradient_style; ?>">
+<section class="producto-frescura-descripcion" style="<?php echo esc_attr($gradient_style); ?>">
     <div class="producto-frescura-descripcion__media">
         <img src="<?php echo esc_url($descripcion_imagen); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
     </div>
@@ -97,15 +253,21 @@ $tamanos = [
     </div>
 </section>
 
-<section class="producto-frescura-tamanos" style="<?php echo $gradient_style; ?>">
+<section class="producto-frescura-tamanos" style="<?php echo esc_attr($gradient_style); ?>">
     <div class="container">
-        <h2 class="producto-frescura-tamanos__titulo">Tamaños</h2>
+        <h2 class="producto-frescura-tamanos__titulo">Tama&ntilde;os</h2>
         <div class="producto-frescura-tamanos__grid">
             <?php foreach ($tamanos as $tamano) : ?>
                 <article class="producto-frescura-tamanos__item">
-                    <h3><?php echo esc_html($tamano['nombre']); ?></h3>
-                    <p class="producto-frescura-tamanos__desc"><?php echo esc_html($tamano['descripcion']); ?></p>
-                    <img src="<?php echo esc_url($tamano['imagen']); ?>" alt="<?php echo esc_attr($tamano['nombre']); ?>">
+                    <?php if (!empty($tamano['nombre'])) : ?>
+                        <h3><?php echo esc_html($tamano['nombre']); ?></h3>
+                    <?php endif; ?>
+                    <?php if (!empty($tamano['descripcion'])) : ?>
+                        <p class="producto-frescura-tamanos__desc"><?php echo esc_html($tamano['descripcion']); ?></p>
+                    <?php endif; ?>
+                    <?php if (!empty($tamano['imagen'])) : ?>
+                        <img src="<?php echo esc_url($tamano['imagen']); ?>" alt="<?php echo esc_attr($tamano['nombre'] ?: get_the_title()); ?>">
+                    <?php endif; ?>
                     <?php if (!empty($tamano['nota'])) : ?>
                         <p class="producto-frescura-tamanos__nota"><?php echo esc_html($tamano['nota']); ?></p>
                     <?php endif; ?>

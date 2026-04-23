@@ -13,6 +13,9 @@ get_header(); ?>
 
             <?php
             $quote = venza_field('beneficios_quote');
+            if (empty($quote)) {
+                $quote = '“Venza provoca...” <strong>sensaciones que impactan tus sentidos y emociones.</strong> Se enfoca en crear ambientes realmente perceptibles en la regadera para hacerte sentir bien durante y después del baño, ya que sus ingredientes (algunos de ellos locales), extractos de aromaterapia, texturas, colores y sonidos <strong>activan tus sentidos provocando emociones únicas.</strong>';
+            }
             if (!empty($quote)) :
             ?>
                 <blockquote class="beneficios-page__quote">
@@ -24,6 +27,52 @@ get_header(); ?>
 
     <?php
     $items = venza_field('beneficios_items');
+    if (empty($items) || !is_array($items)) {
+        $base = trailingslashit(get_template_directory_uri() . '/assets/images/beneficios');
+        $items = [
+            [
+                'titulo' => 'Protección Antibacterial',
+                'descripcion' => 'Para tu tranquilidad, Venza elimina el 99.9% de las bacterias con frescura extrema y protección total.',
+                'imagen' => $base . 'beneficio-01-proteccion.jpg',
+            ],
+            [
+                'titulo' => 'Fórmula humectante',
+                'descripcion' => 'Con sus ingredientes naturales estimula la suavidad y elasticidad sin limpiar de más tu piel.',
+                'imagen' => $base . 'beneficio-02-formula.jpg',
+            ],
+            [
+                'titulo' => 'Aromas agradables',
+                'descripcion' => 'Elige tu favorito: Crema Humectante, Avena, Coco, Manzana Fresh, Sábila, Vitamina E y Frescura Extrema.',
+                'imagen' => $base . 'beneficio-03-aromas.jpg',
+            ],
+            [
+                'titulo' => 'Alto rendimiento',
+                'descripcion' => 'Su fórmula permite mayor durabilidad y así todos nuestros beneficios te acompañarán por más tiempo.',
+                'imagen' => $base . 'beneficio-04-rendimiento.jpg',
+            ],
+            [
+                'titulo' => 'Deja la piel radiante',
+                'descripcion' => 'En cada aplicación notarás un brillo natural saludable ya que la estarás humectando, rejuveneciendo y limpiando balanceadamente.',
+                'imagen' => $base . 'beneficio-05-radiante.jpg',
+            ],
+            [
+                'titulo' => 'Apto para uso diario',
+                'descripcion' => 'Nuestra línea de jabones no limpia de más ni de forma abrasiva por lo cual su uso diario es recomendado para el cuidado de tu piel.',
+                'imagen' => $base . 'beneficio-06-uso-diario.jpg',
+            ],
+            [
+                'titulo' => 'Nutre la piel seca',
+                'descripcion' => 'Con Venza, notarás que las células de tu piel se rejuvenecen mejorando su elasticidad y humedad, dejará de estar sin brillo y con dureza.',
+                'imagen' => $base . 'beneficio-07-nutre.jpg',
+            ],
+            [
+                'titulo' => 'Limpieza efectiva',
+                'descripcion' => 'Nuestra línea de jabones no limpia de más, hace un balance de nutrición a tu piel mientras descarta células muertas y suciedad.',
+                'imagen' => $base . 'beneficio-08-limpieza.jpg',
+            ],
+        ];
+    }
+
     if (!empty($items) && is_array($items)) :
     ?>
         <section class="beneficios-page__list">

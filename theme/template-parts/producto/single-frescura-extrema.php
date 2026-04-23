@@ -78,7 +78,10 @@ if (!$hero_claim) {
 $gradient_color = venza_get_meta_value('producto_single_gradient_color')
     ?: venza_get_meta_value('producto_color_acento')
     ?: '#acdcef';
-$gradient_style = '--producto-gradient: ' . $gradient_color . ';';
+$tamanos_gradient_color = venza_get_meta_value('producto_single_tamanos_gradient_color')
+    ?: $gradient_color;
+$descripcion_gradient_style = '--producto-gradient: ' . $gradient_color . ';';
+$tamanos_gradient_style = '--producto-gradient: ' . $tamanos_gradient_color . ';';
 
 $intro_linea = venza_get_meta_value('producto_nombre_linea') ?: 'Jabon antibacterial';
 $intro_image_fallbacks = [
@@ -91,7 +94,10 @@ if (!$intro_image_fallback) {
 }
 $intro_imagen = $get_meta_image_url('producto_single_intro_imagen', $intro_image_fallback);
 
-$descripcion = venza_get_meta_value('producto_descripcion_larga');
+$descripcion = venza_get_meta_value('producto_single_descripcion_texto');
+if (!$descripcion) {
+    $descripcion = venza_get_meta_value('producto_descripcion_larga');
+}
 if (!$descripcion) {
     $descripcion = venza_get_meta_value('producto_home_descripcion_texto');
 }
@@ -220,6 +226,75 @@ if (empty($tamanos) && $intro_imagen) {
         'nota'        => '',
     ];
 }
+
+$tamano_slot_defaults = [
+    ['nombre' => 'Individual',   'descripcion' => '110g',              'nota' => ''],
+    ['nombre' => '3 pack 330g',  'descripcion' => '3 barras de 110g',  'nota' => ''],
+    ['nombre' => '4 pack 440g',  'descripcion' => '4 barras de 110g',  'nota' => ''],
+];
+
+$tamano_image_overrides = [
+    $get_media_url(venza_get_meta_value('producto_single_tamano_1_imagen')),
+    $get_media_url(venza_get_meta_value('producto_single_tamano_2_imagen')),
+    $get_media_url(venza_get_meta_value('producto_single_tamano_3_imagen')),
+];
+
+$tamanos_finales = [];
+for ($i = 0; $i < 3; $i++) {
+    $slot = $tamano_slot_defaults[$i];
+    $actual = isset($tamanos[$i]) && is_array($tamanos[$i]) ? $tamanos[$i] : [];
+    $defecto = isset($tamanos_defaults[$i]) && is_array($tamanos_defaults[$i]) ? $tamanos_defaults[$i] : [];
+
+    $nombre = trim((string) ($actual['nombre'] ?? ''));
+    if ($nombre === '' && !empty($defecto['nombre'])) {
+        $nombre = trim((string) $defecto['nombre']);
+    }
+    if ($nombre === '') {
+        $nombre = $slot['nombre'];
+    }
+
+    $descripcion = trim((string) ($actual['descripcion'] ?? ''));
+    if ($descripcion === '' && !empty($defecto['descripcion'])) {
+        $descripcion = trim((string) $defecto['descripcion']);
+    }
+    if ($descripcion === '') {
+        $descripcion = $slot['descripcion'];
+    }
+
+    $nota = trim((string) ($actual['nota'] ?? ''));
+    if ($nota === '' && !empty($defecto['nota'])) {
+        $nota = trim((string) $defecto['nota']);
+    }
+    if ($nota === '') {
+        $nota = $slot['nota'];
+    }
+
+    $imagen = $tamano_image_overrides[$i] ?: '';
+    if ($imagen === '' && !empty($actual['imagen'])) {
+        $imagen = (string) $actual['imagen'];
+    }
+    if ($imagen === '' && !empty($defecto['imagen'])) {
+        $imagen = (string) $defecto['imagen'];
+    }
+    if ($imagen === '' && $intro_imagen) {
+        $imagen = $intro_imagen;
+    }
+
+    if ($nombre === '' && $descripcion === '' && $nota === '' && $imagen === '') {
+        continue;
+    }
+
+    $tamanos_finales[] = [
+        'nombre'      => $nombre,
+        'descripcion' => $descripcion,
+        'imagen'      => $imagen,
+        'nota'        => $nota,
+    ];
+}
+
+if (!empty($tamanos_finales)) {
+    $tamanos = $tamanos_finales;
+}
 ?>
 
 <section class="producto-frescura-hero">
@@ -242,7 +317,7 @@ if (empty($tamanos) && $intro_imagen) {
     </div>
 </section>
 
-<section class="producto-frescura-descripcion" style="<?php echo esc_attr($gradient_style); ?>">
+<section class="producto-frescura-descripcion" style="<?php echo esc_attr($descripcion_gradient_style); ?>">
     <div class="producto-frescura-descripcion__media">
         <img src="<?php echo esc_url($descripcion_imagen); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
     </div>
@@ -253,7 +328,7 @@ if (empty($tamanos) && $intro_imagen) {
     </div>
 </section>
 
-<section class="producto-frescura-tamanos" style="<?php echo esc_attr($gradient_style); ?>">
+<section class="producto-frescura-tamanos" style="<?php echo esc_attr($tamanos_gradient_style); ?>">
     <div class="container">
         <h2 class="producto-frescura-tamanos__titulo">Tama&ntilde;os</h2>
         <div class="producto-frescura-tamanos__grid">

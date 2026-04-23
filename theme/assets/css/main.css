@@ -166,7 +166,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 
 /* Dropdown */
 .nav-menu .menu-item-has-children { position: relative; }
-.nav-menu .menu-item-has-children > a::after { content: ' â–¾'; font-size: 0.7em; }
+.nav-menu .menu-item-has-children > a::after { content: ' \25BE'; font-size: 0.7em; }
 .nav-menu .sub-menu {
     display: none;
     position: absolute;

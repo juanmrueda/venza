@@ -275,15 +275,15 @@ for ($i = 0; $i < 3; $i++) {
         $nombre = $slot['nombre'];
     }
 
-    $descripcion = trim((string) ($override['descripcion'] ?? ''));
-    if ($descripcion === '') {
-        $descripcion = trim((string) ($actual['descripcion'] ?? ''));
+    $tamano_descripcion = trim((string) ($override['descripcion'] ?? ''));
+    if ($tamano_descripcion === '') {
+        $tamano_descripcion = trim((string) ($actual['descripcion'] ?? ''));
     }
-    if ($descripcion === '' && !empty($defecto['descripcion'])) {
-        $descripcion = trim((string) $defecto['descripcion']);
+    if ($tamano_descripcion === '' && !empty($defecto['descripcion'])) {
+        $tamano_descripcion = trim((string) $defecto['descripcion']);
     }
-    if ($descripcion === '') {
-        $descripcion = $slot['descripcion'];
+    if ($tamano_descripcion === '') {
+        $tamano_descripcion = $slot['descripcion'];
     }
 
     $nota = trim((string) ($override['nota'] ?? ''));
@@ -308,13 +308,13 @@ for ($i = 0; $i < 3; $i++) {
         $imagen = $intro_imagen;
     }
 
-    if ($nombre === '' && $descripcion === '' && $nota === '' && $imagen === '') {
+    if ($nombre === '' && $tamano_descripcion === '' && $nota === '' && $imagen === '') {
         continue;
     }
 
     $tamanos_finales[] = [
         'nombre'      => $nombre,
-        'descripcion' => $descripcion,
+        'descripcion' => $tamano_descripcion,
         'imagen'      => $imagen,
         'nota'        => $nota,
     ];

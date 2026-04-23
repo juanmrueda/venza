@@ -2350,3 +2350,203 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
         width: min(100%, 380px);
     }
 }
+
+/* ============================================================
+   BENEFICIOS (mock actualizado)
+   ============================================================ */
+.beneficios-page {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(2.5rem, 5vw, 4.6rem) 0 clamp(3rem, 6vw, 5.2rem);
+    background: #e8f1fb;
+}
+
+.beneficios-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+        radial-gradient(1200px 520px at -8% -5%, rgba(255, 255, 255, 0.64) 0%, rgba(255, 255, 255, 0) 70%),
+        radial-gradient(1000px 480px at 108% 6%, rgba(255, 255, 255, 0.56) 0%, rgba(255, 255, 255, 0) 72%),
+        radial-gradient(620px 300px at 50% 12%, rgba(174, 212, 236, 0.44) 0%, rgba(174, 212, 236, 0) 80%),
+        radial-gradient(480px 240px at 18% 36%, rgba(192, 221, 240, 0.36) 0%, rgba(192, 221, 240, 0) 82%),
+        linear-gradient(180deg, #dfedf8 0%, #e8f1fb 42%, #eaf2fc 100%);
+}
+
+.beneficios-page::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.36;
+    background-image:
+        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.7) 0 16%, rgba(255, 255, 255, 0) 45%),
+        radial-gradient(circle at 72% 28%, rgba(255, 255, 255, 0.62) 0 14%, rgba(255, 255, 255, 0) 45%),
+        radial-gradient(circle at 36% 66%, rgba(255, 255, 255, 0.58) 0 14%, rgba(255, 255, 255, 0) 45%);
+    background-size: 460px 260px, 540px 300px, 500px 280px;
+    background-position: 0 0, 100% 24%, 38% 72%;
+    background-repeat: repeat-y;
+}
+
+.beneficios-page__header {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.beneficios-page__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6.4rem);
+    font-weight: 400;
+    line-height: 0.95;
+    color: #2b255e;
+}
+
+.beneficios-page__title-line {
+    display: block;
+    width: min(62vw, 400px);
+    height: 2px;
+    margin: clamp(0.9rem, 1.8vw, 1.5rem) auto 0;
+    background: rgba(43, 37, 94, 0.68);
+}
+
+.beneficios-page__quote {
+    width: min(100%, 1180px);
+    margin: clamp(2rem, 4vw, 3rem) auto 0;
+    border: 2px solid #2f5f97;
+    border-radius: clamp(24px, 3vw, 38px);
+    background: rgba(239, 247, 255, 0.48);
+    padding: clamp(1.2rem, 2.4vw, 2.1rem) clamp(1rem, 3.3vw, 2.9rem);
+}
+
+.beneficios-page__quote p {
+    margin: 0;
+    text-align: center;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(1rem, 2vw, 1.16rem);
+    line-height: 1.34;
+    color: #2b255e;
+}
+
+.beneficios-page__quote p + p {
+    margin-top: 0.75rem;
+}
+
+.beneficios-page__quote strong {
+    font-weight: 700;
+    color: #241f58;
+}
+
+.beneficios-page__list {
+    margin-top: clamp(1.8rem, 4vw, 3.2rem);
+}
+
+.beneficios-page__list .container {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.9rem, 4vw, 3.25rem);
+}
+
+.beneficios-card {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.4rem, 3.8vw, 3.6rem);
+    align-items: center;
+}
+
+.beneficios-card--reverse .beneficios-card__media {
+    order: 2;
+}
+
+.beneficios-card--reverse .beneficios-card__content {
+    order: 1;
+    text-align: center;
+    justify-self: center;
+}
+
+.beneficios-card__media img {
+    width: 100%;
+    aspect-ratio: 16 / 10.4;
+    object-fit: cover;
+    border-radius: clamp(18px, 2.8vw, 26px);
+}
+
+.beneficios-card__content {
+    max-width: 560px;
+}
+
+.beneficios-card__title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.1rem, 4vw, 4.2rem);
+    font-weight: 400;
+    line-height: 0.98;
+    color: #2b255e;
+}
+
+.beneficios-card__description {
+    margin-top: clamp(0.65rem, 1.3vw, 1rem);
+}
+
+.beneficios-card__description p {
+    margin: 0;
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(1.15rem, 2.2vw, 2.28rem);
+    line-height: 1.22;
+    color: #4f5568;
+}
+
+.beneficios-card__description p + p {
+    margin-top: 0.7rem;
+}
+
+@media (max-width: 1024px) {
+    .beneficios-card {
+        gap: 1.6rem;
+    }
+
+    .beneficios-card__title {
+        font-size: clamp(1.9rem, 3.9vw, 3rem);
+    }
+
+    .beneficios-card__description p {
+        font-size: clamp(1.05rem, 2.2vw, 1.45rem);
+    }
+}
+
+@media (max-width: 860px) {
+    .beneficios-page {
+        padding-top: 2rem;
+    }
+
+    .beneficios-page__quote {
+        border-radius: 22px;
+        padding: 1rem 1rem 1.2rem;
+    }
+
+    .beneficios-card,
+    .beneficios-card--reverse {
+        grid-template-columns: 1fr;
+    }
+
+    .beneficios-card--reverse .beneficios-card__media,
+    .beneficios-card--reverse .beneficios-card__content {
+        order: initial;
+    }
+
+    .beneficios-card__content,
+    .beneficios-card--reverse .beneficios-card__content {
+        max-width: 680px;
+        text-align: center;
+        justify-self: center;
+    }
+
+    .beneficios-card__media img {
+        aspect-ratio: 16 / 11;
+    }
+}

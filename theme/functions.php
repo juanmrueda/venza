@@ -29,13 +29,31 @@ function venza_primary_menu_fallback($args = []) {
         return;
     }
 
+    $productos_menu = get_posts([
+        'post_type'      => 'producto',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'orderby'        => ['menu_order' => 'ASC', 'title' => 'ASC'],
+        'order'          => 'ASC',
+    ]);
+
     $menu_class = isset($args['menu_class']) && is_string($args['menu_class']) && $args['menu_class'] !== ''
         ? $args['menu_class']
         : 'nav-menu';
 
     $items = [
         ['label' => 'Inicio',         'url' => home_url('/')],
-        ['label' => 'Productos',      'url' => home_url('/productos/')],
+        [
+            'label'    => 'Productos',
+            'url'      => home_url('/productos/'),
+            'children' => array_map(static function ($producto) {
+                return [
+                    'label' => get_the_title($producto),
+                    'url'   => get_permalink($producto),
+                    'id'    => (int) $producto->ID,
+                ];
+            }, $productos_menu),
+        ],
         ['label' => 'Beneficios',     'url' => home_url('/beneficios/')],
         ['label' => 'Noticias',       'url' => home_url('/noticias/')],
         ['label' => 'Blog',           'url' => home_url('/blog/')],
@@ -44,15 +62,157 @@ function venza_primary_menu_fallback($args = []) {
     ];
 
     $current_url = trailingslashit(home_url(add_query_arg([], $GLOBALS['wp']->request ?? '')));
+    $is_producto_context = is_post_type_archive('producto') || is_singular('producto') || is_tax('linea_producto');
 
     echo '<ul class="' . esc_attr($menu_class) . '">';
     foreach ($items as $item) {
+        $children = isset($item['children']) && is_array($item['children']) ? $item['children'] : [];
         $is_current = trailingslashit($item['url']) === $current_url;
-        $class = $is_current ? ' class="current-menu-item"' : '';
-        echo '<li' . $class . '><a href="' . esc_url($item['url']) . '">' . esc_html($item['label']) . '</a></li>';
+        $has_current_child = false;
+
+        if (!empty($children)) {
+            foreach ($children as $child) {
+                $child_url = isset($child['url']) ? trailingslashit($child['url']) : '';
+                $child_id = isset($child['id']) ? (int) $child['id'] : 0;
+                if ($child_url === $current_url || (is_singular('producto') && $child_id === get_the_ID())) {
+                    $has_current_child = true;
+                    break;
+                }
+            }
+        }
+
+        $classes = [];
+        if (!empty($children)) {
+            $classes[] = 'menu-item-has-children';
+        }
+        if ($is_current) {
+            $classes[] = 'current-menu-item';
+        }
+        if ($has_current_child || (!empty($children) && $is_producto_context)) {
+            $classes[] = 'current-menu-ancestor';
+        }
+
+        $class_attr = !empty($classes) ? ' class="' . esc_attr(implode(' ', $classes)) . '"' : '';
+
+        echo '<li' . $class_attr . '>';
+        echo '<a href="' . esc_url($item['url']) . '">' . esc_html($item['label']) . '</a>';
+
+        if (!empty($children)) {
+            echo '<ul class="sub-menu">';
+            foreach ($children as $child) {
+                $child_url = isset($child['url']) ? trailingslashit($child['url']) : '';
+                $child_id = isset($child['id']) ? (int) $child['id'] : 0;
+                $child_is_current = $child_url === $current_url || (is_singular('producto') && $child_id === get_the_ID());
+                $child_class_attr = $child_is_current ? ' class="current-menu-item"' : '';
+                echo '<li' . $child_class_attr . '>';
+                echo '<a href="' . esc_url($child['url']) . '">' . esc_html($child['label']) . '</a>';
+                echo '</li>';
+            }
+            echo '</ul>';
+        }
+
+        echo '</li>';
     }
     echo '</ul>';
 }
+
+// Inyectar subproductos en "Productos" del menu principal cuando exista menu en WP
+add_filter('wp_nav_menu_objects', function ($items, $args) {
+    if (!isset($args->theme_location) || $args->theme_location !== 'primary' || empty($items) || !is_array($items)) {
+        return $items;
+    }
+
+    $productos_parent = null;
+    $productos_url = untrailingslashit(home_url('/productos/'));
+
+    foreach ($items as $item) {
+        $is_top_level = isset($item->menu_item_parent) && (int) $item->menu_item_parent === 0;
+        $item_url = isset($item->url) ? untrailingslashit($item->url) : '';
+        $item_title = isset($item->title) ? strtolower(trim((string) $item->title)) : '';
+
+        if ($is_top_level && ($item_url === $productos_url || $item_title === 'productos')) {
+            $productos_parent = $item;
+            break;
+        }
+    }
+
+    if (!$productos_parent || !isset($productos_parent->ID)) {
+        return $items;
+    }
+
+    $productos = get_posts([
+        'post_type'      => 'producto',
+        'posts_per_page' => -1,
+        'post_status'    => 'publish',
+        'orderby'        => ['menu_order' => 'ASC', 'title' => 'ASC'],
+        'order'          => 'ASC',
+    ]);
+
+    if (empty($productos)) {
+        return $items;
+    }
+
+    $parent_id = (int) $productos_parent->ID;
+    $is_producto_context = is_post_type_archive('producto') || is_singular('producto') || is_tax('linea_producto');
+
+    $filtered_items = [];
+    foreach ($items as $item) {
+        if (isset($item->menu_item_parent) && (int) $item->menu_item_parent === $parent_id) {
+            continue;
+        }
+        $filtered_items[] = $item;
+    }
+
+    $virtual_id = -1000;
+    $result = [];
+    foreach ($filtered_items as $item) {
+        if (isset($item->ID) && (int) $item->ID === $parent_id) {
+            $classes = isset($item->classes) && is_array($item->classes) ? $item->classes : [];
+            if (!in_array('menu-item-has-children', $classes, true)) {
+                $classes[] = 'menu-item-has-children';
+            }
+            if ($is_producto_context && !in_array('current-menu-ancestor', $classes, true)) {
+                $classes[] = 'current-menu-ancestor';
+            }
+            $item->classes = $classes;
+            $result[] = $item;
+
+            foreach ($productos as $producto) {
+                $permalink = get_permalink($producto);
+                if (!$permalink) {
+                    continue;
+                }
+
+                $child = clone $item;
+                $child->ID = $virtual_id--;
+                $child->db_id = 0;
+                $child->menu_item_parent = (string) $parent_id;
+                $child->object_id = (string) $producto->ID;
+                $child->object = 'producto';
+                $child->type = 'post_type';
+                $child->type_label = 'Producto';
+                $child->title = get_the_title($producto);
+                $child->url = $permalink;
+                $child->classes = ['menu-item', 'menu-item-type-post_type', 'menu-item-object-producto'];
+                $child->current = is_singular('producto') && (int) get_the_ID() === (int) $producto->ID;
+                $child->current_item_ancestor = false;
+                $child->current_item_parent = false;
+                $child->target = '';
+                $child->attr_title = '';
+                $child->description = '';
+                $child->xfn = '';
+                $child->menu_order = isset($item->menu_order) ? ((int) $item->menu_order + 1) : 0;
+                $result[] = $child;
+            }
+
+            continue;
+        }
+
+        $result[] = $item;
+    }
+
+    return $result;
+}, 20, 2);
 
 // Encolar estilos y scripts
 add_action('wp_enqueue_scripts', function () {

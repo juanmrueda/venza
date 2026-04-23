@@ -153,12 +153,28 @@ add_action('acf/init', function () {
                 'instructions'  => 'Color inicial del degrade horizontal en descripcion y tamanos.',
             ],
             [
+                'key'           => 'field_venza_producto_single_gradient_end_color',
+                'label'         => 'Color final del degrade (pagina producto)',
+                'name'          => 'producto_single_gradient_end_color',
+                'type'          => 'color_picker',
+                'default_value' => '#ffffff',
+                'instructions'  => 'Color final del degrade horizontal en la seccion de descripcion.',
+            ],
+            [
                 'key'           => 'field_venza_producto_single_tamanos_gradient_color',
                 'label'         => 'Color del degrade (bloque tamanos)',
                 'name'          => 'producto_single_tamanos_gradient_color',
                 'type'          => 'color_picker',
                 'default_value' => '#acdcef',
                 'instructions'  => 'Color inicial del degrade del bloque de tamanos. Si se deja vacio, usa el color general de pagina producto.',
+            ],
+            [
+                'key'           => 'field_venza_producto_single_tamanos_gradient_end_color',
+                'label'         => 'Color final del degrade (bloque tamanos)',
+                'name'          => 'producto_single_tamanos_gradient_end_color',
+                'type'          => 'color_picker',
+                'default_value' => '#ffffff',
+                'instructions'  => 'Color final del degrade del bloque de tamanos. Si se deja vacio, usa el color final de pagina producto.',
             ],
 
             // Campos editables del producto interno (single)

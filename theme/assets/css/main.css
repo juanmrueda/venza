@@ -2173,7 +2173,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     display: grid;
     grid-template-columns: minmax(300px, 613px) minmax(0, 1fr);
     min-height: 613px;
-    background: linear-gradient(90deg, var(--producto-gradient, #acdcef) 0%, #fff 100%);
+    background: linear-gradient(90deg, var(--producto-gradient-start, var(--producto-gradient, #acdcef)) 0%, var(--producto-gradient-end, #fff) 100%);
     margin-bottom: clamp(1.5rem, 3vw, 3rem);
 }
 
@@ -2213,7 +2213,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 .producto-frescura-tamanos {
-    background: linear-gradient(90deg, var(--producto-gradient, #acdcef) 0%, #fff 100%);
+    background: linear-gradient(90deg, var(--producto-gradient-start, var(--producto-gradient, #acdcef)) 0%, var(--producto-gradient-end, #fff) 100%);
     padding: 4.2rem 0 3.3rem;
 }
 

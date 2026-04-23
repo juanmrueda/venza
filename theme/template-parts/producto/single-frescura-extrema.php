@@ -75,13 +75,32 @@ if (!$hero_claim) {
     $hero_claim = get_the_excerpt();
 }
 
-$gradient_color = venza_get_meta_value('producto_single_gradient_color')
-    ?: venza_get_meta_value('producto_color_acento')
-    ?: '#acdcef';
-$tamanos_gradient_color = venza_get_meta_value('producto_single_tamanos_gradient_color')
-    ?: $gradient_color;
-$descripcion_gradient_style = '--producto-gradient: ' . $gradient_color . ';';
-$tamanos_gradient_style = '--producto-gradient: ' . $tamanos_gradient_color . ';';
+$resolve_color = static function ($value, $fallback) {
+    $sanitized = sanitize_hex_color(is_string($value) ? $value : '');
+    if ($sanitized) {
+        return $sanitized;
+    }
+    return $fallback;
+};
+
+$descripcion_gradient_start = $resolve_color(
+    venza_get_meta_value('producto_single_gradient_color') ?: venza_get_meta_value('producto_color_acento'),
+    '#acdcef'
+);
+$descripcion_gradient_end = $resolve_color(
+    venza_get_meta_value('producto_single_gradient_end_color'),
+    '#ffffff'
+);
+$tamanos_gradient_start = $resolve_color(
+    venza_get_meta_value('producto_single_tamanos_gradient_color'),
+    $descripcion_gradient_start
+);
+$tamanos_gradient_end = $resolve_color(
+    venza_get_meta_value('producto_single_tamanos_gradient_end_color'),
+    $descripcion_gradient_end
+);
+$descripcion_gradient_style = '--producto-gradient-start: ' . $descripcion_gradient_start . '; --producto-gradient-end: ' . $descripcion_gradient_end . ';';
+$tamanos_gradient_style = '--producto-gradient-start: ' . $tamanos_gradient_start . '; --producto-gradient-end: ' . $tamanos_gradient_end . ';';
 
 $intro_linea = venza_get_meta_value('producto_nombre_linea') ?: 'Jabon antibacterial';
 $intro_image_fallbacks = [

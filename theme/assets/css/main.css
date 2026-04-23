@@ -2173,7 +2173,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     display: grid;
     grid-template-columns: minmax(300px, 613px) minmax(0, 1fr);
     min-height: 613px;
-    background: #c2dbea;
+    background: linear-gradient(90deg, var(--producto-gradient, #acdcef) 0%, #fff 100%);
 }
 
 .producto-frescura-descripcion__media {
@@ -2189,7 +2189,6 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 .producto-frescura-descripcion__texto {
     display: flex;
     align-items: center;
-    background: linear-gradient(90deg, rgba(193, 218, 234, 0.98) 0%, rgba(187, 212, 229, 0.98) 100%);
 }
 
 .producto-frescura-descripcion__texto-inner {
@@ -2213,7 +2212,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 .producto-frescura-tamanos {
-    background: linear-gradient(180deg, #dfe4ef 0%, #dfe4ef 14%, #b7d8ea 14%, #b7d8ea 100%);
+    background: linear-gradient(90deg, var(--producto-gradient, #acdcef) 0%, #fff 100%);
     padding: 4.2rem 0 3.3rem;
 }
 

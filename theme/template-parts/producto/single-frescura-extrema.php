@@ -31,6 +31,9 @@ $get_image_url = static function ($meta_key, $fallback_path) {
 $hero_banner = $get_image_url('producto_single_banner_imagen', 'assets/images/banners/frescura-extrema.jpg');
 $hero_claim = venza_get_meta_value('producto_single_claim_texto') ?: 'Más fresco, imposible.';
 
+$gradient_color = venza_get_meta_value('producto_single_gradient_color') ?: '#acdcef';
+$gradient_style = '--producto-gradient: ' . esc_attr($gradient_color) . ';';
+
 $intro_linea = venza_get_meta_value('producto_nombre_linea') ?: 'Jabón Antibacterial';
 $intro_imagen = get_theme_file_uri('assets/images/productos/prod-frescura-extrema.png');
 
@@ -83,7 +86,7 @@ $tamanos = [
     </div>
 </section>
 
-<section class="producto-frescura-descripcion">
+<section class="producto-frescura-descripcion" style="<?php echo $gradient_style; ?>">
     <div class="producto-frescura-descripcion__media">
         <img src="<?php echo esc_url($descripcion_imagen); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
     </div>
@@ -94,7 +97,7 @@ $tamanos = [
     </div>
 </section>
 
-<section class="producto-frescura-tamanos">
+<section class="producto-frescura-tamanos" style="<?php echo $gradient_style; ?>">
     <div class="container">
         <h2 class="producto-frescura-tamanos__titulo">Tamaños</h2>
         <div class="producto-frescura-tamanos__grid">

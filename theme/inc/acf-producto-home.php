@@ -144,6 +144,14 @@ add_action('acf/init', function () {
                 'type'          => 'text',
                 'instructions'  => 'Ejemplo: Jabón antibacterial',
             ],
+            [
+                'key'           => 'field_venza_producto_single_gradient_color',
+                'label'         => 'Color del degradé (página producto)',
+                'name'          => 'producto_single_gradient_color',
+                'type'          => 'color_picker',
+                'default_value' => '#acdcef',
+                'instructions'  => 'Color inicial del degradé horizontal en las secciones "descripción" y "tamaños" de la página del producto. Siempre termina en blanco.',
+            ],
         ],
         'location' => [
             [

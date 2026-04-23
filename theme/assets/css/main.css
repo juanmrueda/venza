@@ -1003,7 +1003,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 .home-hero {
     min-height: auto;
     padding: 0;
-    background: #dfe4ef;
+    background: #eef4ff;
     overflow: hidden;
 }
 
@@ -1508,7 +1508,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 .productos-archive--editable {
-    background: #dfe4ef;
+    background: #eef4ff;
 }
 
 .productos-archive__empty {
@@ -1533,7 +1533,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 
 .producto-home-beneficios {
     padding: 2.5rem 0 1.8rem;
-    background: #dfe4ef;
+    background: #eef4ff;
 }
 
 .producto-home-beneficios .section-title {
@@ -1612,7 +1612,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 
 .producto-home-descripcion {
     padding: 2.2rem 0 1.6rem;
-    background: #dfe4ef;
+    background: #eef4ff;
 }
 
 .producto-home-descripcion__layout {
@@ -1646,7 +1646,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 
 .producto-home-claim {
     padding: 1.2rem 0 2.2rem;
-    background: #dfe4ef;
+    background: #eef4ff;
 }
 
 .producto-home-claim__box {
@@ -1673,7 +1673,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 
 .productos-archive--editable .producto-disponibilidad {
     padding: 1.9rem 1rem 2.4rem;
-    background: #dfe4ef;
+    background: #eef4ff;
     color: #1a1a1a;
     text-align: center;
     font-size: clamp(1rem, 1.45vw, 1.95rem);
@@ -1684,7 +1684,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 .mas-productos--venza {
-    background: #dfe4ef;
+    background: #eef4ff;
     padding: 1.2rem 0 4.5rem;
 }
 
@@ -2067,7 +2067,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
    PRODUCTO INTERNO - FRESCURA EXTREMA (Pagina 03)
    ============================================================ */
 .producto-single--frescura-extrema {
-    background: #dfe4ef;
+    background: #eef4ff;
 }
 
 .producto-frescura-hero {
@@ -2075,7 +2075,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     width: 100%;
     aspect-ratio: 1922 / 815;
     overflow: hidden;
-    background: #dfe4ef;
+    background: #eef4ff;
 }
 
 .producto-frescura-hero > img {
@@ -2101,7 +2101,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 
 .producto-frescura-identidad {
     padding: clamp(1.9rem, 4.5vw, 4.3rem) 0 2rem;
-    background: #dfe4ef;
+    background: #eef4ff;
 }
 
 .producto-frescura-identidad .container {
@@ -2174,6 +2174,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     grid-template-columns: minmax(300px, 613px) minmax(0, 1fr);
     min-height: 613px;
     background: linear-gradient(90deg, var(--producto-gradient, #acdcef) 0%, #fff 100%);
+    margin-bottom: clamp(1.5rem, 3vw, 3rem);
 }
 
 .producto-frescura-descripcion__media {
@@ -2268,7 +2269,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 .producto-single--frescura-extrema .producto-disponibilidad {
-    background: #dfe4ef;
+    background: #eef4ff;
     padding: 2.1rem 1rem 2.8rem;
     color: #1a1a1a;
     text-align: center;

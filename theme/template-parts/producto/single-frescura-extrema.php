@@ -239,13 +239,35 @@ $tamano_image_overrides = [
     $get_media_url(venza_get_meta_value('producto_single_tamano_3_imagen')),
 ];
 
+$tamano_text_overrides = [
+    [
+        'nombre'      => trim((string) (venza_get_meta_value('producto_single_tamano_1_nombre') ?? '')),
+        'descripcion' => trim((string) (venza_get_meta_value('producto_single_tamano_1_descripcion') ?? '')),
+        'nota'        => trim((string) (venza_get_meta_value('producto_single_tamano_1_nota') ?? '')),
+    ],
+    [
+        'nombre'      => trim((string) (venza_get_meta_value('producto_single_tamano_2_nombre') ?? '')),
+        'descripcion' => trim((string) (venza_get_meta_value('producto_single_tamano_2_descripcion') ?? '')),
+        'nota'        => trim((string) (venza_get_meta_value('producto_single_tamano_2_nota') ?? '')),
+    ],
+    [
+        'nombre'      => trim((string) (venza_get_meta_value('producto_single_tamano_3_nombre') ?? '')),
+        'descripcion' => trim((string) (venza_get_meta_value('producto_single_tamano_3_descripcion') ?? '')),
+        'nota'        => trim((string) (venza_get_meta_value('producto_single_tamano_3_nota') ?? '')),
+    ],
+];
+
 $tamanos_finales = [];
 for ($i = 0; $i < 3; $i++) {
     $slot = $tamano_slot_defaults[$i];
     $actual = isset($tamanos[$i]) && is_array($tamanos[$i]) ? $tamanos[$i] : [];
     $defecto = isset($tamanos_defaults[$i]) && is_array($tamanos_defaults[$i]) ? $tamanos_defaults[$i] : [];
+    $override = isset($tamano_text_overrides[$i]) && is_array($tamano_text_overrides[$i]) ? $tamano_text_overrides[$i] : [];
 
-    $nombre = trim((string) ($actual['nombre'] ?? ''));
+    $nombre = trim((string) ($override['nombre'] ?? ''));
+    if ($nombre === '') {
+        $nombre = trim((string) ($actual['nombre'] ?? ''));
+    }
     if ($nombre === '' && !empty($defecto['nombre'])) {
         $nombre = trim((string) $defecto['nombre']);
     }
@@ -253,7 +275,10 @@ for ($i = 0; $i < 3; $i++) {
         $nombre = $slot['nombre'];
     }
 
-    $descripcion = trim((string) ($actual['descripcion'] ?? ''));
+    $descripcion = trim((string) ($override['descripcion'] ?? ''));
+    if ($descripcion === '') {
+        $descripcion = trim((string) ($actual['descripcion'] ?? ''));
+    }
     if ($descripcion === '' && !empty($defecto['descripcion'])) {
         $descripcion = trim((string) $defecto['descripcion']);
     }
@@ -261,7 +286,10 @@ for ($i = 0; $i < 3; $i++) {
         $descripcion = $slot['descripcion'];
     }
 
-    $nota = trim((string) ($actual['nota'] ?? ''));
+    $nota = trim((string) ($override['nota'] ?? ''));
+    if ($nota === '') {
+        $nota = trim((string) ($actual['nota'] ?? ''));
+    }
     if ($nota === '' && !empty($defecto['nota'])) {
         $nota = trim((string) $defecto['nota']);
     }

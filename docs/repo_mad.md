@@ -105,6 +105,15 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-24 - Header global spacing + blue line + submenu indicator
+
+- Adjusted global header navigation spacing for clearer separation between top menu items.
+- Increased blue bottom bar under header from `1px` to `3px` for stronger visual presence.
+- Updated submenu indicator in header (`Productos`) to an inverted triangle in complementary blue.
+- Kept active-item underline behavior intact while moving submenu arrow rendering to a separate pseudo-element.
+- File updated:
+  - `theme/assets/css/main.css`
+
 ### 2026-04-24 - Home hero slider synced to first video end
 
 - Updated Home hero carousel behavior:

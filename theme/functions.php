@@ -26,6 +26,24 @@ add_action('after_setup_theme', function () {
     ]);
 });
 
+// Evitar glitches visuales intermitentes de campos ACF (WYSIWYG/meta boxes)
+// en el editor de bloques para productos.
+add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {
+    if ($post_type === 'producto') {
+        return false;
+    }
+
+    return $use_block_editor;
+}, 10, 2);
+
+add_filter('use_block_editor_for_post', function ($use_block_editor, $post) {
+    if ($post instanceof WP_Post && $post->post_type === 'producto') {
+        return false;
+    }
+
+    return $use_block_editor;
+}, 10, 2);
+
 // Fallback explÃ­cito para que el header no quede sin navegaciÃ³n
 function venza_primary_menu_fallback($args = []) {
     if (!isset($args['theme_location']) || $args['theme_location'] !== 'primary') {

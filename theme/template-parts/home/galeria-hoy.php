@@ -4,11 +4,32 @@ if (!$home_id) {
     $home_id = (int) get_option('page_on_front');
 }
 
+$get_home_field = static function ($key, $default = null) use ($home_id) {
+    $value = venza_field($key, $home_id);
+    if ($value !== null && $value !== '' && $value !== []) {
+        return $value;
+    }
+
+    return $default;
+};
+
 $video_rel = '/assets/videos/venza_video_home.mp4';
 $video_path = VENZA_DIR . $video_rel;
-$video_src = file_exists($video_path) ? VENZA_URI . $video_rel : '';
+$video_src = '';
 
-$acf_video_id = venza_field('home_venza_hoy_video', $home_id);
+$hero_video_id = (int) $get_home_field('home_hero_slide_1_video', 0);
+if ($hero_video_id > 0) {
+    $hero_video_url = wp_get_attachment_url($hero_video_id);
+    if (is_string($hero_video_url) && $hero_video_url !== '') {
+        $video_src = $hero_video_url;
+    }
+}
+
+if ($video_src === '' && file_exists($video_path)) {
+    $video_src = VENZA_URI . $video_rel;
+}
+
+$acf_video_id = $get_home_field('home_venza_hoy_video', 0);
 if ($acf_video_id) {
     $acf_video_url = wp_get_attachment_url((int) $acf_video_id);
     if (is_string($acf_video_url) && $acf_video_url !== '') {
@@ -17,18 +38,41 @@ if ($acf_video_id) {
 }
 
 $poster = VENZA_URI . '/assets/images/banners/bannerhomedemo.svg';
-$poster_id = venza_field('home_venza_hoy_video_poster', $home_id);
+$hero_poster_id = (int) $get_home_field('home_hero_slide_1_poster', 0);
+if ($hero_poster_id > 0) {
+    $hero_poster_url = wp_get_attachment_image_url($hero_poster_id, 'full');
+    if (is_string($hero_poster_url) && $hero_poster_url !== '') {
+        $poster = $hero_poster_url;
+    }
+}
+
+$poster_id = $get_home_field('home_venza_hoy_video_poster', 0);
 if ($poster_id) {
     $poster_url = wp_get_attachment_image_url((int) $poster_id, 'full');
     if (is_string($poster_url) && $poster_url !== '') {
         $poster = $poster_url;
     }
 }
+
+$section_title = trim((string) $get_home_field('home_venza_hoy_titulo', 'Venza hoy'));
+if ($section_title === '') {
+    $section_title = 'Venza hoy';
+}
+
+$pill_text = trim((string) $get_home_field('home_venza_hoy_pill', 'Mira todas las novedades que Venza tiene para ti'));
+if ($pill_text === '') {
+    $pill_text = 'Mira todas las novedades que Venza tiene para ti';
+}
+
+$card_cta_text = trim((string) $get_home_field('home_venza_hoy_cta_texto', 'Conoce mas'));
+if ($card_cta_text === '') {
+    $card_cta_text = 'Conoce mas';
+}
 ?>
 
 <section class="home-venza-hoy">
     <div class="container">
-        <h2 class="section-title section-title--lined">Venza hoy</h2>
+        <h2 class="section-title section-title--lined"><?php echo esc_html($section_title); ?></h2>
     </div>
 
     <div class="home-venza-hoy__video-wrap">
@@ -43,7 +87,7 @@ if ($poster_id) {
 
     <div class="home-venza-hoy__news">
         <div class="container">
-            <p class="home-venza-hoy__pill">Mira todas las novedades que Venza tiene para ti</p>
+            <p class="home-venza-hoy__pill"><?php echo esc_html($pill_text); ?></p>
 
             <div class="venza-hoy-grid">
                 <?php
@@ -70,7 +114,7 @@ if ($poster_id) {
                             <div class="venza-hoy-card__body">
                                 <h3><?php echo esc_html($ph['titulo']); ?></h3>
                                 <p><?php echo esc_html($ph['desc']); ?></p>
-                                <a href="#" class="btn btn--primary">Conoce m&aacute;s</a>
+                                <a href="#" class="btn btn--primary"><?php echo esc_html($card_cta_text); ?></a>
                             </div>
                         </article>
                     <?php endforeach;
@@ -89,7 +133,7 @@ if ($poster_id) {
                             <div class="venza-hoy-card__body">
                                 <h3><?php echo esc_html($item->post_title); ?></h3>
                                 <p><?php echo esc_html($desc); ?></p>
-                                <a href="<?php echo esc_url(get_permalink($item->ID)); ?>" class="btn btn--primary">Conoce m&aacute;s</a>
+                                <a href="<?php echo esc_url(get_permalink($item->ID)); ?>" class="btn btn--primary"><?php echo esc_html($card_cta_text); ?></a>
                             </div>
                         </article>
                     <?php endforeach;

@@ -6,23 +6,45 @@ add_action('acf/init', function () {
         return;
     }
 
+    $build_hero_image_slide_fields = static function ($index, $default_alt = '') {
+        return [
+            [
+                'key'           => 'field_venza_home_hero_slide_' . $index . '_image',
+                'label'         => 'Home Hero - Slide ' . $index . ' (imagen)',
+                'name'          => 'home_hero_slide_' . $index . '_image',
+                'type'          => 'image',
+                'return_format' => 'id',
+                'preview_size'  => 'medium',
+                'library'       => 'all',
+                'instructions'  => 'Imagen del slide ' . $index . ' para el hero.',
+            ],
+            [
+                'key'           => 'field_venza_home_hero_slide_' . $index . '_alt',
+                'label'         => 'Home Hero - Slide ' . $index . ' (texto alterno)',
+                'name'          => 'home_hero_slide_' . $index . '_alt',
+                'type'          => 'text',
+                'default_value' => $default_alt,
+            ],
+        ];
+    };
+
     $build_line_fields = static function ($prefix, $label, array $defaults = []) {
         $title_default = isset($defaults['title']) ? (string) $defaults['title'] : '';
         $desc_default = isset($defaults['description']) ? (string) $defaults['description'] : '';
-        $cta_default = isset($defaults['cta_text']) ? (string) $defaults['cta_text'] : 'Conoce más';
+        $cta_default = isset($defaults['cta_text']) ? (string) $defaults['cta_text'] : 'Conoce mas';
         $fallback_name = isset($defaults['product_name']) ? (string) $defaults['product_name'] : '';
 
         $fields = [
             [
                 'key'           => 'field_venza_' . $prefix . '_titulo',
-                'label'         => $label . ' - Título',
+                'label'         => $label . ' - Titulo',
                 'name'          => $prefix . '_titulo',
                 'type'          => 'text',
                 'default_value' => $title_default,
             ],
             [
                 'key'           => 'field_venza_' . $prefix . '_descripcion',
-                'label'         => $label . ' - Descripción',
+                'label'         => $label . ' - Descripcion',
                 'name'          => $prefix . '_descripcion',
                 'type'          => 'textarea',
                 'rows'          => 4,
@@ -30,17 +52,17 @@ add_action('acf/init', function () {
             ],
             [
                 'key'           => 'field_venza_' . $prefix . '_cta_texto',
-                'label'         => $label . ' - Texto botón',
+                'label'         => $label . ' - Texto boton',
                 'name'          => $prefix . '_cta_texto',
                 'type'          => 'text',
                 'default_value' => $cta_default,
             ],
             [
                 'key'          => 'field_venza_' . $prefix . '_cta_url',
-                'label'        => $label . ' - URL botón',
+                'label'        => $label . ' - URL boton',
                 'name'         => $prefix . '_cta_url',
                 'type'         => 'url',
-                'instructions' => 'Opcional. Si queda vacío usa /productos/.',
+                'instructions' => 'Opcional. Si queda vacio usa /productos/.',
             ],
             [
                 'key'           => 'field_venza_' . $prefix . '_background',
@@ -50,7 +72,7 @@ add_action('acf/init', function () {
                 'return_format' => 'id',
                 'preview_size'  => 'medium',
                 'library'       => 'all',
-                'instructions'  => 'Imagen de fondo para este bloque de línea.',
+                'instructions'  => 'Imagen de fondo para este bloque de linea.',
             ],
         ];
 
@@ -71,7 +93,7 @@ add_action('acf/init', function () {
                 'return_format' => 'id',
                 'preview_size'  => 'medium',
                 'library'       => 'all',
-                'instructions'  => 'Sube la imagen del producto para la rotación. Si está vacío, ese slot no rota.',
+                'instructions'  => 'Sube la imagen del producto para la rotacion. Si esta vacio, ese slot no rota.',
             ];
         }
 
@@ -109,6 +131,91 @@ add_action('acf/init', function () {
 
     $fields = array_merge(
         [
+            [
+                'key'   => 'field_venza_home_tab_hero',
+                'label' => 'Hero',
+                'type'  => 'tab',
+            ],
+            [
+                'key'           => 'field_venza_home_hero_slide_1_video',
+                'label'         => 'Home Hero - Slide 1 (video principal)',
+                'name'          => 'home_hero_slide_1_video',
+                'type'          => 'file',
+                'return_format' => 'id',
+                'library'       => 'all',
+                'mime_types'    => 'mp4,webm,ogg',
+                'instructions'  => 'Video principal del hero. Si queda vacio, usa el archivo local por defecto del tema.',
+            ],
+            [
+                'key'           => 'field_venza_home_hero_slide_1_poster',
+                'label'         => 'Home Hero - Slide 1 (poster)',
+                'name'          => 'home_hero_slide_1_poster',
+                'type'          => 'image',
+                'return_format' => 'id',
+                'preview_size'  => 'medium',
+                'library'       => 'all',
+            ],
+            [
+                'key'           => 'field_venza_home_hero_slide_1_alt',
+                'label'         => 'Home Hero - Slide 1 (texto alterno)',
+                'name'          => 'home_hero_slide_1_alt',
+                'type'          => 'text',
+                'default_value' => 'Video Home Venza',
+            ],
+            [
+                'key'           => 'field_venza_home_hero_slide_1_wait_end',
+                'label'         => 'Home Hero - Esperar fin del video antes de cambiar',
+                'name'          => 'home_hero_slide_1_wait_end',
+                'type'          => 'true_false',
+                'ui'            => 1,
+                'default_value' => 1,
+            ],
+        ],
+        $build_hero_image_slide_fields(2, 'Frescura Extrema'),
+        $build_hero_image_slide_fields(3, 'Vitamina E'),
+        $build_hero_image_slide_fields(4, 'Sabila'),
+        [
+            [
+                'key'           => 'field_venza_home_claim_text',
+                'label'         => 'Home Hero - Texto del claim',
+                'name'          => 'home_claim_text',
+                'type'          => 'textarea',
+                'rows'          => 4,
+                'new_lines'     => 'br',
+                'default_value' => 'Cada uno de nuestros productos exalta una <strong>sensacion y emocion especial</strong> para los diferentes momentos del dia, ayudandote a ti y a los tuyos a vivir <strong>cada instante plenamente</strong>.',
+                'instructions'  => 'Acepta etiquetas basicas como <strong> para resaltar texto.',
+            ],
+            [
+                'key'   => 'field_venza_home_tab_productos',
+                'label' => 'Productos',
+                'type'  => 'tab',
+            ],
+            [
+                'key'           => 'field_venza_home_productos_titulo',
+                'label'         => 'Home - Productos titulo',
+                'name'          => 'home_productos_titulo',
+                'type'          => 'text',
+                'default_value' => 'Productos',
+            ],
+        ],
+        $build_line_fields('home_linea_antibacterial', 'Linea Antibacterial', [
+            'title'        => 'Linea Antibacterial',
+            'description'  => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam',
+            'cta_text'     => 'Conoce mas',
+            'product_name' => 'Frescura Extrema',
+        ]),
+        $build_line_fields('home_linea_hidratacion', 'Linea Hidratacion Profunda', [
+            'title'        => 'Linea Hidratacion Profunda',
+            'description'  => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam',
+            'cta_text'     => 'Conoce mas',
+            'product_name' => 'Crema Humectante',
+        ]),
+        [
+            [
+                'key'   => 'field_venza_home_tab_beneficios',
+                'label' => 'Beneficios',
+                'type'  => 'tab',
+            ],
             [
                 'key'           => 'field_venza_home_beneficios_titulo',
                 'label'         => 'Home - Beneficios titulo',
@@ -168,20 +275,34 @@ add_action('acf/init', function () {
                 'type'          => 'text',
                 'default_value' => 'venza',
             ],
-        ],
-        $build_line_fields('home_linea_antibacterial', 'Línea Antibacterial', [
-            'title'       => 'Línea Antibacterial',
-            'description' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam',
-            'cta_text'    => 'Conoce más',
-            'product_name'=> 'Frescura Extrema',
-        ]),
-        $build_line_fields('home_linea_hidratacion', 'Línea Hidratación Profunda', [
-            'title'       => 'Línea Hidratación Profunda',
-            'description' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam',
-            'cta_text'    => 'Conoce más',
-            'product_name'=> 'Crema Humectante',
-        ]),
-        [
+            [
+                'key'   => 'field_venza_home_tab_venza_hoy',
+                'label' => 'Venza hoy',
+                'type'  => 'tab',
+            ],
+            [
+                'key'           => 'field_venza_home_venza_hoy_titulo',
+                'label'         => 'Venza hoy - Titulo',
+                'name'          => 'home_venza_hoy_titulo',
+                'type'          => 'text',
+                'default_value' => 'Venza hoy',
+            ],
+            [
+                'key'           => 'field_venza_home_venza_hoy_pill',
+                'label'         => 'Venza hoy - Texto introductorio',
+                'name'          => 'home_venza_hoy_pill',
+                'type'          => 'textarea',
+                'rows'          => 2,
+                'new_lines'     => 'br',
+                'default_value' => 'Mira todas las novedades que Venza tiene para ti',
+            ],
+            [
+                'key'           => 'field_venza_home_venza_hoy_cta_texto',
+                'label'         => 'Venza hoy - Texto boton tarjetas',
+                'name'          => 'home_venza_hoy_cta_texto',
+                'type'          => 'text',
+                'default_value' => 'Conoce mas',
+            ],
             [
                 'key'           => 'field_venza_home_venza_hoy_video',
                 'label'         => 'Venza hoy - Video principal',
@@ -190,7 +311,7 @@ add_action('acf/init', function () {
                 'return_format' => 'id',
                 'library'       => 'all',
                 'mime_types'    => 'mp4,webm,ogg',
-                'instructions'  => 'Opcional. Si queda vacío usa el video por defecto del hero.',
+                'instructions'  => 'Opcional. Si queda vacio usa el video por defecto del hero.',
             ],
             [
                 'key'           => 'field_venza_home_venza_hoy_video_poster',
@@ -207,7 +328,7 @@ add_action('acf/init', function () {
 
     acf_add_local_field_group([
         'key'    => 'group_venza_home_sections',
-        'title'  => 'Home - Productos y Venza hoy',
+        'title'  => 'Home - Secciones editables',
         'fields' => $fields,
         'location' => [
             [

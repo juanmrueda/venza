@@ -79,6 +79,11 @@ $build_line_slides = static function ($prefix, array $fallback_slides) use ($get
     return !empty($slides) ? $slides : $fallback_slides;
 };
 
+$productos_title = trim((string) $get_home_field('home_productos_titulo', 'Productos'));
+if ($productos_title === '') {
+    $productos_title = 'Productos';
+}
+
 $default_antibacterial = $build_fallback_product_slides(
     ['frescura-extrema', 'vitamina-e', 'sabila', 'coco', 'avena'],
     [
@@ -125,7 +130,7 @@ $lineas = [
 
 <section class="home-productos">
     <div class="container">
-        <h2 class="section-title section-title--lined">Productos</h2>
+        <h2 class="section-title section-title--lined"><?php echo esc_html($productos_title); ?></h2>
 
         <?php foreach ($lineas as $linea) :
             $slides = is_array($linea['slides']) ? array_values($linea['slides']) : [];

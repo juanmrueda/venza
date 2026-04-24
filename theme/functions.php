@@ -26,8 +26,8 @@ add_action('after_setup_theme', function () {
     ]);
 });
 
-// Evitar glitches visuales intermitentes de campos ACF (WYSIWYG/meta boxes)
-// en el editor de bloques para productos.
+// Evitar glitches visuales intermitentes de campos ACF (meta boxes/WYSIWYG)
+// en pantallas con alta edicion de campos personalizados.
 add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {
     if ($post_type === 'producto') {
         return false;
@@ -37,7 +37,23 @@ add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_
 }, 10, 2);
 
 add_filter('use_block_editor_for_post', function ($use_block_editor, $post) {
-    if ($post instanceof WP_Post && $post->post_type === 'producto') {
+    if (!$post instanceof WP_Post) {
+        return $use_block_editor;
+    }
+
+    if ($post->post_type === 'producto') {
+        return false;
+    }
+
+    // Front Page: forzar editor clasico para estabilidad de campos ACF del Home.
+    if ($post->post_type === 'page') {
+        $front_page_id = (int) get_option('page_on_front');
+        if ($front_page_id > 0 && (int) $post->ID === $front_page_id) {
+            return false;
+        }
+    }
+
+    if ($post->post_type === 'noticia') {
         return false;
     }
 

@@ -1,40 +1,100 @@
 <?php
-$home_video_rel = '/assets/videos/venza_video_home.mp4';
-$home_video_file = VENZA_DIR . $home_video_rel;
-$home_video_src = VENZA_URI . $home_video_rel;
-$home_video_available = file_exists($home_video_file);
+$home_id = get_queried_object_id();
+if (!$home_id) {
+    $home_id = (int) get_option('page_on_front');
+}
 
-$slides = [
-    $home_video_available
-        ? [
-            'type'   => 'video',
-            'src'    => $home_video_src,
-            'poster' => VENZA_URI . '/assets/images/banners/bannerhomedemo.svg',
-            'alt'    => 'Video Home Venza',
-            'wait_end' => true,
-            'loop'   => false,
-        ]
-        : [
-            'type' => 'image',
-            'src'  => VENZA_URI . '/assets/images/banners/bannerhomedemo.svg',
-            'alt'  => 'Banner Home Demo',
-        ],
-    [
+$get_home_field = static function ($key, $default = null) use ($home_id) {
+    $value = venza_field($key, $home_id);
+    if ($value !== null && $value !== '' && $value !== []) {
+        return $value;
+    }
+
+    return $default;
+};
+
+$default_video_rel = '/assets/videos/venza_video_home.mp4';
+$default_video_file = VENZA_DIR . $default_video_rel;
+$default_video_src = VENZA_URI . $default_video_rel;
+
+$hero_video_src = '';
+$hero_video_id = (int) $get_home_field('home_hero_slide_1_video', 0);
+if ($hero_video_id > 0) {
+    $hero_video_url = wp_get_attachment_url($hero_video_id);
+    if (is_string($hero_video_url) && $hero_video_url !== '') {
+        $hero_video_src = $hero_video_url;
+    }
+}
+
+if ($hero_video_src === '' && file_exists($default_video_file)) {
+    $hero_video_src = $default_video_src;
+}
+
+$poster = VENZA_URI . '/assets/images/banners/bannerhomedemo.svg';
+$poster_id = (int) $get_home_field('home_hero_slide_1_poster', 0);
+if ($poster_id > 0) {
+    $poster_url = wp_get_attachment_image_url($poster_id, 'full');
+    if (is_string($poster_url) && $poster_url !== '') {
+        $poster = $poster_url;
+    }
+}
+
+$hero_alt = trim((string) $get_home_field('home_hero_slide_1_alt', 'Video Home Venza'));
+if ($hero_alt === '') {
+    $hero_alt = 'Video Home Venza';
+}
+
+$wait_end = (bool) $get_home_field('home_hero_slide_1_wait_end', true);
+
+$build_image_slide = static function ($index, $fallback_src, $fallback_alt) use ($get_home_field) {
+    $src = $fallback_src;
+    $image_id = (int) $get_home_field('home_hero_slide_' . $index . '_image', 0);
+    if ($image_id > 0) {
+        $image_url = wp_get_attachment_image_url($image_id, 'full');
+        if (is_string($image_url) && $image_url !== '') {
+            $src = $image_url;
+        }
+    }
+
+    $alt = trim((string) $get_home_field('home_hero_slide_' . $index . '_alt', $fallback_alt));
+    if ($alt === '') {
+        $alt = $fallback_alt;
+    }
+
+    return [
         'type' => 'image',
-        'src'  => VENZA_URI . '/assets/images/banners/frescura-extrema.jpg',
-        'alt'  => 'Frescura Extrema',
-    ],
-    [
+        'src'  => $src,
+        'alt'  => $alt,
+    ];
+};
+
+$slides = [];
+if ($hero_video_src !== '') {
+    $slides[] = [
+        'type'     => 'video',
+        'src'      => $hero_video_src,
+        'poster'   => $poster,
+        'alt'      => $hero_alt,
+        'wait_end' => $wait_end,
+        'loop'     => false,
+    ];
+} else {
+    $slides[] = [
         'type' => 'image',
-        'src'  => VENZA_URI . '/assets/images/banners/vitamina-e.jpg',
-        'alt'  => 'Vitamina E',
-    ],
-    [
-        'type' => 'image',
-        'src'  => VENZA_URI . '/assets/images/banners/sabila.jpg',
-        'alt'  => 'Sabila',
-    ],
-];
+        'src'  => $poster,
+        'alt'  => 'Banner Home Demo',
+    ];
+}
+
+$slides[] = $build_image_slide(2, VENZA_URI . '/assets/images/banners/frescura-extrema.jpg', 'Frescura Extrema');
+$slides[] = $build_image_slide(3, VENZA_URI . '/assets/images/banners/vitamina-e.jpg', 'Vitamina E');
+$slides[] = $build_image_slide(4, VENZA_URI . '/assets/images/banners/sabila.jpg', 'Sabila');
+
+$claim_text = (string) $get_home_field('home_claim_text', 'Cada uno de nuestros productos exalta una <strong>sensacion y emocion especial</strong> para los diferentes momentos del dia, ayudandote a ti y a los tuyos a vivir <strong>cada instante plenamente</strong>.');
+if (trim(strip_tags($claim_text)) === '') {
+    $claim_text = 'Cada uno de nuestros productos exalta una <strong>sensacion y emocion especial</strong> para los diferentes momentos del dia, ayudandote a ti y a los tuyos a vivir <strong>cada instante plenamente</strong>.';
+}
+$claim_html = wp_kses_post($claim_text);
 ?>
 
 <section class="home-hero" aria-label="Hero principal">
@@ -81,9 +141,7 @@ $slides = [
 <section class="home-claim">
     <div class="container">
         <div class="home-claim__box">
-            <p>
-                Cada uno de nuestros productos exalta una <strong>sensacion y emocion especial</strong> para los diferentes momentos del dia, ayudandote a ti y a los tuyos a vivir <strong>cada instante plenamente</strong>.
-            </p>
+            <p><?php echo wp_kses_post($claim_html); ?></p>
         </div>
     </div>
 </section>

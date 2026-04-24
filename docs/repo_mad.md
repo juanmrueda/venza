@@ -105,6 +105,48 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-24 - Home fully editable + front-page editor stability fix
+
+- Home section admin-enablement completed across all blocks:
+  - Hero now editable from Front Page ACF:
+    - main video, poster, wait-until-end toggle, slide images 2/3/4, claim text
+  - Productos section title now editable from admin
+  - Venza Hoy section now editable for:
+    - section title, intro/pill text, cards CTA text, video, poster
+- Existing editable blocks preserved:
+  - Productos line blocks (titles, descriptions, CTA, backgrounds, rotating images)
+  - Beneficios home copy block
+- Applied the same editor stability approach used in products to Home:
+  - Gutenberg disabled specifically for Front Page edit screen (classic editor for ACF-heavy home fields)
+  - Keeps ACF field rendering/paste behavior stable on Home admin
+- Files updated:
+  - `theme/inc/acf-home.php`
+  - `theme/template-parts/home/hero.php`
+  - `theme/template-parts/home/productos-destacados.php`
+  - `theme/template-parts/home/galeria-hoy.php`
+  - `theme/functions.php`
+
+### 2026-04-24 - Product admin ACF visibility bug mitigation
+
+- Addressed intermittent issue where ACF product fields (notably WYSIWYG) appeared visually blank until browser restart.
+- Applied stability fix by disabling Gutenberg only for CPT `producto`, forcing classic editor meta-box flow for product editing.
+- Files updated:
+  - `theme/functions.php`
+
+### 2026-04-24 - README synced with real navigation status
+
+- Updated `README.md` to reflect current implementation reality:
+  - site map status corrected (Productos single + Noticias moved from pending to implemented)
+  - current progress clarified for Blog, Descubre Venza, Quiz, and Contacto
+  - folder structure section aligned with actual files in `theme/`
+  - timeline status adjusted to match delivered vs in-progress work
+
+### 2026-04-24 - Header tuning approved and documented
+
+- User validated the final header look in production (`línea inferior` + `altura compacta`).
+- Documentation synced to reflect this closed adjustment cycle.
+- No additional functional changes applied in this step.
+
 ### 2026-04-24 - Header compact + bottom line doubled
 
 - Increased header bottom blue line thickness from `3px` to `6px` (double).

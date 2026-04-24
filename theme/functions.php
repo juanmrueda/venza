@@ -10,6 +10,7 @@ require_once VENZA_DIR . '/inc/cpt.php';
 require_once VENZA_DIR . '/inc/helpers.php';
 require_once VENZA_DIR . '/inc/acf-producto-home.php';
 require_once VENZA_DIR . '/inc/acf-page-beneficios.php';
+require_once VENZA_DIR . '/inc/acf-noticia.php';
 
 // Soporte del tema
 add_action('after_setup_theme', function () {

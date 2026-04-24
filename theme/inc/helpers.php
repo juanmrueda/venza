@@ -129,3 +129,166 @@ function venza_body_class_page() {
     $slug = get_post_field('post_name', get_post());
     return 'page-' . $slug;
 }
+
+function venza_get_noticia_home_terms($limit = 3) {
+    $terms = get_terms([
+        'taxonomy'   => 'noticia_cat',
+        'hide_empty' => false,
+    ]);
+
+    if (is_wp_error($terms) || empty($terms)) {
+        return [];
+    }
+
+    $preferred_order = [
+        'nuevos-lanzamientos',
+        'activaciones-venza',
+        'repositorio-sensorial',
+    ];
+
+    $terms_by_slug = [];
+    foreach ($terms as $term) {
+        $terms_by_slug[$term->slug] = $term;
+    }
+
+    $ordered = [];
+    foreach ($preferred_order as $slug) {
+        if (isset($terms_by_slug[$slug])) {
+            $ordered[] = $terms_by_slug[$slug];
+            unset($terms_by_slug[$slug]);
+        }
+    }
+
+    if (!empty($terms_by_slug)) {
+        foreach ($terms_by_slug as $term) {
+            $ordered[] = $term;
+        }
+    }
+
+    return array_slice($ordered, 0, max(1, (int) $limit));
+}
+
+function venza_get_noticia_term_latest_post($term_id) {
+    static $cache = [];
+
+    $term_id = (int) $term_id;
+    if ($term_id <= 0) {
+        return null;
+    }
+
+    if (array_key_exists($term_id, $cache)) {
+        return $cache[$term_id];
+    }
+
+    $posts = get_posts([
+        'post_type'      => 'noticia',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+        'tax_query'      => [
+            [
+                'taxonomy' => 'noticia_cat',
+                'field'    => 'term_id',
+                'terms'    => [$term_id],
+            ],
+        ],
+    ]);
+
+    $cache[$term_id] = !empty($posts) ? $posts[0] : null;
+    return $cache[$term_id];
+}
+
+function venza_get_post_preview_text($post_id, $length = 22) {
+    $post = get_post($post_id);
+    if (!$post instanceof WP_Post) {
+        return '';
+    }
+
+    $excerpt = has_excerpt($post) ? $post->post_excerpt : $post->post_content;
+    $excerpt = wp_strip_all_tags((string) $excerpt);
+
+    if ($excerpt === '') {
+        return '';
+    }
+
+    return wp_trim_words($excerpt, max(8, (int) $length), '...');
+}
+
+function venza_format_term_name_label($name) {
+    $name = trim(wp_strip_all_tags((string) $name));
+    if ($name === '') {
+        return '';
+    }
+
+    $words = preg_split('/\s+/', $name);
+    $words = is_array($words) ? array_values(array_filter($words)) : [];
+
+    $to_upper = static function ($value) {
+        return function_exists('mb_strtoupper') ? mb_strtoupper($value, 'UTF-8') : strtoupper($value);
+    };
+
+    if (count($words) < 2) {
+        return $to_upper($name);
+    }
+
+    $break_index = (int) ceil(count($words) / 2);
+    $line_one = implode(' ', array_slice($words, 0, $break_index));
+    $line_two = implode(' ', array_slice($words, $break_index));
+
+    if ($line_two === '') {
+        return $to_upper($line_one);
+    }
+
+    return $to_upper($line_one) . '<br>' . $to_upper($line_two);
+}
+
+function venza_get_noticia_video_embed($post_id) {
+    $video_url = trim((string) venza_get_meta_value('noticia_video_url', $post_id));
+
+    if ($video_url !== '') {
+        $embedded = wp_oembed_get($video_url, [
+            'width'  => 880,
+            'height' => 500,
+        ]);
+
+        if (is_string($embedded) && $embedded !== '') {
+            return $embedded;
+        }
+    }
+
+    $post = get_post($post_id);
+    if (!$post instanceof WP_Post) {
+        return '';
+    }
+
+    $content = apply_filters('the_content', (string) $post->post_content);
+    $media = get_media_embedded_in_content($content, ['video', 'iframe', 'embed', 'object']);
+
+    if (!empty($media) && is_array($media)) {
+        return (string) $media[0];
+    }
+
+    return '';
+}
+
+function venza_get_noticia_badges($post_id, $limit = 3) {
+    $raw = venza_get_meta_value('noticia_badges', $post_id);
+    if (!is_string($raw) || trim($raw) === '') {
+        return [];
+    }
+
+    $items = preg_split('/\r\n|\r|\n/', $raw);
+    if (!is_array($items)) {
+        return [];
+    }
+
+    $badges = [];
+    foreach ($items as $item) {
+        $item = trim(wp_strip_all_tags((string) $item));
+        if ($item === '') {
+            continue;
+        }
+        $badges[] = $item;
+    }
+
+    return array_slice($badges, 0, max(1, (int) $limit));
+}

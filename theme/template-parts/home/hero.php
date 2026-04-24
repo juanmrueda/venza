@@ -1,10 +1,22 @@
 <?php
+$home_video_rel = '/assets/videos/venza_video_home.mp4';
+$home_video_file = VENZA_DIR . $home_video_rel;
+$home_video_src = VENZA_URI . $home_video_rel;
+$home_video_available = file_exists($home_video_file);
+
 $slides = [
-    [
-        'type' => 'image',
-        'src'  => VENZA_URI . '/assets/images/banners/bannerhomedemo.svg',
-        'alt'  => 'Banner Home Demo',
-    ],
+    $home_video_available
+        ? [
+            'type'   => 'video',
+            'src'    => $home_video_src,
+            'poster' => VENZA_URI . '/assets/images/banners/bannerhomedemo.svg',
+            'alt'    => 'Video Home Venza',
+        ]
+        : [
+            'type' => 'image',
+            'src'  => VENZA_URI . '/assets/images/banners/bannerhomedemo.svg',
+            'alt'  => 'Banner Home Demo',
+        ],
     [
         'type' => 'image',
         'src'  => VENZA_URI . '/assets/images/banners/frescura-extrema.jpg',
@@ -36,9 +48,6 @@ $slides = [
                         <video class="home-hero__media" autoplay muted loop playsinline preload="metadata" poster="<?php echo esc_url($slide['poster']); ?>">
                             <source src="<?php echo esc_url($slide['src']); ?>" type="video/mp4">
                         </video>
-                        <button class="home-hero__play video-play-btn" type="button" data-video-src="<?php echo esc_attr($slide['src']); ?>" aria-label="Reproducir video principal">
-                            <span class="home-hero__play-icon" aria-hidden="true"></span>
-                        </button>
                     <?php else : ?>
                         <img class="home-hero__media" src="<?php echo esc_url($slide['src']); ?>" alt="<?php echo esc_attr($slide['alt']); ?>">
                     <?php endif; ?>

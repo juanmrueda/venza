@@ -27,7 +27,7 @@
                 <div class="home-producto-row__content">
                     <h3 class="home-producto-nombre"><?php echo esc_html($linea); ?></h3>
                     <p class="home-producto-desc"><?php echo esc_html($descripcion); ?></p>
-                    <a href="<?php echo esc_url(get_permalink($p->ID)); ?>" class="btn btn--primary">Conoce mas</a>
+                    <a href="<?php echo esc_url(get_permalink($p->ID)); ?>" class="btn btn--primary">Conoce m&aacute;s</a>
                 </div>
             </article>
         <?php endforeach; ?>

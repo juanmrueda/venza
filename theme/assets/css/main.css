@@ -2064,6 +2064,166 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 /* ============================================================
+   HOME - PRODUCTOS (Ajuste Pixel Perfect Pagina 01)
+   ============================================================ */
+.home-productos {
+    padding: 4.8rem 0 5.2rem;
+    background:
+        radial-gradient(circle at 12% 20%, rgba(176, 214, 233, 0.26), transparent 44%),
+        radial-gradient(circle at 88% 84%, rgba(176, 214, 233, 0.16), transparent 40%),
+        #f8fbff;
+}
+
+.home-productos .section-title {
+    margin-bottom: 3.1rem;
+    font-size: clamp(3.1rem, 5.4vw, 5.4rem);
+    line-height: 0.9;
+}
+
+.home-productos .section-title--lined::after {
+    width: 230px;
+    margin-top: 0.95rem;
+    background: #9eb8d8;
+}
+
+.home-productos .home-producto-row {
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
+    align-items: center;
+    gap: clamp(2rem, 4vw, 3.5rem);
+    padding: 3rem clamp(1.8rem, 3vw, 3.2rem) 2.4rem;
+    margin-bottom: 2.6rem;
+    background: #fbfcff;
+}
+
+.home-productos .home-producto-row:last-child {
+    margin-bottom: 0;
+}
+
+.home-productos .home-producto-row--alt {
+    background: #dbeef9;
+}
+
+.home-productos .home-producto-row--reverse {
+    direction: ltr;
+}
+
+.home-productos .home-producto-row__image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.home-productos .home-producto-row__img {
+    width: min(100%, 455px);
+    max-height: 390px;
+    object-fit: contain;
+    filter: none;
+}
+
+.home-productos .home-producto-row__caption {
+    margin-top: 1.35rem;
+    color: #8f9eb2;
+    font-family: 'Gotham', 'Satoshi', sans-serif;
+    font-size: clamp(1.55rem, 2.3vw, 2.45rem);
+    font-weight: 300;
+    line-height: 1.1;
+}
+
+.home-productos .home-producto-row__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.3rem;
+}
+
+.home-productos .home-producto-nombre {
+    color: var(--color-navy);
+    font-family: var(--font-display);
+    font-size: clamp(2.3rem, 3.8vw, 4rem);
+    line-height: 1.04;
+}
+
+.home-productos .home-producto-desc {
+    margin: 0;
+    max-width: 650px;
+    color: #111111;
+    font-size: clamp(1.45rem, 2.2vw, 2.45rem);
+    font-weight: 700;
+    line-height: 1.18;
+}
+
+.home-productos .btn.btn--primary {
+    margin-top: 0.35rem;
+    padding: 0.5rem 2.35rem;
+    font-size: clamp(1.05rem, 1.15vw, 1.25rem);
+    line-height: 1;
+}
+
+@media (max-width: 1200px) {
+    .home-productos .home-producto-row {
+        padding: 2.6rem 1.9rem 2.1rem;
+        gap: 2rem;
+    }
+
+    .home-productos .home-producto-desc {
+        font-size: clamp(1.2rem, 2vw, 1.8rem);
+    }
+}
+
+@media (max-width: 900px) {
+    .home-productos {
+        padding: 3.8rem 0 4.2rem;
+    }
+
+    .home-productos .home-producto-row {
+        grid-template-columns: 1fr;
+        gap: 1.35rem;
+        padding: 2.1rem 1.2rem 1.6rem;
+        margin-bottom: 1.7rem;
+    }
+
+    .home-productos .home-producto-row__content {
+        align-items: center;
+        text-align: center;
+    }
+
+    .home-productos .home-producto-row__img {
+        max-height: 320px;
+    }
+
+    .home-productos .home-producto-row__caption {
+        font-size: clamp(1.2rem, 5vw, 1.7rem);
+    }
+
+    .home-productos .home-producto-nombre {
+        font-size: clamp(1.95rem, 6.2vw, 2.65rem);
+    }
+
+    .home-productos .home-producto-desc {
+        font-size: clamp(1rem, 4.6vw, 1.42rem);
+        line-height: 1.25;
+    }
+}
+
+@media (max-width: 768px) {
+    .home-productos .section-title {
+        margin-bottom: 2rem;
+    }
+
+    .home-productos .section-title--lined::after {
+        width: 170px;
+    }
+
+    .home-productos .btn.btn--primary {
+        padding: 0.48rem 1.8rem;
+        font-size: 1rem;
+    }
+}
+
+/* ============================================================
    PRODUCTO INTERNO - FRESCURA EXTREMA (Pagina 03)
    ============================================================ */
 .producto-single {

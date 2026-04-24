@@ -96,6 +96,19 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-24 - Home Productos pixel-perfect (Pagina 01)
+
+- Updated Home products section visuals to match `Assets/Venza WB_Página_01.jpg`:
+  - stronger section spacing and title rhythm
+  - alternating white/light-blue product blocks
+  - larger product line and description typography
+  - product image/caption composition and CTA spacing tuned to reference
+- Files touched in scope:
+  - `theme/template-parts/home/productos-destacados.php`
+  - `theme/assets/css/main.css`
+- Text polish:
+  - CTA changed to `Conoce más`
+
 ### 2026-04-24 - Noticias closed, Home next
 
 - Implemented and deployed:

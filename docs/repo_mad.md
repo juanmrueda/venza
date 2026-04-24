@@ -105,6 +105,16 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-24 - Home hero slider synced to first video end
+
+- Updated Home hero carousel behavior:
+  - first slide video is now marked to wait until `ended`
+  - carousel advances to slide 2 only after the first video finishes
+  - default 6s timer remains for non-video slides
+- Technical changes:
+  - `theme/template-parts/home/hero.php`: first video slide now uses `data-wait-end="1"` and disables loop
+  - `theme/assets/js/main.js`: autoplay scheduler now supports video-end-triggered transition
+
 ### 2026-04-24 - Documentation sync after home admin updates
 
 - Documentation aligned with latest Home work:

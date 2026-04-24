@@ -11,6 +11,8 @@ $slides = [
             'src'    => $home_video_src,
             'poster' => VENZA_URI . '/assets/images/banners/bannerhomedemo.svg',
             'alt'    => 'Video Home Venza',
+            'wait_end' => true,
+            'loop'   => false,
         ]
         : [
             'type' => 'image',
@@ -45,7 +47,16 @@ $slides = [
             <?php foreach ($slides as $index => $slide) : ?>
                 <article class="home-hero__slide <?php echo $index === 0 ? 'is-active' : ''; ?>" data-slide-index="<?php echo esc_attr((string) $index); ?>">
                     <?php if ($slide['type'] === 'video') : ?>
-                        <video class="home-hero__media" autoplay muted loop playsinline preload="metadata" poster="<?php echo esc_url($slide['poster']); ?>">
+                        <video
+                            class="home-hero__media"
+                            autoplay
+                            muted
+                            <?php echo !empty($slide['loop']) ? 'loop' : ''; ?>
+                            playsinline
+                            preload="metadata"
+                            poster="<?php echo esc_url($slide['poster']); ?>"
+                            <?php echo !empty($slide['wait_end']) ? 'data-wait-end="1"' : ''; ?>
+                        >
                             <source src="<?php echo esc_url($slide['src']); ?>" type="video/mp4">
                         </video>
                     <?php else : ?>

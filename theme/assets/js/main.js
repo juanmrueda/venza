@@ -50,11 +50,22 @@
 
         let currentIndex = 0;
         let timer = null;
+        let activeVideoEndTarget = null;
+        let activeVideoEndHandler = null;
+
+        const detachVideoEndListener = () => {
+            if (activeVideoEndTarget && activeVideoEndHandler) {
+                activeVideoEndTarget.removeEventListener('ended', activeVideoEndHandler);
+            }
+            activeVideoEndTarget = null;
+            activeVideoEndHandler = null;
+        };
 
         const showSlide = (index) => {
             if (!slides.length) return;
 
             currentIndex = (index + slides.length) % slides.length;
+            detachVideoEndListener();
 
             slides.forEach((slide, idx) => {
                 const isActive = idx === currentIndex;
@@ -63,6 +74,12 @@
                 const video = slide.querySelector('video');
                 if (video) {
                     if (isActive) {
+                        if (video.dataset.waitEnd === '1') {
+                            video.loop = false;
+                            try {
+                                video.currentTime = 0;
+                            } catch (e) {}
+                        }
                         const playPromise = video.play();
                         if (playPromise && typeof playPromise.catch === 'function') {
                             playPromise.catch(() => {});
@@ -78,24 +95,51 @@
             });
         };
 
-        const nextSlide = () => showSlide(currentIndex + 1);
-        const prevSlide = () => showSlide(currentIndex - 1);
-
         const stopAuto = () => {
             if (timer) {
                 clearInterval(timer);
                 timer = null;
             }
+            detachVideoEndListener();
         };
 
         const startAuto = () => {
             if (slides.length <= 1) return;
             stopAuto();
-            timer = setInterval(nextSlide, 6000);
+
+            const currentSlide = slides[currentIndex];
+            const waitEndVideo = currentSlide ? currentSlide.querySelector('video[data-wait-end="1"]') : null;
+
+            if (waitEndVideo) {
+                activeVideoEndTarget = waitEndVideo;
+                activeVideoEndHandler = () => {
+                    detachVideoEndListener();
+                    showSlide(currentIndex + 1);
+                    startAuto();
+                };
+
+                waitEndVideo.addEventListener('ended', activeVideoEndHandler, { once: true });
+                return;
+            }
+
+            timer = setInterval(() => {
+                showSlide(currentIndex + 1);
+                startAuto();
+            }, 6000);
         };
 
-        if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); startAuto(); });
-        if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); startAuto(); });
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                showSlide(currentIndex - 1);
+                startAuto();
+            });
+        }
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                showSlide(currentIndex + 1);
+                startAuto();
+            });
+        }
 
         dots.forEach((dot) => {
             dot.addEventListener('click', () => {

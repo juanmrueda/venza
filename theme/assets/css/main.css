@@ -3064,6 +3064,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 .noticias-repo-card__media img,
+.noticias-repo-card__media video,
 .noticias-repo-card__placeholder,
 .noticias-repo-card__embed iframe,
 .noticias-repo-card__embed video {
@@ -3254,6 +3255,41 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     color: #ffffff;
 }
 
+/* Repositorio sensorial (pagina) */
+.repositorio-sensorial-page__hero {
+    padding: clamp(3rem, 6vw, 5.2rem) 0 clamp(0.85rem, 1.9vw, 1.5rem);
+}
+
+.repositorio-sensorial-page__hero h1 {
+    text-transform: none;
+    font-size: clamp(3rem, 6.8vw, 5.9rem);
+    line-height: 0.95;
+}
+
+.repositorio-sensorial-page__hero p {
+    width: min(94%, 880px);
+    font-size: clamp(1.15rem, 1.9vw, 1.6rem);
+}
+
+.repositorio-sensorial-page__content {
+    padding-top: 0;
+}
+
+.repositorio-sensorial-page__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.6rem);
+}
+
+.repositorio-sensorial-page .noticias-repo-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.repositorio-sensorial-page .noticias-repo-card__body {
+    flex: 1;
+}
+
 @media (max-width: 1220px) {
     .noticias-home__grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3263,6 +3299,10 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
         grid-column: 1 / -1;
         justify-self: center;
         width: min(100%, 430px);
+    }
+
+    .repositorio-sensorial-page__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -3287,6 +3327,10 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     .noticia-single-card__media img,
     .noticia-single-card__placeholder {
         aspect-ratio: 16 / 10.5;
+    }
+
+    .repositorio-sensorial-page__grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
@@ -3335,5 +3379,9 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 
     .noticia-single-card h1 {
         font-size: clamp(2rem, 12vw, 3.2rem);
+    }
+
+    .repositorio-sensorial-page__grid {
+        grid-template-columns: 1fr;
     }
 }

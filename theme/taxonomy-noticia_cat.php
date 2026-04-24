@@ -14,10 +14,16 @@ if ($hero_title === '') {
 
 $hero_subtitle = trim((string) get_term_meta((int) ($term->term_id ?? 0), 'venza_noticia_hero_subtitle', true));
 if ($hero_subtitle === '') {
+    $hero_subtitle_fallback_by_slug = [
+        'nuevos-lanzamientos' => 'Conoce la nueva linea de cuidado personal',
+        'activaciones-venza'  => 'Conoce nuestras actividades',
+        'repositorio-sensorial' => 'Lleva la cotidianidad a otro nivel.',
+    ];
+
     if ($description !== '') {
         $hero_subtitle = $description;
-    } elseif ($is_repository) {
-        $hero_subtitle = 'Videos, fotos y experiencias que construyen el universo sensorial de Venza.';
+    } elseif (isset($hero_subtitle_fallback_by_slug[$term_slug])) {
+        $hero_subtitle = $hero_subtitle_fallback_by_slug[$term_slug];
     } else {
         $hero_subtitle = 'Conoce la nueva linea de cuidado personal';
     }

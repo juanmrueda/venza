@@ -9,6 +9,21 @@ $fallback_by_slug = [
     'activaciones-venza'   => $base_image_uri . 'beneficios/beneficio-04-rendimiento.jpg',
     'repositorio-sensorial'=> $base_image_uri . 'beneficios/beneficio-06-uso-diario.jpg',
 ];
+
+$copy_fallback_by_slug = [
+    'nuevos-lanzamientos' => [
+        'title'   => 'Descubre el nuevo jabon crema humectante',
+        'summary' => 'Conoce la nueva linea de cuidado personal',
+    ],
+    'activaciones-venza' => [
+        'title'   => 'Descubriendo el lado Venza del deporte',
+        'summary' => 'Conoce nuestras actividades',
+    ],
+    'repositorio-sensorial' => [
+        'title'   => 'Descubre el lado Venza de la vida',
+        'summary' => 'Lleva la cotidianidad a otro nivel.',
+    ],
+];
 ?>
 <main class="noticias-page noticias-home">
     <section class="noticias-home__stage">
@@ -24,7 +39,20 @@ $fallback_by_slug = [
                             $term_link = '#';
                         }
 
+                        if ($term->slug === 'repositorio-sensorial') {
+                            $repositorio_page = get_page_by_path('repositorio-sensorial');
+                            if ($repositorio_page instanceof WP_Post && $repositorio_page->post_status === 'publish') {
+                                $term_link = get_permalink($repositorio_page);
+                            } else {
+                                $term_link = home_url('/repositorio-sensorial/');
+                            }
+                        }
+
+                        $copy_fallback = $copy_fallback_by_slug[$term->slug] ?? [];
                         $title = trim((string) get_term_meta($term_id, 'venza_noticia_home_title', true));
+                        if ($title === '' && !empty($copy_fallback['title'])) {
+                            $title = (string) $copy_fallback['title'];
+                        }
                         if ($title === '' && $latest_post instanceof WP_Post) {
                             $title = get_the_title($latest_post);
                         }
@@ -33,6 +61,9 @@ $fallback_by_slug = [
                         }
 
                         $summary = trim((string) get_term_meta($term_id, 'venza_noticia_home_summary', true));
+                        if ($summary === '' && !empty($copy_fallback['summary'])) {
+                            $summary = (string) $copy_fallback['summary'];
+                        }
                         if ($summary === '') {
                             $summary = trim(wp_strip_all_tags((string) term_description($term_id, 'noticia_cat')));
                         }

@@ -32,6 +32,7 @@ Main goals:
 ### 2. ACF Config
 
 - `theme/inc/acf-producto-home.php`: product home and single product editable fields.
+- `theme/inc/acf-home.php`: home sections editable fields (beneficios, productos, venza hoy).
 - `theme/inc/acf-page-beneficios.php`: beneficios page editable fields.
 - `theme/inc/acf-noticia.php`: noticia and noticia category visual fields.
 
@@ -95,6 +96,19 @@ And additionally:
 - Always update this file at the end of each completed action.
 
 ## Action Log
+
+### 2026-04-24 - Home beneficios editable from admin
+
+- Converted Home `Beneficios` section from hardcoded copy to front-page ACF fields.
+- Added editable fields in front page for:
+  - section title
+  - 4 left-column benefit items (title + text)
+  - 4 right-column benefit items (title + text)
+  - center soap labels (green/cream)
+- Preserved current visual structure and fallbacks so design remains unchanged if fields are empty.
+- Files updated:
+  - `theme/template-parts/home/beneficios-strip.php`
+  - `theme/inc/acf-home.php`
 
 ### 2026-04-24 - Home (2 líneas de productos + video en Venza hoy)
 

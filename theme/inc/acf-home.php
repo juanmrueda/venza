@@ -78,7 +78,97 @@ add_action('acf/init', function () {
         return $fields;
     };
 
+    $build_home_benefit_fields = static function ($prefix, $label, array $defaults = []) {
+        $fields = [];
+
+        for ($i = 1; $i <= 4; $i++) {
+            $row_default = isset($defaults[$i - 1]) && is_array($defaults[$i - 1]) ? $defaults[$i - 1] : [];
+            $title_default = isset($row_default['title']) ? (string) $row_default['title'] : '';
+            $text_default = isset($row_default['text']) ? (string) $row_default['text'] : '';
+
+            $fields[] = [
+                'key'           => 'field_venza_' . $prefix . '_' . $i . '_title',
+                'label'         => $label . ' - Item ' . $i . ' (titulo)',
+                'name'          => $prefix . '_' . $i . '_title',
+                'type'          => 'text',
+                'default_value' => $title_default,
+            ];
+
+            $fields[] = [
+                'key'           => 'field_venza_' . $prefix . '_' . $i . '_text',
+                'label'         => $label . ' - Item ' . $i . ' (texto)',
+                'name'          => $prefix . '_' . $i . '_text',
+                'type'          => 'textarea',
+                'rows'          => 3,
+                'default_value' => $text_default,
+            ];
+        }
+
+        return $fields;
+    };
+
     $fields = array_merge(
+        [
+            [
+                'key'           => 'field_venza_home_beneficios_titulo',
+                'label'         => 'Home - Beneficios titulo',
+                'name'          => 'home_beneficios_titulo',
+                'type'          => 'text',
+                'default_value' => 'Beneficios',
+            ],
+        ],
+        $build_home_benefit_fields('home_beneficios_left', 'Home Beneficios - Columna izquierda', [
+            [
+                'title' => 'Proteccion antibacterial',
+                'text'  => 'Elimina eficazmente bacterias y germenes, brindando una limpieza profunda que protege tu piel en cada uso.',
+            ],
+            [
+                'title' => 'Formula humectante',
+                'text'  => 'Disenada para mantener la piel hidratada, evitando la resequedad y proporcionando suavidad natural.',
+            ],
+            [
+                'title' => 'Aromas agradables',
+                'text'  => 'Cada jabon deja una fragancia fresca y duradera que acompana tus momentos de cuidado diario.',
+            ],
+            [
+                'title' => 'Nutre la piel seca',
+                'text'  => 'Enriquecido con componentes que aportan nutricion y alivio a la piel mas reseca.',
+            ],
+        ]),
+        $build_home_benefit_fields('home_beneficios_right', 'Home Beneficios - Columna derecha', [
+            [
+                'title' => 'Deja la piel suave y radiante',
+                'text'  => 'Gracias a sus ingredientes especiales, tu piel se siente tersa y con un brillo saludable.',
+            ],
+            [
+                'title' => 'Limpieza efectiva',
+                'text'  => 'Elimina impurezas y suciedad facilmente, dejando tu piel limpia, fresca y revitalizada.',
+            ],
+            [
+                'title' => 'Apto para uso diario',
+                'text'  => 'Suavidad y frescura que podes disfrutar todos los dias sin irritar ni maltratar la piel.',
+            ],
+            [
+                'title' => 'Alto rendimiento',
+                'text'  => 'Su formula concentrada rinde mas, ofreciendo calidad y duracion en cada barra de jabon.',
+            ],
+        ]),
+        [
+            [
+                'key'           => 'field_venza_home_beneficios_soap_green_text',
+                'label'         => 'Home Beneficios - texto jabon verde',
+                'name'          => 'home_beneficios_soap_green_text',
+                'type'          => 'text',
+                'default_value' => 'venza',
+            ],
+            [
+                'key'           => 'field_venza_home_beneficios_soap_cream_text',
+                'label'         => 'Home Beneficios - texto jabon crema',
+                'name'          => 'home_beneficios_soap_cream_text',
+                'type'          => 'text',
+                'default_value' => 'venza',
+            ],
+        ],
         $build_line_fields('home_linea_antibacterial', 'Línea Antibacterial', [
             'title'       => 'Línea Antibacterial',
             'description' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam',

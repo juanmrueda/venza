@@ -57,3 +57,28 @@ add_action('init', function () {
         'show_in_rest'  => true,
     ]);
 });
+
+// Reglas explicitas para priorizar /noticias/categoria/... y evitar 404
+// por colision con reglas de adjuntos del CPT noticia.
+add_action('init', function () {
+    add_rewrite_rule(
+        '^noticias/categoria/([^/]+)/?$',
+        'index.php?noticia_cat=$matches[1]',
+        'top'
+    );
+    add_rewrite_rule(
+        '^noticias/categoria/([^/]+)/page/([0-9]{1,})/?$',
+        'index.php?noticia_cat=$matches[1]&paged=$matches[2]',
+        'top'
+    );
+    add_rewrite_rule(
+        '^noticias/categoria/([^/]+)/feed/(feed|rdf|rss|rss2|atom)/?$',
+        'index.php?noticia_cat=$matches[1]&feed=$matches[2]',
+        'top'
+    );
+    add_rewrite_rule(
+        '^noticias/categoria/([^/]+)/(feed|rdf|rss|rss2|atom)/?$',
+        'index.php?noticia_cat=$matches[1]&feed=$matches[2]',
+        'top'
+    );
+}, 20);

@@ -96,6 +96,28 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-24 - Home (2 líneas de productos + video en Venza hoy)
+
+- Home `Productos` refactorizado para mostrar solo 2 bloques fijos:
+  - `Línea Antibacterial`
+  - `Línea Hidratación Profunda`
+- Se eliminó el render dinámico de todos los productos en Home.
+- Cada bloque ahora soporta desde admin:
+  - título de línea
+  - descripción
+  - texto y URL de botón
+  - background del bloque
+  - hasta 5 imágenes rotativas con nombre por línea (la leyenda bajo imagen rota con la foto)
+- Se agregó rotador automático en frontend para esas imágenes por línea.
+- `Venza hoy` ahora usa el mismo video del hero por defecto (`assets/videos/venza_video_home.mp4`) y permite override desde admin (video + poster).
+- Archivos actualizados:
+  - `theme/template-parts/home/productos-destacados.php`
+  - `theme/template-parts/home/galeria-hoy.php`
+  - `theme/assets/js/main.js`
+  - `theme/assets/css/main.css`
+  - `theme/functions.php`
+  - `theme/inc/acf-home.php` (nuevo)
+
 ### 2026-04-24 - Home Productos pixel-perfect (Pagina 01)
 
 - Updated Home products section visuals to match `Assets/Venza WB_Página_01.jpg`:

@@ -1,10 +1,44 @@
+<?php
+$home_id = get_queried_object_id();
+if (!$home_id) {
+    $home_id = (int) get_option('page_on_front');
+}
+
+$video_rel = '/assets/videos/venza_video_home.mp4';
+$video_path = VENZA_DIR . $video_rel;
+$video_src = file_exists($video_path) ? VENZA_URI . $video_rel : '';
+
+$acf_video_id = venza_field('home_venza_hoy_video', $home_id);
+if ($acf_video_id) {
+    $acf_video_url = wp_get_attachment_url((int) $acf_video_id);
+    if (is_string($acf_video_url) && $acf_video_url !== '') {
+        $video_src = $acf_video_url;
+    }
+}
+
+$poster = VENZA_URI . '/assets/images/banners/bannerhomedemo.svg';
+$poster_id = venza_field('home_venza_hoy_video_poster', $home_id);
+if ($poster_id) {
+    $poster_url = wp_get_attachment_image_url((int) $poster_id, 'full');
+    if (is_string($poster_url) && $poster_url !== '') {
+        $poster = $poster_url;
+    }
+}
+?>
+
 <section class="home-venza-hoy">
     <div class="container">
         <h2 class="section-title section-title--lined">Venza hoy</h2>
     </div>
 
     <div class="home-venza-hoy__video-wrap">
-        <img class="home-venza-hoy__video" src="<?php echo esc_url(VENZA_URI . '/assets/images/banners/bannerhomedemo.svg'); ?>" alt="Banner Venza hoy">
+        <?php if ($video_src) : ?>
+            <video class="home-venza-hoy__video" autoplay muted loop playsinline preload="metadata" poster="<?php echo esc_url($poster); ?>">
+                <source src="<?php echo esc_url($video_src); ?>" type="video/mp4">
+            </video>
+        <?php else : ?>
+            <img class="home-venza-hoy__video" src="<?php echo esc_url($poster); ?>" alt="Banner Venza hoy">
+        <?php endif; ?>
     </div>
 
     <div class="home-venza-hoy__news">
@@ -36,7 +70,7 @@
                             <div class="venza-hoy-card__body">
                                 <h3><?php echo esc_html($ph['titulo']); ?></h3>
                                 <p><?php echo esc_html($ph['desc']); ?></p>
-                                <a href="#" class="btn btn--primary">Conoce mas</a>
+                                <a href="#" class="btn btn--primary">Conoce m&aacute;s</a>
                             </div>
                         </article>
                     <?php endforeach;
@@ -55,7 +89,7 @@
                             <div class="venza-hoy-card__body">
                                 <h3><?php echo esc_html($item->post_title); ?></h3>
                                 <p><?php echo esc_html($desc); ?></p>
-                                <a href="<?php echo esc_url(get_permalink($item->ID)); ?>" class="btn btn--primary">Conoce mas</a>
+                                <a href="<?php echo esc_url(get_permalink($item->ID)); ?>" class="btn btn--primary">Conoce m&aacute;s</a>
                             </div>
                         </article>
                     <?php endforeach;

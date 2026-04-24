@@ -114,6 +114,77 @@
         startAuto();
     }
 
+    // --- Rotador de producto por línea (Home) ---
+    const productRotators = Array.from(document.querySelectorAll('[data-home-product-rotator]'));
+    productRotators.forEach((rotator) => {
+        const rawSlides = rotator.getAttribute('data-home-product-rotator') || '';
+        if (!rawSlides) return;
+
+        let slides = [];
+        try {
+            const parsed = JSON.parse(rawSlides);
+            if (Array.isArray(parsed)) {
+                slides = parsed.filter((slide) => slide && typeof slide.image === 'string' && slide.image !== '');
+            }
+        } catch (err) {
+            return;
+        }
+
+        if (slides.length <= 1) {
+            return;
+        }
+
+        const imageEl = rotator.querySelector('.js-home-producto-img');
+        const captionEl = rotator.querySelector('.js-home-producto-caption');
+        if (!imageEl || !captionEl) {
+            return;
+        }
+
+        const intervalAttr = Number(rotator.getAttribute('data-rotate-interval'));
+        const rotateInterval = Number.isFinite(intervalAttr) && intervalAttr > 1200 ? intervalAttr : 4500;
+        let index = 0;
+        let timer = null;
+
+        const renderSlide = (targetIndex) => {
+            const slide = slides[targetIndex];
+            if (!slide) return;
+
+            imageEl.classList.add('is-fading');
+            captionEl.classList.add('is-fading');
+
+            window.setTimeout(() => {
+                imageEl.src = slide.image;
+                imageEl.alt = slide.name || 'Producto';
+                captionEl.textContent = slide.name || 'Producto';
+                imageEl.classList.remove('is-fading');
+                captionEl.classList.remove('is-fading');
+            }, 180);
+        };
+
+        const stop = () => {
+            if (timer) {
+                window.clearInterval(timer);
+                timer = null;
+            }
+        };
+
+        const start = () => {
+            if (timer || slides.length <= 1) {
+                return;
+            }
+
+            timer = window.setInterval(() => {
+                index = (index + 1) % slides.length;
+                renderSlide(index);
+            }, rotateInterval);
+        };
+
+        rotator.addEventListener('mouseenter', stop);
+        rotator.addEventListener('mouseleave', start);
+
+        start();
+    });
+
     // --- Carrusel YouTube (Descubre Venza) ---
     const carousel = document.querySelector('.youtube-carousel');
     const track = document.getElementById('yt-track');

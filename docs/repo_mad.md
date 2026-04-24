@@ -105,6 +105,16 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-24 - Header compact + bottom line doubled
+
+- Increased header bottom blue line thickness from `3px` to `6px` (double).
+- Reduced header overall height for a more compact look:
+  - Desktop header container: `84px` -> `76px`
+  - <=1200px header container: `76px` -> `72px`
+- Aligned mobile nav vertical offset to match the compact header (`top: 70px`).
+- File updated:
+  - `theme/assets/css/main.css`
+
 ### 2026-04-24 - Header global spacing + blue line + submenu indicator
 
 - Adjusted global header navigation spacing for clearer separation between top menu items.

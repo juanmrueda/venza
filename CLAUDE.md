@@ -10,6 +10,13 @@ Sitio web corporativo para la marca **Venza** (jabones, Dinant).
 ## Regla de trabajo
 **Bloque a bloque.** Cada bloque se presenta al usuario, Ã©l da el OK, luego se avanza al siguiente. Nunca ejecutar el siguiente bloque sin confirmaciÃ³n explÃ­cita.
 
+Flujo operativo acordado:
+
+1. DiseÃ±o/layout primero (pixel-perfect).
+2. Esperar trigger explÃ­cito `ejecuta admin`.
+3. Convertir ese bloque a administrable desde WordPress admin.
+4. Desplegar solo con trigger `despliega`.
+
 ## Protocolo obligatorio de lectura minima
 
 Antes de implementar cualquier feature:
@@ -92,10 +99,11 @@ ssh root@142.93.15.66 "tail -f /var/log/nginx/error.log"
 - [x] Helpers globales (`inc/helpers.php`): `venza_field`, `venza_get_meta_value`, `venza_get_producto_destacado_home`, `venza_get_producto_disponibilidad`, `venza_get_producto_medialuna_color`, `venza_svg`
 
 ### Home (`front-page.php`) âœ…
-- Hero (placeholder `bannerhomedemo.svg` â€” pendiente video del cliente)
-- Productos destacados (6 productos en filas alternas, imÃ¡genes reales)
-- Beneficios strip (3 col, fondo `#eef3fb`)
+- Hero con video local `theme/assets/videos/venza_video_home.mp4` (con fallback visual)
+- Productos destacados (2 lineas fijas, administrables, con rotador de imagen por linea)
+- Beneficios strip (administrable desde front page: titulo + 8 items + textos de jabones)
 - GalerÃ­a Venza Hoy (3 cards desde CPT noticia/post, fallback placeholders)
+- Venza Hoy video conectado al video del hero con override opcional desde admin
 - Header: fondo `#eef4ff`, lÃ­nea inferior `#8cbce1`, "SÃ­guenos" `#210a67`
 - Footer global ajustado a referencia aprobada
 
@@ -140,7 +148,6 @@ ssh root@142.93.15.66 "tail -f /var/log/nginx/error.log"
 - Fotos "packs" de algunos productos
 
 ## Assets pendientes del cliente
-- [ ] Video hero (actualmente placeholder con `bannerhomedemo.svg`)
 - [ ] ImÃ¡genes para el quiz (aromas, entornos, tipos de piel)
 - [ ] Crema Humectante â€” banner + pack
 - [ ] Coco â€” packs adicionales
@@ -166,6 +173,7 @@ c:/dev/Venza/
 â”‚   â”œâ”€â”€ assets/images/banners/     â† JPG banners hero
 â”‚   â”œâ”€â”€ inc/cpt.php                â† CPTs y taxonomÃ­as
 â”‚   â”œâ”€â”€ inc/acf-producto-home.php  â† campos ACF para home productos
+â”‚   â”œâ”€â”€ inc/acf-home.php           â† campos ACF para home (beneficios/productos/venza hoy)
 â”‚   â””â”€â”€ template-parts/
 â”‚       â”œâ”€â”€ home/
 â”‚       â”‚   â”œâ”€â”€ hero.php                â† âœ… listo

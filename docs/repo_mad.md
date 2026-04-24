@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-24
-Current phase: Home adjustments (Noticias block closed for now)
+Current phase: Home refinements with admin-enablement workflow
 
 ## Purpose
 
@@ -95,7 +95,23 @@ And additionally:
 - Always read this file (`docs/repo_mad.md`) at task start.
 - Always update this file at the end of each completed action.
 
+## Delivery Workflow (Agreed)
+
+- For new sections:
+  1. Build design/layout first (pixel-perfect target).
+  2. Wait for explicit user trigger `ejecuta admin`.
+  3. Convert that section to admin-editable (ACF + template wiring).
+  4. Deploy when user requests `despliega`.
+
 ## Action Log
+
+### 2026-04-24 - Documentation sync after home admin updates
+
+- Documentation aligned with latest Home work:
+  - Home productos now 2 fixed lines, admin-editable, with per-line rotating product images.
+  - Home beneficios section now admin-editable from front page fields.
+  - Home `Venza hoy` video now supports default hero video + optional admin override.
+- Added explicit "design first -> ejecuta admin -> despliega" workflow in this file.
 
 ### 2026-04-24 - Home beneficios editable from admin
 

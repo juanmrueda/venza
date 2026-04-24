@@ -12,6 +12,10 @@
 - Usar `docs/repo_mad.md` como mapa vivo del proyecto.
 - Al finalizar cada accion completada, actualizar `docs/repo_mad.md`.
 - Modificar solo modulos relevantes para evitar lecturas masivas e innecesarias del repo.
+- Flujo operativo acordado:
+  1. primero dejar la seccion pixel-perfect,
+  2. luego, cuando el usuario diga `ejecuta admin`, volverla administrable,
+  3. desplegar solo cuando el usuario diga `despliega`.
 
 ---
 
@@ -24,7 +28,7 @@
 | Tema custom activo | âœ… |
 | Plugins (ACF, CF7, Yoast) | âœ… Instalados |
 | 6 productos en WP con imÃ¡genes | âœ… |
-| Home page | âœ… Completa (ajustada 1:1 contra arte aprobado) |
+| Home page | âœ… Completa (ajustada 1:1 y bloques clave administrables desde admin) |
 | Header + Footer global | âœ… Ajustados segÃºn referencia visual |
 | Productos (archivo `/productos/`) | âœ… Implementado y editable desde admin |
 | PÃ¡ginas internas restantes | En progreso |
@@ -54,6 +58,18 @@
   - opacidad de capa del fondo
 - Soporte de fondo animado en Beneficios via video (mp4/webm) cargado desde admin.
 - Estado de deploy validado en DO y produccion alineada con `main`.
+- Home `Productos` actualizado a 2 bloques fijos:
+  - Linea Antibacterial
+  - Linea Hidratacion Profunda
+- Home `Productos` ahora editable desde Front Page:
+  - textos por linea
+  - fondo por bloque
+  - rotador de imagenes por linea (con nombre bajo la imagen)
+- Home `Beneficios` (seccion del Home, no pagina) ahora editable desde Front Page:
+  - titulo de seccion
+  - 8 items (4 izquierda + 4 derecha, titulo + texto)
+  - textos de jabones centrales
+- Home `Venza hoy` ahora usa el video del hero por defecto y permite override desde admin.
 
 ## Mapa del sitio
 
@@ -218,6 +234,7 @@ ssh root@142.93.15.66 "cd /var/repo/venza && git pull origin main"
 â”‚   â”œâ”€â”€ cpt.php                   â† CPTs y taxonomÃ­as âœ…
 â”‚   â”œâ”€â”€ acf-fields.php
 â”‚   â”œâ”€â”€ acf-producto-home.php     â† âœ… Campos ACF de home productos
+â”‚   â”œâ”€â”€ acf-home.php              â† âœ… Campos ACF de home (beneficios/productos/venza hoy)
 â”‚   â””â”€â”€ helpers.php
 â”‚
 â””â”€â”€ template-parts/
@@ -261,7 +278,7 @@ ImplementaciÃ³n: Vanilla JS puro (`quiz.js`). Sistema de puntaje por respuesta
 - Packs de algunos productos
 
 ## Assets pendientes del cliente
-- [ ] Video hero principal (actualmente placeholder `bannerhomedemo.svg`)
+- [ ] (Opcional) Video hero final alternativo si se desea reemplazar `venza_video_home.mp4`
 - [ ] Crema Humectante â€” banner + pack
 - [ ] Coco â€” packs adicionales
 - [ ] Fotos lifestyle para Descubre Venza

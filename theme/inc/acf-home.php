@@ -255,6 +255,23 @@ add_action('acf/init', function () {
                 'type'          => 'text',
                 'default_value' => 'Beneficios',
             ],
+            [
+                'key'           => 'field_venza_home_beneficios_imagen_central',
+                'label'         => 'Home Beneficios - Imagen central',
+                'name'          => 'home_beneficios_imagen_central',
+                'type'          => 'image',
+                'return_format' => 'id',
+                'preview_size'  => 'medium',
+                'library'       => 'all',
+                'instructions'  => 'Imagen central de la seccion Beneficios del home. Si queda vacia usa el jabon actual como fallback.',
+            ],
+            [
+                'key'           => 'field_venza_home_beneficios_imagen_alt',
+                'label'         => 'Home Beneficios - Texto alterno imagen central',
+                'name'          => 'home_beneficios_imagen_alt',
+                'type'          => 'text',
+                'default_value' => '',
+            ],
         ],
         $build_home_benefit_fields('home_beneficios_left', 'Home Beneficios - Columna izquierda', [
             [

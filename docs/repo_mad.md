@@ -105,6 +105,19 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-26 - Home beneficios central image editable
+
+- Added admin fields in the Home `Beneficios` tab:
+  - `Home Beneficios - Imagen central`
+  - `Home Beneficios - Texto alterno imagen central`
+- Home beneficios template now renders the uploaded central image when present.
+- Existing CSS soap visual remains as fallback when no image is selected.
+- Files updated:
+  - `theme/inc/acf-home.php`
+  - `theme/template-parts/home/beneficios-strip.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
+
 ### 2026-04-26 - Home theme background toggle
 
 - Added admin toggle `Home - Usar background del tema`.

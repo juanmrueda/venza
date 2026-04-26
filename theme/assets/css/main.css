@@ -1263,6 +1263,18 @@ main.home {
     min-height: 430px;
 }
 
+.home-beneficios__soaps--image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-beneficios__center-image {
+    width: min(100%, 520px);
+    max-height: 520px;
+    object-fit: contain;
+}
+
 .home-beneficios__circle {
     position: absolute;
     inset: 35px 16px 35px 16px;
@@ -1946,6 +1958,10 @@ main.home {
         min-height: 340px;
     }
 
+    .home-beneficios__center-image {
+        max-height: 380px;
+    }
+
     .home-venza-hoy__pill {
         font-size: clamp(1.1rem, 2.5vw, 1.8rem);
     }
@@ -1980,6 +1996,14 @@ main.home {
     .home-beneficios__soaps {
         order: -1;
         min-height: 290px;
+    }
+
+    .home-beneficios__soaps--image {
+        min-height: 0;
+    }
+
+    .home-beneficios__center-image {
+        max-height: 300px;
     }
 
     .home-soap {

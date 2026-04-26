@@ -14,6 +14,8 @@ $get_home_field = static function ($key, $default = '') use ($home_id) {
 };
 
 $beneficios_title = (string) $get_home_field('home_beneficios_titulo', 'Beneficios');
+$beneficios_image_id = (int) $get_home_field('home_beneficios_imagen_central', 0);
+$beneficios_image_alt = trim((string) $get_home_field('home_beneficios_imagen_alt', ''));
 $soap_green_text = (string) $get_home_field('home_beneficios_soap_green_text', 'venza');
 $soap_cream_text = (string) $get_home_field('home_beneficios_soap_cream_text', 'venza');
 
@@ -74,6 +76,16 @@ $build_items = static function ($prefix, array $defaults) use ($get_home_field) 
 
 $left_items = $build_items('home_beneficios_left', $left_defaults);
 $right_items = $build_items('home_beneficios_right', $right_defaults);
+
+$beneficios_image = '';
+if ($beneficios_image_id > 0) {
+    $image_attrs = ['class' => 'home-beneficios__center-image'];
+    if ($beneficios_image_alt !== '') {
+        $image_attrs['alt'] = $beneficios_image_alt;
+    }
+
+    $beneficios_image = wp_get_attachment_image($beneficios_image_id, 'large', false, $image_attrs);
+}
 ?>
 
 <section class="home-beneficios">
@@ -90,10 +102,14 @@ $right_items = $build_items('home_beneficios_right', $right_defaults);
                 <?php endforeach; ?>
             </div>
 
-            <div class="home-beneficios__soaps" aria-hidden="true">
-                <div class="home-beneficios__circle"></div>
-                <span class="home-soap home-soap--green"><?php echo esc_html($soap_green_text); ?></span>
-                <span class="home-soap home-soap--cream"><?php echo esc_html($soap_cream_text); ?></span>
+            <div class="home-beneficios__soaps <?php echo $beneficios_image ? 'home-beneficios__soaps--image' : ''; ?>" <?php echo $beneficios_image ? '' : 'aria-hidden="true"'; ?>>
+                <?php if ($beneficios_image) : ?>
+                    <?php echo $beneficios_image; ?>
+                <?php else : ?>
+                    <div class="home-beneficios__circle"></div>
+                    <span class="home-soap home-soap--green"><?php echo esc_html($soap_green_text); ?></span>
+                    <span class="home-soap home-soap--cream"><?php echo esc_html($soap_cream_text); ?></span>
+                <?php endif; ?>
             </div>
 
             <div class="home-beneficios__col home-beneficios__col--right">

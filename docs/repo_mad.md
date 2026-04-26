@@ -105,6 +105,16 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-26 - Noticia badge icon fallback fix
+
+- Fixed internal news badge rendering when editors add only the new icon/position fields while badge text still lives in the legacy `noticia_badges` textarea.
+- Badge helper now merges legacy badge text with the new icon and position fields by slot.
+- Icon rendering now falls back to attachment URL when `wp_get_attachment_image()` cannot generate markup.
+- Files updated:
+  - `theme/inc/helpers.php`
+  - `theme/single-noticia.php`
+  - `docs/repo_mad.md`
+
 ### 2026-04-26 - Noticia single visual and badge controls
 
 - Tuned `single-noticia.php` toward the supplied internal news reference:

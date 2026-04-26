@@ -42,7 +42,16 @@ get_header();
                                     ?>
                                     <span class="noticia-single-card__badge noticia-single-card__badge--<?php echo esc_attr($badge_position); ?>">
                                         <?php if ($badge_icon_id > 0) : ?>
-                                            <?php echo wp_get_attachment_image($badge_icon_id, 'thumbnail', false, ['class' => 'noticia-single-card__badge-icon', 'loading' => 'lazy']); ?>
+                                            <?php
+                                            $badge_icon_html = wp_get_attachment_image($badge_icon_id, 'thumbnail', false, ['class' => 'noticia-single-card__badge-icon', 'loading' => 'lazy']);
+                                            if ($badge_icon_html !== '') {
+                                                echo $badge_icon_html;
+                                            } elseif (!empty($badge['icon_url'])) {
+                                                echo '<img class="noticia-single-card__badge-icon" src="' . esc_url((string) $badge['icon_url']) . '" alt="" loading="lazy">';
+                                            }
+                                            ?>
+                                        <?php elseif (!empty($badge['icon_url'])) : ?>
+                                            <img class="noticia-single-card__badge-icon" src="<?php echo esc_url((string) $badge['icon_url']); ?>" alt="" loading="lazy">
                                         <?php endif; ?>
                                         <span class="noticia-single-card__badge-text"><?php echo esc_html($badge_text); ?></span>
                                     </span>

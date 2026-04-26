@@ -301,17 +301,47 @@ function venza_get_noticia_badges($post_id, $limit = 2) {
         2 => 'bottom-left',
     ];
 
+    $legacy_texts = [];
+    $raw = venza_get_meta_value('noticia_badges', $post_id);
+    if (is_string($raw) && trim($raw) !== '') {
+        $items = preg_split('/\r\n|\r|\n/', $raw);
+        if (is_array($items)) {
+            foreach ($items as $item) {
+                $item = trim(wp_strip_all_tags((string) $item));
+                if ($item !== '') {
+                    $legacy_texts[] = $item;
+                }
+            }
+        }
+    }
+
     $structured_badges = [];
     for ($index = 1; $index <= 2; $index++) {
         $text = venza_get_meta_value('noticia_badge_' . $index . '_text', $post_id);
         $text = is_string($text) ? trim(wp_strip_all_tags($text)) : '';
+        if ($text === '' && isset($legacy_texts[$index - 1])) {
+            $text = $legacy_texts[$index - 1];
+        }
 
         if ($text === '') {
             continue;
         }
 
         $icon_value = venza_get_meta_value('noticia_badge_' . $index . '_icon_id', $post_id);
-        $icon_id = is_array($icon_value) && isset($icon_value['ID']) ? (int) $icon_value['ID'] : (int) $icon_value;
+        $icon_id = 0;
+        $icon_url = '';
+        if (is_array($icon_value)) {
+            $icon_id = isset($icon_value['ID']) ? (int) $icon_value['ID'] : 0;
+            $icon_url = isset($icon_value['url']) ? esc_url_raw((string) $icon_value['url']) : '';
+        } elseif (is_numeric($icon_value)) {
+            $icon_id = (int) $icon_value;
+        } elseif (is_string($icon_value) && filter_var($icon_value, FILTER_VALIDATE_URL)) {
+            $icon_url = esc_url_raw($icon_value);
+        }
+
+        if ($icon_id > 0 && $icon_url === '') {
+            $icon_url = (string) wp_get_attachment_image_url($icon_id, 'thumbnail');
+        }
 
         $position = venza_get_meta_value('noticia_badge_' . $index . '_position', $post_id);
         $position = is_string($position) ? trim($position) : '';
@@ -322,6 +352,7 @@ function venza_get_noticia_badges($post_id, $limit = 2) {
         $structured_badges[] = [
             'text'     => $text,
             'icon_id'  => $icon_id,
+            'icon_url' => $icon_url,
             'position' => $position,
         ];
     }
@@ -330,26 +361,17 @@ function venza_get_noticia_badges($post_id, $limit = 2) {
         return array_slice($structured_badges, 0, max(1, (int) $limit));
     }
 
-    $raw = venza_get_meta_value('noticia_badges', $post_id);
-    if (!is_string($raw) || trim($raw) === '') {
-        return [];
-    }
-
-    $items = preg_split('/\r\n|\r|\n/', $raw);
-    if (!is_array($items)) {
+    if (empty($legacy_texts)) {
         return [];
     }
 
     $badges = [];
-    foreach ($items as $item) {
-        $item = trim(wp_strip_all_tags((string) $item));
-        if ($item === '') {
-            continue;
-        }
+    foreach ($legacy_texts as $item) {
         $legacy_index = count($badges) + 1;
         $badges[] = [
             'text'     => $item,
             'icon_id'  => 0,
+            'icon_url' => '',
             'position' => $default_positions[$legacy_index] ?? 'top-right',
         ];
     }

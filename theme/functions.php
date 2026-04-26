@@ -66,6 +66,45 @@ add_filter('use_block_editor_for_post', function ($use_block_editor, $post) {
     return $use_block_editor;
 }, 10, 2);
 
+function venza_is_descubre_quiz_route() {
+    $request = trim((string) ($GLOBALS['wp']->request ?? ''), '/');
+
+    return $request === 'descubre-venza/quiz' || (string) get_query_var('venza_descubre_quiz') === '1';
+}
+
+function venza_is_descubre_context() {
+    $request = trim((string) ($GLOBALS['wp']->request ?? ''), '/');
+
+    return venza_is_descubre_quiz_route()
+        || $request === 'descubre-venza'
+        || is_page_template('page-descubre-venza.php')
+        || is_page_template('page-quiz.php');
+}
+
+add_action('init', function () {
+    add_rewrite_rule('^descubre-venza/quiz/?$', 'index.php?venza_descubre_quiz=1', 'top');
+});
+
+add_filter('query_vars', function ($vars) {
+    $vars[] = 'venza_descubre_quiz';
+    return $vars;
+});
+
+add_action('template_redirect', function () {
+    if (!venza_is_descubre_quiz_route()) {
+        return;
+    }
+
+    global $wp_query;
+    if ($wp_query instanceof WP_Query) {
+        $wp_query->is_404 = false;
+    }
+
+    status_header(200);
+    include VENZA_DIR . '/page-quiz.php';
+    exit;
+});
+
 // Fallback explÃ­cito para que el header no quede sin navegaciÃ³n
 function venza_primary_menu_fallback($args = []) {
     if (!isset($args['theme_location']) || $args['theme_location'] !== 'primary') {
@@ -108,6 +147,7 @@ function venza_primary_menu_fallback($args = []) {
     $is_producto_context = is_post_type_archive('producto') || is_singular('producto') || is_tax('linea_producto');
     $is_noticias_context = is_post_type_archive('noticia') || is_singular('noticia') || is_tax('noticia_cat');
     $is_blog_context = is_home() || is_singular('post') || is_category() || is_tag() || is_date() || is_author();
+    $is_descubre_context = venza_is_descubre_context();
 
     echo '<ul class="' . esc_attr($menu_class) . '">';
     foreach ($items as $item) {
@@ -117,6 +157,9 @@ function venza_primary_menu_fallback($args = []) {
             $is_current = true;
         }
         if ($is_blog_context && isset($item['label']) && strtolower((string) $item['label']) === 'blog') {
+            $is_current = true;
+        }
+        if ($is_descubre_context && isset($item['label']) && strtolower((string) $item['label']) === 'descubre venza') {
             $is_current = true;
         }
         $has_current_child = false;
@@ -329,6 +372,38 @@ add_filter('wp_nav_menu_objects', function ($items, $args) {
     return $items;
 }, 35, 2);
 
+// Mantener "Descubre Venza" activo en la pagina y en el quiz asociado.
+add_filter('wp_nav_menu_objects', function ($items, $args) {
+    if (!venza_is_descubre_context()) {
+        return $items;
+    }
+
+    if (empty($items) || !is_array($items)) {
+        return $items;
+    }
+
+    $descubre_url = untrailingslashit(home_url('/descubre-venza/'));
+
+    foreach ($items as $item) {
+        $item_url = isset($item->url) ? untrailingslashit($item->url) : '';
+        $item_title = isset($item->title) ? strtolower(trim((string) $item->title)) : '';
+
+        if ($item_url === $descubre_url || $item_title === 'descubre venza') {
+            $classes = isset($item->classes) && is_array($item->classes) ? $item->classes : [];
+            foreach (['current-menu-item', 'current_page_item'] as $active_class) {
+                if (!in_array($active_class, $classes, true)) {
+                    $classes[] = $active_class;
+                }
+            }
+
+            $item->classes = $classes;
+            $item->current = true;
+        }
+    }
+
+    return $items;
+}, 40, 2);
+
 // Encolar estilos y scripts
 add_action('wp_enqueue_scripts', function () {
     $main_css_path = VENZA_DIR . '/assets/css/main.css';
@@ -342,7 +417,7 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_style('venza-main', VENZA_URI . '/assets/css/main.css', [], $main_css_ver);
     wp_enqueue_script('venza-main', VENZA_URI . '/assets/js/main.js', [], $main_js_ver, true);
 
-    if (is_page_template('page-quiz.php')) {
+    if (is_page_template('page-quiz.php') || venza_is_descubre_quiz_route()) {
         wp_enqueue_script('venza-quiz', VENZA_URI . '/assets/js/quiz.js', [], $quiz_js_ver, true);
     }
 });

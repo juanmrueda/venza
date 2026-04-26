@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Descubre Venza optional page background
+Current phase: Descubre Venza quiz entry module
 
 ## Purpose
 
@@ -114,6 +114,28 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Descubre Venza floating quiz entry
+
+- Added a floating quiz entry CTA to `Descubre Venza`.
+- CTA behavior:
+  - desktop: fixed card on the right side of the page
+  - mobile: bottom pill so it does not block the content flow
+  - default text: `¿Ya sabes cuál jabón va contigo?`
+  - default icon: theme product image `frescura-extrema.png`
+- Added admin controls in `Pagina - Descubre Venza`:
+  - `Quiz flotante - Mostrar`
+  - `Quiz flotante - Icono / jabon`
+  - `Quiz flotante - Texto`
+  - `Quiz flotante - URL`
+- Added route support for `/descubre-venza/quiz/` so the CTA can open the quiz template as a Descubre Venza child experience.
+- Updated navigation active state so `Descubre Venza` remains active on the quiz route.
+- Files updated:
+  - `theme/page-descubre-venza.php`
+  - `theme/inc/acf-page-descubre.php`
+  - `theme/functions.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Descubre Venza optional exclusive background
 

@@ -122,6 +122,21 @@ $get_link_attrs = static function ($url) {
         $background_url = $get_image_url($background_image_id, 'full');
         $page_style = $background_url !== '' ? '--blog-bg-image:url(' . esc_url($background_url) . ');' : '';
 
+        $quiz_cta_enabled_raw = get_post_meta($page_id, 'descubre_quiz_cta_enabled', true);
+        $quiz_cta_enabled = $quiz_cta_enabled_raw === '' ? true : (bool) $quiz_cta_enabled_raw;
+        $quiz_cta_text = trim((string) venza_get_meta_value('descubre_quiz_cta_text', $page_id));
+        if ($quiz_cta_text === '') {
+            $quiz_cta_text = '¿Ya sabes cuál jabón va contigo?';
+        }
+
+        $quiz_cta_url = trim((string) venza_get_meta_value('descubre_quiz_cta_url', $page_id));
+        if ($quiz_cta_url === '') {
+            $quiz_cta_url = home_url('/descubre-venza/quiz/');
+        }
+
+        $quiz_cta_image_id = $get_image_id('descubre_quiz_cta_image_id', $page_id);
+        $quiz_cta_fallback_image = VENZA_URI . '/assets/images/productos/frescura-extrema.png';
+
         $fallback_video_titles = [
             'Manos limpias, piel protegida',
             'Deja que creen libremente, mientras Venza cuida su piel',
@@ -241,6 +256,19 @@ $get_link_attrs = static function ($url) {
                     </div>
                 </div>
             </section>
+
+            <?php if ($quiz_cta_enabled) : ?>
+                <a class="descubre-floating-quiz" href="<?php echo esc_url($quiz_cta_url); ?>"<?php echo $get_link_attrs($quiz_cta_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> aria-label="<?php echo esc_attr($quiz_cta_text); ?>">
+                    <span class="descubre-floating-quiz__text"><?php echo esc_html($quiz_cta_text); ?></span>
+                    <span class="descubre-floating-quiz__media" aria-hidden="true">
+                        <?php if ($quiz_cta_image_id > 0) : ?>
+                            <?php echo wp_get_attachment_image($quiz_cta_image_id, 'producto-thumb', false, ['loading' => 'lazy']); ?>
+                        <?php else : ?>
+                            <img src="<?php echo esc_url($quiz_cta_fallback_image); ?>" alt="" loading="lazy">
+                        <?php endif; ?>
+                    </span>
+                </a>
+            <?php endif; ?>
         </article>
     <?php endwhile; endif; ?>
 </main>

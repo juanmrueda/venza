@@ -1131,6 +1131,99 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 .carousel-btn--prev { left: 0; }
 .carousel-btn--next { right: 0; }
 
+.descubre-floating-quiz {
+    position: fixed;
+    right: clamp(1rem, 2.1vw, 2.3rem);
+    top: 50%;
+    z-index: 90;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: min(270px, calc(100vw - 2rem));
+    min-height: 92px;
+    padding: 0.7rem 0.65rem 0.7rem 1.05rem;
+    border: 1.5px solid rgba(43, 37, 94, 0.78);
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--color-navy);
+    text-decoration: none;
+    box-shadow: 0 18px 36px rgba(43, 37, 94, 0.16);
+    transform: translateY(-50%);
+    transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.descubre-floating-quiz:hover {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 22px 42px rgba(43, 37, 94, 0.23);
+    transform: translateY(-50%) translateX(-4px);
+}
+
+.descubre-floating-quiz__text {
+    flex: 1;
+    font-family: var(--font-body);
+    font-size: clamp(0.9rem, 0.95vw, 1.05rem);
+    font-weight: 800;
+    line-height: 1.16;
+}
+
+.descubre-floating-quiz__text::after {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 0.42rem;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 7px solid var(--color-blue-mid);
+    transform: translateY(1px);
+}
+
+.descubre-floating-quiz__media {
+    flex: 0 0 82px;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+}
+
+.descubre-floating-quiz__media img {
+    display: block;
+    width: 96px;
+    max-width: none;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 9px 12px rgba(43, 37, 94, 0.16));
+}
+
+@media (max-width: 768px) {
+    .descubre-floating-quiz {
+        left: 1rem;
+        right: 1rem;
+        top: auto;
+        bottom: 1rem;
+        width: auto;
+        min-height: 66px;
+        border-radius: 999px;
+        padding: 0.55rem 0.65rem 0.55rem 1rem;
+        transform: none;
+    }
+
+    .descubre-floating-quiz:hover {
+        transform: translateY(-2px);
+    }
+
+    .descubre-floating-quiz__text {
+        font-size: 0.95rem;
+    }
+
+    .descubre-floating-quiz__media {
+        flex-basis: 62px;
+    }
+
+    .descubre-floating-quiz__media img {
+        width: 76px;
+    }
+}
+
 /* ============================================================
    QUIZ
    ============================================================ */

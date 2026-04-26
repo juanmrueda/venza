@@ -139,6 +139,41 @@ add_action('acf/init', function () {
                     'Opcional. Solo carga si el switch anterior esta encendido.'
                 ),
                 [
+                    'key'   => 'field_venza_descubre_tab_quiz_cta',
+                    'label' => 'Quiz flotante',
+                    'type'  => 'tab',
+                ],
+                [
+                    'key'           => 'field_venza_descubre_quiz_cta_enabled',
+                    'label'         => 'Quiz flotante - Mostrar',
+                    'name'          => 'descubre_quiz_cta_enabled',
+                    'type'          => 'true_false',
+                    'ui'            => 1,
+                    'default_value' => 1,
+                    'instructions'  => 'Muestra el acceso flotante al quiz de recomendacion de jabon.',
+                ],
+                $image_field(
+                    'field_venza_descubre_quiz_cta_image',
+                    'Quiz flotante - Icono / jabon',
+                    'descubre_quiz_cta_image_id',
+                    'Opcional. Si esta vacio se usa el jabon Frescura Extrema del tema.'
+                ),
+                [
+                    'key'           => 'field_venza_descubre_quiz_cta_text',
+                    'label'         => 'Quiz flotante - Texto',
+                    'name'          => 'descubre_quiz_cta_text',
+                    'type'          => 'text',
+                    'default_value' => '¿Ya sabes cuál jabón va contigo?',
+                ],
+                [
+                    'key'           => 'field_venza_descubre_quiz_cta_url',
+                    'label'         => 'Quiz flotante - URL',
+                    'name'          => 'descubre_quiz_cta_url',
+                    'type'          => 'url',
+                    'default_value' => home_url('/descubre-venza/quiz/'),
+                    'instructions'  => 'Por defecto abre la vista del quiz dentro de Descubre Venza.',
+                ],
+                [
                     'key'   => 'field_venza_descubre_tab_video',
                     'label' => 'Video principal',
                     'type'  => 'tab',

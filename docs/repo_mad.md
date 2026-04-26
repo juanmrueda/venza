@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Home refinements with admin-enablement workflow
+Current phase: Noticias visual QA and home refinements with admin-enablement workflow
 
 ## Purpose
 
@@ -104,6 +104,17 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Noticias home layout aligned to reference
+
+- Tuned `/noticias/` landing layout to match the supplied visual reference:
+  - water-texture background applied behind the three cards
+  - compact three-column card composition
+  - purple top tabs, white framed cards, smaller copy, and blue CTA buttons
+  - responsive breakpoints adjusted without changing content or admin fields
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Home product blocks full width
 

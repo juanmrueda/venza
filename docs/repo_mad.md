@@ -105,6 +105,26 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-26 - Noticia single visual and badge controls
+
+- Tuned `single-noticia.php` toward the supplied internal news reference:
+  - light blue page background
+  - text-left / image-right hero without card container
+  - reduced typography scale and tighter title/excerpt rhythm
+  - white body content card below hero
+- Reworked internal news badges:
+  - two editable badge slots per noticia
+  - each slot supports text, icon image, and position (`top-left`, `top-right`, `bottom-left`, `bottom-right`)
+  - legacy textarea badges remain as frontend fallback if new fields are empty
+- Updated navigation active state so `Noticias` remains active on archive, category, and single noticia routes.
+- Files updated:
+  - `theme/single-noticia.php`
+  - `theme/inc/acf-noticia.php`
+  - `theme/inc/helpers.php`
+  - `theme/functions.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
+
 ### 2026-04-26 - Noticias category listing card tuning
 
 - Tuned the general `noticia_cat` template cards to match the supplied category reference:

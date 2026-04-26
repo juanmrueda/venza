@@ -294,7 +294,42 @@ function venza_get_noticia_video_embed($post_id) {
     return '';
 }
 
-function venza_get_noticia_badges($post_id, $limit = 3) {
+function venza_get_noticia_badges($post_id, $limit = 2) {
+    $allowed_positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+    $default_positions = [
+        1 => 'top-right',
+        2 => 'bottom-left',
+    ];
+
+    $structured_badges = [];
+    for ($index = 1; $index <= 2; $index++) {
+        $text = venza_get_meta_value('noticia_badge_' . $index . '_text', $post_id);
+        $text = is_string($text) ? trim(wp_strip_all_tags($text)) : '';
+
+        if ($text === '') {
+            continue;
+        }
+
+        $icon_value = venza_get_meta_value('noticia_badge_' . $index . '_icon_id', $post_id);
+        $icon_id = is_array($icon_value) && isset($icon_value['ID']) ? (int) $icon_value['ID'] : (int) $icon_value;
+
+        $position = venza_get_meta_value('noticia_badge_' . $index . '_position', $post_id);
+        $position = is_string($position) ? trim($position) : '';
+        if (!in_array($position, $allowed_positions, true)) {
+            $position = $default_positions[$index] ?? 'top-right';
+        }
+
+        $structured_badges[] = [
+            'text'     => $text,
+            'icon_id'  => $icon_id,
+            'position' => $position,
+        ];
+    }
+
+    if (!empty($structured_badges)) {
+        return array_slice($structured_badges, 0, max(1, (int) $limit));
+    }
+
     $raw = venza_get_meta_value('noticia_badges', $post_id);
     if (!is_string($raw) || trim($raw) === '') {
         return [];
@@ -311,7 +346,12 @@ function venza_get_noticia_badges($post_id, $limit = 3) {
         if ($item === '') {
             continue;
         }
-        $badges[] = $item;
+        $legacy_index = count($badges) + 1;
+        $badges[] = [
+            'text'     => $item,
+            'icon_id'  => 0,
+            'position' => $default_positions[$legacy_index] ?? 'top-right',
+        ];
     }
 
     return array_slice($badges, 0, max(1, (int) $limit));

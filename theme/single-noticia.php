@@ -4,13 +4,11 @@ get_header();
 <main class="noticias-page noticia-single-page">
     <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
         <?php
-        $terms = get_the_terms(get_the_ID(), 'noticia_cat');
-        $category_label = (!is_wp_error($terms) && !empty($terms)) ? $terms[0]->name : 'Noticias';
         $intro_line = trim((string) venza_get_meta_value('noticia_intro_line'));
         if ($intro_line === '') {
             $intro_line = 'Descubre lo nuevo de Venza';
         }
-        $badges = venza_get_noticia_badges(get_the_ID(), 4);
+        $badges = venza_get_noticia_badges(get_the_ID(), 2);
         $preview_text = venza_get_post_preview_text(get_the_ID(), 36);
         ?>
         <section class="noticia-single-page__hero">
@@ -22,7 +20,6 @@ get_header();
                         <?php if ($preview_text !== '') : ?>
                             <p class="noticia-single-card__excerpt"><?php echo esc_html($preview_text); ?></p>
                         <?php endif; ?>
-                        <span class="noticia-single-card__category"><?php echo esc_html($category_label); ?></span>
                     </div>
 
                     <div class="noticia-single-card__media">
@@ -35,7 +32,20 @@ get_header();
                         <?php if (!empty($badges)) : ?>
                             <div class="noticia-single-card__badges">
                                 <?php foreach ($badges as $badge) : ?>
-                                    <span><?php echo esc_html($badge); ?></span>
+                                    <?php
+                                    $badge_text = isset($badge['text']) ? (string) $badge['text'] : '';
+                                    $badge_icon_id = isset($badge['icon_id']) ? (int) $badge['icon_id'] : 0;
+                                    $badge_position = isset($badge['position']) ? sanitize_html_class((string) $badge['position']) : 'top-right';
+                                    if ($badge_text === '') {
+                                        continue;
+                                    }
+                                    ?>
+                                    <span class="noticia-single-card__badge noticia-single-card__badge--<?php echo esc_attr($badge_position); ?>">
+                                        <?php if ($badge_icon_id > 0) : ?>
+                                            <?php echo wp_get_attachment_image($badge_icon_id, 'thumbnail', false, ['class' => 'noticia-single-card__badge-icon', 'loading' => 'lazy']); ?>
+                                        <?php endif; ?>
+                                        <span class="noticia-single-card__badge-text"><?php echo esc_html($badge_text); ?></span>
+                                    </span>
                                 <?php endforeach; ?>
                             </div>
                         <?php endif; ?>

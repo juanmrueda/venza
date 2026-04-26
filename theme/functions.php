@@ -100,11 +100,15 @@ function venza_primary_menu_fallback($args = []) {
 
     $current_url = trailingslashit(home_url(add_query_arg([], $GLOBALS['wp']->request ?? '')));
     $is_producto_context = is_post_type_archive('producto') || is_singular('producto') || is_tax('linea_producto');
+    $is_noticias_context = is_post_type_archive('noticia') || is_singular('noticia') || is_tax('noticia_cat');
 
     echo '<ul class="' . esc_attr($menu_class) . '">';
     foreach ($items as $item) {
         $children = isset($item['children']) && is_array($item['children']) ? $item['children'] : [];
         $is_current = trailingslashit($item['url']) === $current_url;
+        if ($is_noticias_context && isset($item['label']) && strtolower((string) $item['label']) === 'noticias') {
+            $is_current = true;
+        }
         $has_current_child = false;
 
         if (!empty($children)) {
@@ -250,6 +254,38 @@ add_filter('wp_nav_menu_objects', function ($items, $args) {
 
     return $result;
 }, 20, 2);
+
+// Mantener "Noticias" activo en archivo, categorias e internas de noticias.
+add_filter('wp_nav_menu_objects', function ($items, $args) {
+    if (!is_post_type_archive('noticia') && !is_singular('noticia') && !is_tax('noticia_cat')) {
+        return $items;
+    }
+
+    if (empty($items) || !is_array($items)) {
+        return $items;
+    }
+
+    $noticias_url = untrailingslashit(home_url('/noticias/'));
+
+    foreach ($items as $item) {
+        $item_url = isset($item->url) ? untrailingslashit($item->url) : '';
+        $item_title = isset($item->title) ? strtolower(trim((string) $item->title)) : '';
+
+        if ($item_url === $noticias_url || $item_title === 'noticias') {
+            $classes = isset($item->classes) && is_array($item->classes) ? $item->classes : [];
+            foreach (['current-menu-item', 'current_page_item'] as $active_class) {
+                if (!in_array($active_class, $classes, true)) {
+                    $classes[] = $active_class;
+                }
+            }
+
+            $item->classes = $classes;
+            $item->current = true;
+        }
+    }
+
+    return $items;
+}, 30, 2);
 
 // Encolar estilos y scripts
 add_action('wp_enqueue_scripts', function () {

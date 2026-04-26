@@ -2936,8 +2936,10 @@ main.home {
     position: relative;
     z-index: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.02em;
     width: min(82%, 248px);
     min-height: 66px;
     margin-bottom: -8px;

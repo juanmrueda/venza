@@ -105,6 +105,17 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-26 - Noticias tab labels stacked
+
+- Adjusted `/noticias/` card tabs so the light label line stacks above the bold label line.
+- This fixes the visual order requested for:
+  - `Nuevos` / `Lanzamientos`
+  - `Activaciones` / `Venza`
+  - `Repositorio` / `Sensorial`
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
+
 ### 2026-04-26 - Noticias home admin controls and tab typography
 
 - Completed admin controls for each `/noticias/` landing card through `noticia_cat` fields:

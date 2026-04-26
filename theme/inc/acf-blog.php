@@ -87,45 +87,6 @@ add_action('acf/init', function () {
         ];
     }
 
-    $video_card_fields = [];
-    for ($i = 1; $i <= 4; $i++) {
-        $video_card_fields[] = $image_field(
-            'field_venza_blog_t2_video_' . $i . '_image',
-            'Interna Tipo 2 - Video card ' . $i . ' imagen',
-            'blog_t2_video_' . $i . '_image_id'
-        );
-
-        $video_card_fields[] = [
-            'key'   => 'field_venza_blog_t2_video_' . $i . '_title',
-            'label' => 'Interna Tipo 2 - Video card ' . $i . ' titulo',
-            'name'  => 'blog_t2_video_' . $i . '_title',
-            'type'  => 'text',
-        ];
-
-        $video_card_fields[] = [
-            'key'           => 'field_venza_blog_t2_video_' . $i . '_meta',
-            'label'         => 'Interna Tipo 2 - Video card ' . $i . ' meta',
-            'name'          => 'blog_t2_video_' . $i . '_meta',
-            'type'          => 'text',
-            'default_value' => '',
-            'instructions'  => 'Ejemplo: 36 K visualizaciones - hace 2 semanas.',
-        ];
-
-        $video_card_fields[] = [
-            'key'   => 'field_venza_blog_t2_video_' . $i . '_duration',
-            'label' => 'Interna Tipo 2 - Video card ' . $i . ' duracion',
-            'name'  => 'blog_t2_video_' . $i . '_duration',
-            'type'  => 'text',
-        ];
-
-        $video_card_fields[] = [
-            'key'   => 'field_venza_blog_t2_video_' . $i . '_url',
-            'label' => 'Interna Tipo 2 - Video card ' . $i . ' URL',
-            'name'  => 'blog_t2_video_' . $i . '_url',
-            'type'  => 'url',
-        ];
-    }
-
     acf_add_local_field_group([
         'key'    => 'group_venza_blog_home',
         'title'  => 'Blog - Home editable',
@@ -183,19 +144,6 @@ add_action('acf/init', function () {
                     'label' => 'General',
                     'type'  => 'tab',
                 ],
-                [
-                    'key'           => 'field_venza_blog_layout_type',
-                    'label'         => 'Tipo de interna',
-                    'name'          => 'blog_layout_type',
-                    'type'          => 'select',
-                    'choices'       => [
-                        'type_1' => 'Interna tipo 1 editorial',
-                        'type_2' => 'Interna tipo 2 video',
-                    ],
-                    'default_value' => 'type_1',
-                    'ui'            => 1,
-                    'instructions'  => 'Selecciona el diseno que debe usar esta entrada del blog.',
-                ],
                 $image_field(
                     'field_venza_blog_card_image',
                     'Home Blog - Imagen tarjeta',
@@ -246,70 +194,7 @@ add_action('acf/init', function () {
                     'type'  => 'tab',
                 ],
             ],
-            $type_one_fields,
-            [
-                [
-                    'key'   => 'field_venza_blog_tab_type_2',
-                    'label' => 'Interna tipo 2',
-                    'type'  => 'tab',
-                ],
-                $image_field(
-                    'field_venza_blog_t2_background_image',
-                    'Interna Tipo 2 - Background superior',
-                    'blog_t2_background_image_id',
-                    'Opcional. Solo carga si el switch "Usar background superior" esta encendido.'
-                ),
-                [
-                    'key'           => 'field_venza_blog_t2_use_background_image',
-                    'label'         => 'Interna Tipo 2 - Usar background superior',
-                    'name'          => 'blog_t2_use_background_image',
-                    'type'          => 'true_false',
-                    'ui'            => 1,
-                    'default_value' => 0,
-                    'instructions'  => 'Apagado por defecto para mejorar rendimiento.',
-                ],
-                $textarea_field(
-                    'field_venza_blog_t2_callout',
-                    'Interna Tipo 2 - Caja de texto',
-                    'blog_t2_callout',
-                    5,
-                    'Texto dentro de la caja con borde. Acepta <strong>.'
-                ),
-                $image_field(
-                    'field_venza_blog_t2_video_poster',
-                    'Interna Tipo 2 - Poster video principal',
-                    'blog_t2_video_poster_id',
-                    'Imagen del bloque grande de video.'
-                ),
-                [
-                    'key'          => 'field_venza_blog_t2_video_url',
-                    'label'        => 'Interna Tipo 2 - URL video principal',
-                    'name'         => 'blog_t2_video_url',
-                    'type'         => 'url',
-                    'instructions' => 'URL de YouTube, Vimeo u otro destino del video.',
-                ],
-                [
-                    'key'           => 'field_venza_blog_t2_videos_title',
-                    'label'         => 'Interna Tipo 2 - Titulo videos',
-                    'name'          => 'blog_t2_videos_title',
-                    'type'          => 'text',
-                    'default_value' => 'Videos Venza',
-                ],
-                [
-                    'key'           => 'field_venza_blog_t2_cta_text',
-                    'label'         => 'Interna Tipo 2 - Texto CTA YouTube',
-                    'name'          => 'blog_t2_cta_text',
-                    'type'          => 'text',
-                    'default_value' => 'Visita nuestro canal de Youtube',
-                ],
-                [
-                    'key'   => 'field_venza_blog_t2_cta_url',
-                    'label' => 'Interna Tipo 2 - URL CTA YouTube',
-                    'name'  => 'blog_t2_cta_url',
-                    'type'  => 'url',
-                ],
-            ],
-            $video_card_fields
+            $type_one_fields
         ),
         'location' => [
             [

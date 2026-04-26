@@ -2,62 +2,178 @@
 /*
  * Template Name: Descubre Venza
  */
-get_header(); ?>
-<main class="descubre-page">
+get_header();
 
-    <section class="descubre-hero">
-        <div class="descubre-hero__overlay">
-            <div class="container">
-                <h1><?php echo wp_kses_post(venza_field('descubre_titulo')); ?></h1>
-                <p><?php echo esc_html(venza_field('descubre_subtitulo')); ?></p>
-            </div>
-        </div>
+$get_image_id = static function ($key, $post_id) {
+    $value = venza_get_meta_value($key, $post_id);
+    $image_id = is_numeric($value) ? (int) $value : 0;
+
+    if ($image_id <= 0 && is_array($value) && isset($value['ID'])) {
+        $image_id = (int) $value['ID'];
+    }
+
+    return $image_id;
+};
+
+$get_image_url = static function ($image_id, $size = 'full') {
+    $image_id = (int) $image_id;
+    if ($image_id <= 0) {
+        return '';
+    }
+
+    $url = wp_get_attachment_image_url($image_id, $size);
+    return is_string($url) ? $url : '';
+};
+
+$get_link_attrs = static function ($url) {
+    $host = wp_parse_url(home_url(), PHP_URL_HOST);
+    $url_host = wp_parse_url($url, PHP_URL_HOST);
+
+    if ($url_host && $host && strtolower((string) $url_host) !== strtolower((string) $host)) {
+        return ' target="_blank" rel="noopener"';
+    }
+
+    return '';
+};
+?>
+<main class="descubre-page descubre-video-page">
+    <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
         <?php
-        $video_id = venza_field('descubre_video_youtube');
-        if ($video_id) : ?>
-            <div class="descubre-hero__video">
-                <button class="video-play-btn" data-video="<?php echo esc_attr($video_id); ?>" aria-label="Reproducir video">
-                    <svg viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="30" fill="rgba(255,255,255,0.9)"/><polygon points="24,18 46,30 24,42" fill="#1B1464"/></svg>
-                </button>
-                <?php if (has_post_thumbnail()) : ?>
-                    <?php the_post_thumbnail('producto-hero', ['class' => 'video-poster']); ?>
-                <?php endif; ?>
-            </div>
-        <?php endif; ?>
-    </section>
+        $page_id = get_the_ID();
 
-    <section class="descubre-videos">
-        <div class="container">
-            <h2 class="section-title">
-                <svg viewBox="0 0 24 24" width="32" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-                Videos Venza
-            </h2>
-            <?php $channel = venza_field('youtube_channel_url'); ?>
-            <?php if ($channel) : ?>
-                <a href="<?php echo esc_url($channel); ?>" class="btn btn--primary" target="_blank" rel="noopener">
-                    Visita nuestro canal de Youtube
-                </a>
-            <?php endif; ?>
+        $hero_title = trim((string) venza_get_meta_value('descubre_titulo', $page_id));
+        if ($hero_title === '') {
+            $hero_title = get_the_title($page_id);
+        }
 
-            <?php
-            $playlist_id = venza_field('youtube_playlist_id');
-            if ($playlist_id) : ?>
-                <div class="youtube-carousel" data-playlist="<?php echo esc_attr($playlist_id); ?>">
-                    <div class="youtube-carousel__track" id="yt-track"></div>
-                    <button class="carousel-btn carousel-btn--prev" aria-label="Anterior">&#8592;</button>
-                    <button class="carousel-btn carousel-btn--next" aria-label="Siguiente">&#8594;</button>
+        $callout = trim((string) venza_get_meta_value('descubre_callout', $page_id));
+        if ($callout === '') {
+            $callout = trim((string) venza_get_meta_value('descubre_subtitulo', $page_id));
+        }
+
+        $video_poster_id = $get_image_id('descubre_video_poster_id', $page_id);
+        if ($video_poster_id <= 0 && has_post_thumbnail($page_id)) {
+            $video_poster_id = (int) get_post_thumbnail_id($page_id);
+        }
+
+        $video_url = trim((string) venza_get_meta_value('descubre_video_url', $page_id));
+        if ($video_url === '') {
+            $legacy_youtube = trim((string) venza_get_meta_value('descubre_video_youtube', $page_id));
+            if ($legacy_youtube !== '') {
+                $video_url = filter_var($legacy_youtube, FILTER_VALIDATE_URL)
+                    ? $legacy_youtube
+                    : 'https://www.youtube.com/watch?v=' . rawurlencode($legacy_youtube);
+            }
+        }
+
+        $videos_title = trim((string) venza_get_meta_value('descubre_videos_title', $page_id));
+        if ($videos_title === '') {
+            $videos_title = 'Videos Venza';
+        }
+
+        $cta_text = trim((string) venza_get_meta_value('descubre_cta_text', $page_id));
+        if ($cta_text === '') {
+            $cta_text = 'Visita nuestro canal de Youtube';
+        }
+
+        $cta_url = trim((string) venza_get_meta_value('descubre_cta_url', $page_id));
+        if ($cta_url === '') {
+            $cta_url = trim((string) venza_get_meta_value('youtube_channel_url', $page_id));
+        }
+        if ($cta_url === '') {
+            $cta_url = '#';
+        }
+
+        $use_background_image = (bool) venza_get_meta_value('descubre_use_background_image', $page_id);
+        $background_image_id = $use_background_image ? $get_image_id('descubre_background_image_id', $page_id) : 0;
+        $background_url = $get_image_url($background_image_id, 'full');
+        $page_style = $background_url !== '' ? '--blog-bg-image:url(' . esc_url($background_url) . ');' : '';
+
+        $fallback_video_titles = [
+            'Manos limpias, piel protegida',
+            'Deja que creen libremente, mientras Venza cuida su piel',
+            'Tu piel tambien necesita su momento',
+            'Entrena duro y limpia tu piel con jabones Venza',
+        ];
+        ?>
+        <article class="blog-single-page blog-single-page--type2 descubre-video-page__content" style="<?php echo esc_attr($page_style); ?>">
+            <section class="blog-t2-hero">
+                <div class="container blog-t2-hero__container">
+                    <h1><?php echo wp_kses_post($hero_title); ?></h1>
+                    <?php if ($callout !== '') : ?>
+                        <div class="blog-t2-hero__callout">
+                            <?php echo wp_kses_post(wpautop($callout)); ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
-            <?php endif; ?>
-        </div>
-    </section>
+            </section>
 
-    <section class="descubre-quiz-cta">
-        <div class="container">
-            <a href="<?php echo home_url('/descubre-venza/quiz/'); ?>" class="btn btn--secondary">
-                Descubre qué jabón es ideal para tu piel
-            </a>
-        </div>
-    </section>
+            <section class="blog-t2-feature-video">
+                <?php if ($video_url !== '') : ?>
+                    <a class="blog-t2-feature-video__link" href="<?php echo esc_url($video_url); ?>"<?php echo $get_link_attrs($video_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+                <?php else : ?>
+                    <div class="blog-t2-feature-video__link">
+                <?php endif; ?>
+                    <?php if ($video_poster_id > 0) : ?>
+                        <?php echo wp_get_attachment_image($video_poster_id, 'full', false, ['loading' => 'eager']); ?>
+                    <?php else : ?>
+                        <span class="blog-t2-feature-video__placeholder"></span>
+                    <?php endif; ?>
+                    <span class="blog-play blog-t2-feature-video__play" aria-hidden="true"></span>
+                <?php echo $video_url !== '' ? '</a>' : '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+            </section>
 
+            <section class="blog-t2-videos">
+                <div class="container blog-t2-videos__container">
+                    <span class="blog-t2-videos__icon" aria-hidden="true"></span>
+                    <h2><?php echo esc_html($videos_title); ?></h2>
+                    <a class="blog-t2-videos__cta" href="<?php echo esc_url($cta_url); ?>"<?php echo $get_link_attrs($cta_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo esc_html($cta_text); ?></a>
+
+                    <div class="blog-t2-video-strip">
+                        <button class="blog-t2-video-strip__arrow blog-t2-video-strip__arrow--prev" type="button" aria-label="Anterior"></button>
+                        <div class="blog-t2-video-strip__track">
+                            <?php for ($i = 1; $i <= 4; $i++) : ?>
+                                <?php
+                                $card_image_id = $get_image_id('descubre_video_' . $i . '_image_id', $page_id);
+                                if ($card_image_id <= 0) {
+                                    $card_image_id = $video_poster_id;
+                                }
+                                $card_title = trim((string) venza_get_meta_value('descubre_video_' . $i . '_title', $page_id));
+                                if ($card_title === '') {
+                                    $card_title = $fallback_video_titles[$i - 1] ?? 'Video Venza';
+                                }
+                                $card_meta = trim((string) venza_get_meta_value('descubre_video_' . $i . '_meta', $page_id));
+                                if ($card_meta === '') {
+                                    $card_meta = ($i * 42) . ' K visualizaciones - hace ' . ($i + 1) . ' semanas';
+                                }
+                                $card_duration = trim((string) venza_get_meta_value('descubre_video_' . $i . '_duration', $page_id));
+                                if ($card_duration === '') {
+                                    $card_duration = '0:' . (34 + ($i * 5));
+                                }
+                                $card_url = trim((string) venza_get_meta_value('descubre_video_' . $i . '_url', $page_id));
+                                if ($card_url === '') {
+                                    $card_url = $video_url !== '' ? $video_url : '#';
+                                }
+                                ?>
+                                <a class="blog-t2-video-card" href="<?php echo esc_url($card_url); ?>"<?php echo $get_link_attrs($card_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+                                    <span class="blog-t2-video-card__media">
+                                        <?php if ($card_image_id > 0) : ?>
+                                            <?php echo wp_get_attachment_image($card_image_id, 'noticia-card', false, ['loading' => 'lazy']); ?>
+                                        <?php else : ?>
+                                            <span class="blog-t2-video-card__placeholder"></span>
+                                        <?php endif; ?>
+                                        <span class="blog-t2-video-card__duration"><?php echo esc_html($card_duration); ?></span>
+                                    </span>
+                                    <strong><?php echo esc_html($card_title); ?></strong>
+                                    <small><?php echo esc_html($card_meta); ?></small>
+                                </a>
+                            <?php endfor; ?>
+                        </div>
+                        <button class="blog-t2-video-strip__arrow blog-t2-video-strip__arrow--next" type="button" aria-label="Siguiente"></button>
+                    </div>
+                </div>
+            </section>
+        </article>
+    <?php endwhile; endif; ?>
 </main>
 <?php get_footer(); ?>

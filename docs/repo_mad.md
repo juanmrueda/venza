@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Blog type 1 visual QA and admin overlay fields
+Current phase: Blog single unified + Descubre Venza video template
 
 ## Purpose
 
@@ -35,6 +35,7 @@ Main goals:
 - `theme/inc/acf-home.php`: home sections editable fields (beneficios, productos, venza hoy).
 - `theme/inc/acf-page-beneficios.php`: beneficios page editable fields.
 - `theme/inc/acf-noticia.php`: noticia and noticia category visual fields.
+- `theme/inc/acf-page-descubre.php`: Descubre Venza video/home page editable fields.
 
 ### 3. Main Sections / Templates
 
@@ -71,7 +72,7 @@ Main goals:
 
 ## Current Focus
 
-Starting now: **Blog templates and admin fields**.
+Starting now: **Blog + Descubre Venza separation**.
 
 When touching Blog, prioritize only these files unless required:
 
@@ -81,6 +82,13 @@ When touching Blog, prioritize only these files unless required:
 - `theme/inc/acf-blog.php`
 - `theme/assets/css/main.css`
 - `theme/functions.php` only for includes, image sizes, editor stability, or active menu state
+
+When touching Descubre Venza, prioritize:
+
+- `theme/page-descubre-venza.php`
+- `theme/inc/acf-page-descubre.php`
+- `theme/assets/css/main.css`
+- `theme/functions.php` only for includes, editor stability, or active menu state
 
 ## Working Protocol (Required)
 
@@ -106,6 +114,26 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Blog single unified and Descubre Venza video template
+
+- Corrected architecture after user clarification:
+  - Blog posts now use only the editorial type 1 template.
+  - The former Blog type 2 video layout moved to the `Descubre Venza` page template.
+- Removed the Blog post layout selector and all type 2 Blog ACF controls from `Blog - Campos visuales`.
+- Added local ACF group `Pagina - Descubre Venza` with editable fields for:
+  - hero title and callout
+  - optional background toggle/image
+  - main video poster and URL
+  - videos section title, CTA, and 4 video cards
+- Disabled Gutenberg for the `Descubre Venza` page template to keep ACF-heavy editing stable.
+- Files updated:
+  - `theme/single.php`
+  - `theme/page-descubre-venza.php`
+  - `theme/inc/acf-blog.php`
+  - `theme/inc/acf-page-descubre.php`
+  - `theme/functions.php`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Blog featured image priority fix
 

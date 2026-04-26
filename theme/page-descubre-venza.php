@@ -85,7 +85,6 @@ $get_link_attrs = static function ($url) {
         if ($video_poster_id <= 0 && has_post_thumbnail($page_id)) {
             $video_poster_id = (int) get_post_thumbnail_id($page_id);
         }
-        $video_poster_url = $get_image_url($video_poster_id, 'full');
 
         $video_file_id = $get_image_id('descubre_video_file_id', $page_id);
         $video_file_url = $get_file_url($video_file_id);
@@ -147,26 +146,18 @@ $get_link_attrs = static function ($url) {
             <section class="blog-t2-feature-video">
                 <?php if ($video_file_url !== '') : ?>
                     <div class="blog-t2-feature-video__link blog-t2-feature-video__link--video">
-                        <video controls preload="metadata"<?php echo $video_poster_url !== '' ? ' poster="' . esc_url($video_poster_url) . '"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+                        <video controls preload="metadata">
                             <source src="<?php echo esc_url($video_file_url); ?>" type="<?php echo esc_attr($get_video_type($video_file_id, $video_file_url)); ?>">
                         </video>
                     </div>
                 <?php elseif ($video_url !== '') : ?>
-                    <a class="blog-t2-feature-video__link" href="<?php echo esc_url($video_url); ?>"<?php echo $get_link_attrs($video_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-                        <?php if ($video_poster_id > 0) : ?>
-                            <?php echo wp_get_attachment_image($video_poster_id, 'full', false, ['loading' => 'eager']); ?>
-                        <?php else : ?>
-                            <span class="blog-t2-feature-video__placeholder"></span>
-                        <?php endif; ?>
+                    <a class="blog-t2-feature-video__link blog-t2-feature-video__link--external" href="<?php echo esc_url($video_url); ?>"<?php echo $get_link_attrs($video_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+                        <span class="blog-t2-feature-video__placeholder"></span>
                         <span class="blog-play blog-t2-feature-video__play" aria-hidden="true"></span>
                     </a>
                 <?php else : ?>
                     <div class="blog-t2-feature-video__link">
-                        <?php if ($video_poster_id > 0) : ?>
-                            <?php echo wp_get_attachment_image($video_poster_id, 'full', false, ['loading' => 'eager']); ?>
-                        <?php else : ?>
-                            <span class="blog-t2-feature-video__placeholder"></span>
-                        <?php endif; ?>
+                        <span class="blog-t2-feature-video__placeholder"></span>
                     </div>
                 <?php endif; ?>
             </section>
@@ -178,14 +169,21 @@ $get_link_attrs = static function ($url) {
                     <a class="blog-t2-videos__cta" href="<?php echo esc_url($cta_url); ?>"<?php echo $get_link_attrs($cta_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo esc_html($cta_text); ?></a>
 
                     <div class="blog-t2-video-strip">
-                        <div class="blog-t2-video-strip__track">
+                        <button class="blog-t2-video-strip__arrow blog-t2-video-strip__arrow--prev" type="button" aria-label="Anterior"></button>
+                        <div class="blog-t2-video-strip__viewport">
+                            <div class="blog-t2-video-strip__track">
                             <?php for ($i = 1; $i <= 6; $i++) : ?>
                                 <?php
+                                $enabled_raw = get_post_meta($page_id, 'descubre_video_' . $i . '_enabled', true);
+                                $is_enabled = $enabled_raw === '' ? $i <= 4 : (bool) $enabled_raw;
+                                if (!$is_enabled) {
+                                    continue;
+                                }
+
                                 $card_image_id = $get_image_id('descubre_video_' . $i . '_image_id', $page_id);
                                 if ($card_image_id <= 0) {
                                     $card_image_id = $video_poster_id;
                                 }
-                                $card_poster_url = $get_image_url($card_image_id, 'noticia-card');
                                 $card_title = trim((string) venza_get_meta_value('descubre_video_' . $i . '_title', $page_id));
                                 if ($card_title === '') {
                                     $card_title = $fallback_video_titles[$i - 1] ?? 'Video Venza';
@@ -195,27 +193,10 @@ $get_link_attrs = static function ($url) {
                                 $card_video_file_id = $get_image_id('descubre_video_' . $i . '_file_id', $page_id);
                                 $card_video_file_url = $get_file_url($card_video_file_id);
                                 $card_url = trim((string) venza_get_meta_value('descubre_video_' . $i . '_url', $page_id));
-                                if ($card_url === '' && $card_video_file_url === '') {
-                                    $card_url = $video_url !== '' ? $video_url : '#';
-                                }
+                                $card_href = $card_video_file_url !== '' ? $card_video_file_url : $card_url;
                                 ?>
-                                <?php if ($card_video_file_url !== '') : ?>
-                                    <article class="blog-t2-video-card blog-t2-video-card--inline">
-                                        <span class="blog-t2-video-card__media">
-                                            <video controls preload="none"<?php echo $card_poster_url !== '' ? ' poster="' . esc_url($card_poster_url) . '"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-                                                <source src="<?php echo esc_url($card_video_file_url); ?>" type="<?php echo esc_attr($get_video_type($card_video_file_id, $card_video_file_url)); ?>">
-                                            </video>
-                                            <?php if ($card_duration !== '') : ?>
-                                                <span class="blog-t2-video-card__duration"><?php echo esc_html($card_duration); ?></span>
-                                            <?php endif; ?>
-                                        </span>
-                                        <strong><?php echo esc_html($card_title); ?></strong>
-                                        <?php if ($card_meta !== '') : ?>
-                                            <small><?php echo esc_html($card_meta); ?></small>
-                                        <?php endif; ?>
-                                    </article>
-                                <?php elseif ($card_url !== '#') : ?>
-                                    <a class="blog-t2-video-card" href="<?php echo esc_url($card_url); ?>"<?php echo $get_link_attrs($card_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+                                <?php if ($card_href !== '') : ?>
+                                    <a class="blog-t2-video-card" href="<?php echo esc_url($card_href); ?>"<?php echo $get_link_attrs($card_href); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                                         <span class="blog-t2-video-card__media">
                                             <?php if ($card_image_id > 0) : ?>
                                                 <?php echo wp_get_attachment_image($card_image_id, 'noticia-card', false, ['loading' => 'lazy']); ?>
@@ -227,7 +208,10 @@ $get_link_attrs = static function ($url) {
                                             <?php endif; ?>
                                             <span class="blog-t2-video-card__play" aria-hidden="true"></span>
                                         </span>
-                                        <strong><?php echo esc_html($card_title); ?></strong>
+                                        <span class="blog-t2-video-card__content">
+                                            <strong><?php echo esc_html($card_title); ?></strong>
+                                            <span class="blog-t2-video-card__menu" aria-hidden="true"></span>
+                                        </span>
                                         <?php if ($card_meta !== '') : ?>
                                             <small><?php echo esc_html($card_meta); ?></small>
                                         <?php endif; ?>
@@ -241,14 +225,19 @@ $get_link_attrs = static function ($url) {
                                                 <span class="blog-t2-video-card__placeholder"></span>
                                             <?php endif; ?>
                                         </span>
-                                        <strong><?php echo esc_html($card_title); ?></strong>
+                                        <span class="blog-t2-video-card__content">
+                                            <strong><?php echo esc_html($card_title); ?></strong>
+                                            <span class="blog-t2-video-card__menu" aria-hidden="true"></span>
+                                        </span>
                                         <?php if ($card_meta !== '') : ?>
                                             <small><?php echo esc_html($card_meta); ?></small>
                                         <?php endif; ?>
                                     </article>
                                 <?php endif; ?>
                             <?php endfor; ?>
+                            </div>
                         </div>
+                        <button class="blog-t2-video-strip__arrow blog-t2-video-strip__arrow--next" type="button" aria-label="Siguiente"></button>
                     </div>
                 </div>
             </section>

@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Descubre Venza video admin controls
+Current phase: Descubre Venza pixel QA and video carousel
 
 ## Purpose
 
@@ -114,6 +114,30 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Descubre Venza hero and carousel tuning
+
+- Tuned the top `Descubre Venza` hero toward the supplied reference:
+  - smaller centered title
+  - thinner rounded callout border
+  - tighter callout text sizing and spacing
+  - water-texture fallback background restored for this page.
+- Removed the principal video cover behavior:
+  - uploaded main video now renders without `poster`
+  - external video fallback shows only the play treatment over a neutral placeholder, not a cover image.
+- Reworked the lower videos from grid to carousel:
+  - 4 cards visible on desktop, matching the reference
+  - horizontal scroll with left/right arrows
+  - responsive 2-card/tablet and 1-card/mobile behavior
+- Added per-video admin switches:
+  - `Video card N - Mostrar`
+  - defaults: cards 1-4 on, cards 5-6 off.
+- Files updated:
+  - `theme/page-descubre-venza.php`
+  - `theme/inc/acf-page-descubre.php`
+  - `theme/assets/css/main.css`
+  - `theme/assets/js/main.js`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Descubre Venza video uploads and six video cards
 

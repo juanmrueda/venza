@@ -258,6 +258,42 @@
         }
     }
 
+    // --- Carrusel videos Descubre Venza ---
+    document.querySelectorAll('.blog-t2-video-strip').forEach((videoCarousel) => {
+        const viewport = videoCarousel.querySelector('.blog-t2-video-strip__viewport');
+        const prev = videoCarousel.querySelector('.blog-t2-video-strip__arrow--prev');
+        const next = videoCarousel.querySelector('.blog-t2-video-strip__arrow--next');
+
+        if (!viewport || !prev || !next) return;
+
+        const getScrollAmount = () => {
+            const card = viewport.querySelector('.blog-t2-video-card');
+            if (!card) {
+                return viewport.clientWidth;
+            }
+
+            return Math.max(card.getBoundingClientRect().width, viewport.clientWidth * 0.25);
+        };
+
+        const updateButtons = () => {
+            const maxScroll = viewport.scrollWidth - viewport.clientWidth - 4;
+            prev.disabled = viewport.scrollLeft <= 4;
+            next.disabled = viewport.scrollLeft >= maxScroll;
+        };
+
+        prev.addEventListener('click', () => {
+            viewport.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+        });
+
+        next.addEventListener('click', () => {
+            viewport.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+        });
+
+        viewport.addEventListener('scroll', updateButtons, { passive: true });
+        window.addEventListener('resize', updateButtons);
+        updateButtons();
+    });
+
     // --- Modal de video (YouTube o archivo local) ---
     document.querySelectorAll('.video-play-btn').forEach((btn) => {
         btn.addEventListener('click', function () {

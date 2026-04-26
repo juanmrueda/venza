@@ -45,6 +45,16 @@ add_action('acf/init', function () {
 
     $video_card_fields = [];
     for ($i = 1; $i <= 6; $i++) {
+        $video_card_fields[] = [
+            'key'           => 'field_venza_descubre_video_' . $i . '_enabled',
+            'label'         => 'Video card ' . $i . ' - Mostrar',
+            'name'          => 'descubre_video_' . $i . '_enabled',
+            'type'          => 'true_false',
+            'ui'            => 1,
+            'default_value' => $i <= 4 ? 1 : 0,
+            'instructions'  => 'Activa o desactiva esta tarjeta del carrusel.',
+        ];
+
         $video_card_fields[] = $image_field(
             'field_venza_descubre_video_' . $i . '_image',
             'Video card ' . $i . ' - Poster',
@@ -137,7 +147,7 @@ add_action('acf/init', function () {
                     'field_venza_descubre_video_poster',
                     'Video principal - Poster',
                     'descubre_video_poster_id',
-                    'Imagen del bloque grande de video.'
+                    'Opcional. No se usa como cover del video principal; queda disponible como fallback si no hay archivo/URL.'
                 ),
                 $file_field(
                     'field_venza_descubre_video_file',

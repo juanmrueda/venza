@@ -105,6 +105,20 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-26 - Home global background editable from admin
+
+- Added a new `General` tab to the Front Page ACF group.
+- Home global background is now editable from admin:
+  - `Home - Background general`
+  - `Home - Color base del background`
+- `front-page.php` now passes the selected background image/color as CSS variables on `<main class="home">`.
+- CSS keeps `backgroundhome.png` as the fallback when admin fields are empty.
+- Files updated:
+  - `theme/inc/acf-home.php`
+  - `theme/front-page.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
+
 ### 2026-04-26 - Home background and product block visual tuning
 
 - Added `Assets/backgroundhome.png` to the theme as `theme/assets/images/backgroundhome.png`.

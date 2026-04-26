@@ -1018,12 +1018,12 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 .home-hero {
     min-height: auto;
     padding: 0;
-    background: #f8fbff url('../images/backgroundhome.png') center top / 100% auto repeat-y;
+    background: var(--home-bg-color, #f8fbff) var(--home-bg-image, url('../images/backgroundhome.png')) center top / 100% auto repeat-y;
     overflow: hidden;
 }
 
 main.home {
-    background: #f8fbff url('../images/backgroundhome.png') center top / 100% auto repeat-y;
+    background: var(--home-bg-color, #f8fbff) var(--home-bg-image, url('../images/backgroundhome.png')) center top / 100% auto repeat-y;
 }
 
 .home-hero__carousel {

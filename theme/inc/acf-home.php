@@ -132,6 +132,29 @@ add_action('acf/init', function () {
     $fields = array_merge(
         [
             [
+                'key'   => 'field_venza_home_tab_general',
+                'label' => 'General',
+                'type'  => 'tab',
+            ],
+            [
+                'key'           => 'field_venza_home_background_image',
+                'label'         => 'Home - Background general',
+                'name'          => 'home_background_image',
+                'type'          => 'image',
+                'return_format' => 'id',
+                'preview_size'  => 'medium',
+                'library'       => 'all',
+                'instructions'  => 'Imagen de fondo que aparece debajo del hero y acompana las secciones del home. Si queda vacio usa backgroundhome.png del tema.',
+            ],
+            [
+                'key'           => 'field_venza_home_background_color',
+                'label'         => 'Home - Color base del background',
+                'name'          => 'home_background_color',
+                'type'          => 'color_picker',
+                'default_value' => '#f8fbff',
+                'instructions'  => 'Color de respaldo debajo de la imagen de fondo.',
+            ],
+            [
                 'key'   => 'field_venza_home_tab_hero',
                 'label' => 'Hero',
                 'type'  => 'tab',

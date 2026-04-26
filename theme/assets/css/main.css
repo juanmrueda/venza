@@ -2953,6 +2953,20 @@ main.home {
     font-size: clamp(1.1rem, 1.55vw, 1.45rem);
 }
 
+.noticias-home-card__title-light,
+.noticias-home-card__title-strong {
+    display: block;
+}
+
+.noticias-home-card__title-light {
+    font-weight: 300;
+    font-size: 0.92em;
+}
+
+.noticias-home-card__title-strong {
+    font-weight: 700;
+}
+
 .noticias-home-card__frame {
     position: relative;
     z-index: 1;

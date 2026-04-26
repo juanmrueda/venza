@@ -105,6 +105,23 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-26 - Noticias home admin controls and tab typography
+
+- Completed admin controls for each `/noticias/` landing card through `noticia_cat` fields:
+  - tab line 1 (light) and tab line 2 (bold)
+  - card title, summary, image, CTA text, and custom URL
+- Updated the archive logic so card content prefers:
+  - admin override first
+  - latest post in the category second
+  - visual fallback copy last
+- Adjusted the Noticias card tab typography so the first line renders light and the second line bold.
+- Files updated:
+  - `theme/archive-noticia.php`
+  - `theme/inc/acf-noticia.php`
+  - `theme/inc/helpers.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
+
 ### 2026-04-26 - Noticias home layout aligned to reference
 
 - Tuned `/noticias/` landing layout to match the supplied visual reference:

@@ -235,10 +235,34 @@ function venza_format_term_name_label($name) {
     $line_two = implode(' ', array_slice($words, $break_index));
 
     if ($line_two === '') {
-        return $to_upper($line_one);
+        return '<span class="noticias-home-card__title-strong">' . esc_html($to_upper($line_one)) . '</span>';
     }
 
-    return $to_upper($line_one) . '<br>' . $to_upper($line_two);
+    return '<span class="noticias-home-card__title-light">' . esc_html($to_upper($line_one)) . '</span>'
+        . '<span class="noticias-home-card__title-strong">' . esc_html($to_upper($line_two)) . '</span>';
+}
+
+function venza_format_noticia_home_label($fallback_name, $line_light = '', $line_strong = '') {
+    $line_light = trim(wp_strip_all_tags((string) $line_light));
+    $line_strong = trim(wp_strip_all_tags((string) $line_strong));
+
+    if ($line_light === '' && $line_strong === '') {
+        return venza_format_term_name_label($fallback_name);
+    }
+
+    $to_upper = static function ($value) {
+        return function_exists('mb_strtoupper') ? mb_strtoupper($value, 'UTF-8') : strtoupper($value);
+    };
+
+    $html = '';
+    if ($line_light !== '') {
+        $html .= '<span class="noticias-home-card__title-light">' . esc_html($to_upper($line_light)) . '</span>';
+    }
+    if ($line_strong !== '') {
+        $html .= '<span class="noticias-home-card__title-strong">' . esc_html($to_upper($line_strong)) . '</span>';
+    }
+
+    return $html;
 }
 
 function venza_get_noticia_video_embed($post_id) {

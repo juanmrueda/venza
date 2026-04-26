@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Noticias visual QA and home refinements with admin-enablement workflow
+Current phase: Blog implementation and admin-enabled templates
 
 ## Purpose
 
@@ -71,14 +71,16 @@ Main goals:
 
 ## Current Focus
 
-Starting now: **Home adjustments**.
+Starting now: **Blog templates and admin fields**.
 
-When touching Home, prioritize only these files unless required:
+When touching Blog, prioritize only these files unless required:
 
-- `theme/front-page.php`
-- `theme/template-parts/home/*`
+- `theme/home.php`
+- `theme/single.php`
+- `theme/template-parts/blog/card.php`
+- `theme/inc/acf-blog.php`
 - `theme/assets/css/main.css`
-- Any directly related helper/ACF include if strictly needed
+- `theme/functions.php` only for includes, image sizes, editor stability, or active menu state
 
 ## Working Protocol (Required)
 
@@ -104,6 +106,33 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Blog home and two internal templates admin-enabled
+
+- Implemented Blog home layout based on `Venza WB_Pagina_12.jpg`:
+  - water-texture background
+  - large horizontal white cards
+  - editable card image, excerpt, and CTA text per post
+  - editable Blog posts page background and global card CTA text
+- Reworked standard WordPress post single template with two selectable layouts:
+  - `Interna tipo 1 editorial` based on `Venza WB_Pagina_13.jpg`
+  - `Interna tipo 2 video` based on `Venza WB_Pagina_14.jpg`
+- Added local ACF group `theme/inc/acf-blog.php`:
+  - Blog home settings on the posts page
+  - per-post layout selector
+  - hero image/text fields
+  - type 1 editorial image/text blocks
+  - type 2 video poster, CTA, and video card fields
+- Applied editor stability fix to standard posts by disabling Gutenberg for `post`, matching the product/home approach.
+- Updated global navigation active state so `Blog` remains active on archive, post single, category, tag, date, and author routes.
+- Files updated:
+  - `theme/home.php`
+  - `theme/single.php`
+  - `theme/template-parts/blog/card.php`
+  - `theme/inc/acf-blog.php`
+  - `theme/functions.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Noticia badge icon fallback fix
 

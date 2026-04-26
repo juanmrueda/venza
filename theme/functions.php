@@ -12,6 +12,7 @@ require_once VENZA_DIR . '/inc/acf-producto-home.php';
 require_once VENZA_DIR . '/inc/acf-page-beneficios.php';
 require_once VENZA_DIR . '/inc/acf-noticia.php';
 require_once VENZA_DIR . '/inc/acf-home.php';
+require_once VENZA_DIR . '/inc/acf-blog.php';
 
 // Soporte del tema
 add_action('after_setup_theme', function () {
@@ -29,7 +30,7 @@ add_action('after_setup_theme', function () {
 // Evitar glitches visuales intermitentes de campos ACF (meta boxes/WYSIWYG)
 // en pantallas con alta edicion de campos personalizados.
 add_filter('use_block_editor_for_post_type', function ($use_block_editor, $post_type) {
-    if ($post_type === 'producto') {
+    if ($post_type === 'producto' || $post_type === 'post') {
         return false;
     }
 
@@ -41,7 +42,7 @@ add_filter('use_block_editor_for_post', function ($use_block_editor, $post) {
         return $use_block_editor;
     }
 
-    if ($post->post_type === 'producto') {
+    if ($post->post_type === 'producto' || $post->post_type === 'post') {
         return false;
     }
 
@@ -101,12 +102,16 @@ function venza_primary_menu_fallback($args = []) {
     $current_url = trailingslashit(home_url(add_query_arg([], $GLOBALS['wp']->request ?? '')));
     $is_producto_context = is_post_type_archive('producto') || is_singular('producto') || is_tax('linea_producto');
     $is_noticias_context = is_post_type_archive('noticia') || is_singular('noticia') || is_tax('noticia_cat');
+    $is_blog_context = is_home() || is_singular('post') || is_category() || is_tag() || is_date() || is_author();
 
     echo '<ul class="' . esc_attr($menu_class) . '">';
     foreach ($items as $item) {
         $children = isset($item['children']) && is_array($item['children']) ? $item['children'] : [];
         $is_current = trailingslashit($item['url']) === $current_url;
         if ($is_noticias_context && isset($item['label']) && strtolower((string) $item['label']) === 'noticias') {
+            $is_current = true;
+        }
+        if ($is_blog_context && isset($item['label']) && strtolower((string) $item['label']) === 'blog') {
             $is_current = true;
         }
         $has_current_child = false;
@@ -287,6 +292,38 @@ add_filter('wp_nav_menu_objects', function ($items, $args) {
     return $items;
 }, 30, 2);
 
+// Mantener "Blog" activo en archivo, categorias e internas del blog.
+add_filter('wp_nav_menu_objects', function ($items, $args) {
+    if (!is_home() && !is_singular('post') && !is_category() && !is_tag() && !is_date() && !is_author()) {
+        return $items;
+    }
+
+    if (empty($items) || !is_array($items)) {
+        return $items;
+    }
+
+    $blog_url = untrailingslashit(home_url('/blog/'));
+
+    foreach ($items as $item) {
+        $item_url = isset($item->url) ? untrailingslashit($item->url) : '';
+        $item_title = isset($item->title) ? strtolower(trim((string) $item->title)) : '';
+
+        if ($item_url === $blog_url || $item_title === 'blog') {
+            $classes = isset($item->classes) && is_array($item->classes) ? $item->classes : [];
+            foreach (['current-menu-item', 'current_page_item'] as $active_class) {
+                if (!in_array($active_class, $classes, true)) {
+                    $classes[] = $active_class;
+                }
+            }
+
+            $item->classes = $classes;
+            $item->current = true;
+        }
+    }
+
+    return $items;
+}, 35, 2);
+
 // Encolar estilos y scripts
 add_action('wp_enqueue_scripts', function () {
     $main_css_path = VENZA_DIR . '/assets/css/main.css';
@@ -311,6 +348,8 @@ add_action('after_setup_theme', function () {
     add_image_size('producto-thumb',   400,  400, true);
     add_image_size('noticia-card',     600,  400, true);
     add_image_size('blog-card',        300,  300, true);
+    add_image_size('blog-card-wide',   720,  520, true);
+    add_image_size('blog-hero',        960,  960, true);
 });
 
 // ACF: cargar campos desde JSON

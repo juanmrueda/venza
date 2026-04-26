@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Descubre Venza pixel QA and video carousel
+Current phase: Descubre Venza background cleanup
 
 ## Purpose
 
@@ -114,6 +114,14 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Descubre Venza background removed
+
+- Removed the water-texture/background image from `Descubre Venza`.
+- The video template now uses a flat light-blue background for better performance and cleaner visual QA.
+- File updated:
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Descubre Venza hero and carousel tuning
 

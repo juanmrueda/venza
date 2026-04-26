@@ -59,11 +59,9 @@ $get_image_url = static function ($image_id, $size = 'full') {
 
         <?php if ($layout === 'type_2') : ?>
             <?php
-            $background_image_id = $get_image_id('blog_t2_background_image_id', $post_id);
+            $use_background_image = (bool) venza_get_meta_value('blog_t2_use_background_image', $post_id);
+            $background_image_id = $use_background_image ? $get_image_id('blog_t2_background_image_id', $post_id) : 0;
             $background_url = $get_image_url($background_image_id, 'full');
-            if ($background_url === '') {
-                $background_url = VENZA_URI . '/assets/images/backgroundhome.png';
-            }
 
             $callout = trim((string) venza_get_meta_value('blog_t2_callout', $post_id));
             if ($callout === '') {
@@ -95,7 +93,12 @@ $get_image_url = static function ($image_id, $size = 'full') {
                 'Entrena duro y limpia tu piel con jabones Venza',
             ];
             ?>
-            <article class="blog-single-page blog-single-page--type2" style="<?php echo esc_attr('--blog-bg-image:url(' . esc_url($background_url) . ');'); ?>">
+            <?php
+            $type2_style = $background_url !== ''
+                ? '--blog-bg-image:url(' . esc_url($background_url) . ');'
+                : '';
+            ?>
+            <article class="blog-single-page blog-single-page--type2" style="<?php echo esc_attr($type2_style); ?>">
                 <section class="blog-t2-hero">
                     <div class="container blog-t2-hero__container">
                         <h1><?php the_title(); ?></h1>

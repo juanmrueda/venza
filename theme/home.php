@@ -2,9 +2,9 @@
 get_header();
 
 $blog_page_id = (int) get_option('page_for_posts');
-$theme_bg = VENZA_URI . '/assets/images/backgroundhome.png';
-$background_image_id = $blog_page_id > 0 ? (int) venza_get_meta_value('blog_home_background_image_id', $blog_page_id) : 0;
-$background_image_url = $background_image_id > 0 ? wp_get_attachment_image_url($background_image_id, 'full') : $theme_bg;
+$use_background_image = $blog_page_id > 0 ? (bool) venza_get_meta_value('blog_home_use_background_image', $blog_page_id) : false;
+$background_image_id = $use_background_image && $blog_page_id > 0 ? (int) venza_get_meta_value('blog_home_background_image_id', $blog_page_id) : 0;
+$background_image_url = $background_image_id > 0 ? wp_get_attachment_image_url($background_image_id, 'full') : '';
 $background_color = $blog_page_id > 0 ? trim((string) venza_get_meta_value('blog_home_background_color', $blog_page_id)) : '';
 if ($background_color === '') {
     $background_color = '#eaf3fb';

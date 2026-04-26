@@ -104,11 +104,20 @@ add_action('acf/init', function () {
         'key'    => 'group_venza_blog_home',
         'title'  => 'Blog - Home editable',
         'fields' => [
+            [
+                'key'           => 'field_venza_blog_home_use_background_image',
+                'label'         => 'Blog Home - Usar imagen de fondo',
+                'name'          => 'blog_home_use_background_image',
+                'type'          => 'true_false',
+                'ui'            => 1,
+                'default_value' => 0,
+                'instructions'  => 'Apagado por defecto para mejorar rendimiento. Enciendelo solo si necesitas una imagen de fondo.',
+            ],
             $image_field(
                 'field_venza_blog_home_background_image',
                 'Blog Home - Background',
                 'blog_home_background_image_id',
-                'Imagen de fondo para el home del blog. Si queda vacio usa el background acuatico del tema.'
+                'Imagen de fondo para el home del blog. Solo carga si el switch anterior esta encendido.'
             ),
             [
                 'key'           => 'field_venza_blog_home_background_color',
@@ -222,8 +231,17 @@ add_action('acf/init', function () {
                     'field_venza_blog_t2_background_image',
                     'Interna Tipo 2 - Background superior',
                     'blog_t2_background_image_id',
-                    'Opcional. Si queda vacio usa el background acuatico del tema.'
+                    'Opcional. Solo carga si el switch "Usar background superior" esta encendido.'
                 ),
+                [
+                    'key'           => 'field_venza_blog_t2_use_background_image',
+                    'label'         => 'Interna Tipo 2 - Usar background superior',
+                    'name'          => 'blog_t2_use_background_image',
+                    'type'          => 'true_false',
+                    'ui'            => 1,
+                    'default_value' => 0,
+                    'instructions'  => 'Apagado por defecto para mejorar rendimiento.',
+                ],
                 $textarea_field(
                     'field_venza_blog_t2_callout',
                     'Interna Tipo 2 - Caja de texto',

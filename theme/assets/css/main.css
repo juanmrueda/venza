@@ -535,7 +535,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     --blog-bg-color: #eaf3fb;
     min-height: 80vh;
     background-color: var(--blog-bg-color);
-    background-image: var(--blog-bg-image);
+    background-image: var(--blog-bg-image, none);
     background-size: cover;
     background-position: top center;
     background-repeat: repeat-y;
@@ -730,9 +730,8 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 .blog-single-page--type2 {
-    --blog-bg-image: url('../images/backgroundhome.png');
     background-color: #eaf3fb;
-    background-image: var(--blog-bg-image);
+    background-image: var(--blog-bg-image, none);
     background-size: cover;
     background-position: top center;
 }
@@ -1098,9 +1097,6 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     background: var(--color-bg-light);
     padding: 4rem 0;
     min-height: 80vh;
-    background-image: url('../images/bg-water.jpg');
-    background-size: cover;
-    background-position: center;
 }
 .contacto-header { text-align: center; margin-bottom: 3rem; }
 .contacto-header__title {
@@ -3366,7 +3362,6 @@ main.home {
 .noticias-home::before {
     background:
         linear-gradient(180deg, rgba(232, 240, 250, 0.28) 0%, rgba(232, 240, 250, 0.62) 100%),
-        url('../images/backgroundhome.png') center top / cover no-repeat,
         #dbe6f4;
 }
 

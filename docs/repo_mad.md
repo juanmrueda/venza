@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Blog implementation and admin-enabled templates
+Current phase: Background performance cleanup for internal pages and Blog
 
 ## Purpose
 
@@ -106,6 +106,25 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Heavy background cleanup for Blog and internal pages
+
+- Removed heavy automatic background image fallbacks from Blog:
+  - `/blog/` no longer loads `backgroundhome.png` by default.
+  - Blog internal type 2 no longer loads `backgroundhome.png` by default.
+- Added Blog admin switches:
+  - `Blog Home - Usar imagen de fondo`
+  - `Interna Tipo 2 - Usar background superior`
+  - Both are off by default to protect performance.
+- Removed hardcoded background image from `/noticias/` home layout.
+- Removed legacy image background reference from Contact page CSS.
+- Kept lightweight CSS gradients/colors so layouts still preserve visual atmosphere without loading large background assets.
+- Files updated:
+  - `theme/home.php`
+  - `theme/single.php`
+  - `theme/inc/acf-blog.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Blog home and two internal templates admin-enabled
 

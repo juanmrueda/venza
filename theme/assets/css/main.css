@@ -758,7 +758,9 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 
 .blog-single-page--type2 {
     background-color: #eaf3fb;
-    background-image: none;
+    background-image: var(--blog-bg-image, none);
+    background-size: cover;
+    background-position: top center;
 }
 .blog-t2-hero {
     padding: clamp(3.2rem, 5.5vw, 5.7rem) 0 clamp(2.4rem, 4vw, 3.8rem);

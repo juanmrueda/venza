@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Descubre Venza background cleanup
+Current phase: Descubre Venza optional page background
 
 ## Purpose
 
@@ -114,6 +114,15 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Descubre Venza optional exclusive background
+
+- Re-enabled optional background support only for `Descubre Venza`.
+- Default state remains no background image.
+- If editors activate `Hero - Usar background superior` and upload `Hero - Background superior`, the selected image renders only on `page-descubre-venza.php`.
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Descubre Venza background removed
 

@@ -107,6 +107,17 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-26 - Blog featured image priority fix
+
+- Fixed Blog image priority so the standard WordPress featured image controls the Blog card and single hero image.
+- ACF image fields now act as fallbacks only when no featured image is selected.
+- This prevents old demo ACF image IDs from overriding newly selected featured images.
+- Files updated:
+  - `theme/single.php`
+  - `theme/template-parts/blog/card.php`
+  - `theme/inc/acf-blog.php`
+  - `docs/repo_mad.md`
+
 ### 2026-04-26 - Blog type 1 hero and overlay image controls
 
 - Tuned Blog `Interna tipo 1 editorial` based on the supplied reference:

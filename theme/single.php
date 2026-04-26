@@ -26,6 +26,14 @@ $get_image_id = static function ($key, $post_id, $use_thumbnail = false) {
     return $image_id;
 };
 
+$get_featured_or_meta_image_id = static function ($key, $post_id) use ($get_image_id) {
+    if (has_post_thumbnail($post_id)) {
+        return (int) get_post_thumbnail_id($post_id);
+    }
+
+    return $get_image_id($key, $post_id, false);
+};
+
 $get_image_url = static function ($image_id, $size = 'full') {
     $image_id = (int) $image_id;
     if ($image_id <= 0) {
@@ -45,7 +53,7 @@ $get_image_url = static function ($image_id, $size = 'full') {
             $layout = 'type_1';
         }
 
-        $hero_image_id = $get_image_id('blog_hero_image_id', $post_id, true);
+        $hero_image_id = $get_featured_or_meta_image_id('blog_hero_image_id', $post_id);
         $hero_intro = trim((string) venza_get_meta_value('blog_hero_intro', $post_id));
         if ($hero_intro === '') {
             $hero_intro = has_excerpt($post_id) ? get_the_excerpt($post_id) : venza_get_post_preview_text($post_id, 22);

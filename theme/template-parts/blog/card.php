@@ -1,9 +1,12 @@
 <?php
 $post_id = get_the_ID();
-$card_image = venza_get_meta_value('blog_card_image_id', $post_id);
-$card_image_id = is_numeric($card_image) ? (int) $card_image : 0;
-if ($card_image_id <= 0 && has_post_thumbnail($post_id)) {
+$card_image_id = 0;
+if (has_post_thumbnail($post_id)) {
     $card_image_id = (int) get_post_thumbnail_id($post_id);
+}
+if ($card_image_id <= 0) {
+    $card_image = venza_get_meta_value('blog_card_image_id', $post_id);
+    $card_image_id = is_numeric($card_image) ? (int) $card_image : 0;
 }
 
 $excerpt = trim((string) venza_get_meta_value('blog_card_excerpt', $post_id));

@@ -200,7 +200,7 @@ add_action('acf/init', function () {
                     'field_venza_blog_card_image',
                     'Home Blog - Imagen tarjeta',
                     'blog_card_image_id',
-                    'Opcional. Si queda vacia usa la imagen destacada.'
+                    'Opcional. Se usa solo si la entrada no tiene imagen destacada.'
                 ),
                 $textarea_field(
                     'field_venza_blog_card_excerpt',
@@ -224,7 +224,7 @@ add_action('acf/init', function () {
                     'field_venza_blog_hero_image',
                     'Hero - Imagen principal',
                     'blog_hero_image_id',
-                    'Opcional. Si queda vacia usa la imagen destacada.'
+                    'Opcional. Se usa solo si la entrada no tiene imagen destacada.'
                 ),
                 $textarea_field(
                     'field_venza_blog_hero_intro',

@@ -2119,7 +2119,8 @@ main.home {
 }
 
 .home-productos .container {
-    max-width: 1280px;
+    max-width: none;
+    padding-inline: 0;
 }
 
 .home-productos .section-title {

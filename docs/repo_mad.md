@@ -105,6 +105,14 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-26 - Home product blocks full width
+
+- Updated Home product blocks (`Linea Antibacterial` and `Linea Hidratacion Profunda`) to span 100% page width.
+- Removed the Home products container max-width while preserving inner row padding and existing responsive behavior.
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
+
 ### 2026-04-26 - Home beneficios central image editable
 
 - Added admin fields in the Home `Beneficios` tab:

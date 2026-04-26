@@ -111,7 +111,7 @@ And additionally:
   - water-texture background applied behind the three cards
   - compact three-column card composition
   - purple top tabs, white framed cards, smaller copy, and blue CTA buttons
-  - responsive breakpoints adjusted without changing content or admin fields
+  - three-column layout preserved until mobile, without changing content or admin fields
 - Files updated:
   - `theme/assets/css/main.css`
   - `docs/repo_mad.md`

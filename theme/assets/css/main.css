@@ -2919,7 +2919,7 @@ main.home {
 
 .noticias-home__grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(210px, 292px));
+    grid-template-columns: repeat(3, minmax(0, 292px));
     justify-content: center;
     gap: clamp(3rem, 7vw, 7.15rem);
     align-items: start;
@@ -2996,6 +2996,8 @@ main.home {
 .noticias-home-card .noticias-btn {
     width: min(100%, 220px);
     margin-top: 1rem;
+    padding: 0.6rem 1.45rem;
+    font-size: clamp(1rem, 1.25vw, 1.25rem);
 }
 
 .noticias-home-card--empty {
@@ -3362,19 +3364,6 @@ main.home {
 @media (max-width: 1220px) {
     .repositorio-sensorial-page__grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 860px) {
-    .noticias-home__grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: clamp(2rem, 7vw, 3.2rem);
-    }
-
-    .noticias-home-card:last-child:nth-child(odd) {
-        grid-column: 1 / -1;
-        justify-self: center;
-        width: min(100%, 320px);
     }
 }
 

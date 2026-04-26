@@ -144,7 +144,16 @@ add_action('acf/init', function () {
                 'return_format' => 'id',
                 'preview_size'  => 'medium',
                 'library'       => 'all',
-                'instructions'  => 'Imagen de fondo que aparece debajo del hero y acompana las secciones del home. Si queda vacio usa backgroundhome.png del tema.',
+                'instructions'  => 'Imagen de fondo que aparece debajo del hero y acompana las secciones del home. Tiene prioridad sobre el background del tema.',
+            ],
+            [
+                'key'           => 'field_venza_home_use_theme_background',
+                'label'         => 'Home - Usar background del tema',
+                'name'          => 'home_use_theme_background',
+                'type'          => 'true_false',
+                'ui'            => 1,
+                'default_value' => 1,
+                'instructions'  => 'Apagalo para dejar el home sin imagen de fondo cuando no haya una imagen personalizada.',
             ],
             [
                 'key'           => 'field_venza_home_background_color',

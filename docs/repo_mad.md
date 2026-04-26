@@ -105,6 +105,18 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-26 - Home theme background toggle
+
+- Added admin toggle `Home - Usar background del tema`.
+- Behavior:
+  - custom background image wins if selected
+  - if no custom image and toggle is on, theme uses `backgroundhome.png`
+  - if no custom image and toggle is off, home uses only the base color
+- Files updated:
+  - `theme/inc/acf-home.php`
+  - `theme/front-page.php`
+  - `docs/repo_mad.md`
+
 ### 2026-04-26 - Home global background editable from admin
 
 - Added a new `General` tab to the Front Page ACF group.

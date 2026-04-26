@@ -13,6 +13,8 @@ if ($home_background_id > 0) {
     if (is_string($home_background_url) && $home_background_url !== '') {
         $home_styles[] = '--home-bg-image: url(' . esc_url($home_background_url) . ')';
     }
+} elseif (venza_field('home_use_theme_background', $home_id) === false) {
+    $home_styles[] = '--home-bg-image: none';
 }
 
 $home_background_color = trim((string) venza_field('home_background_color', $home_id));

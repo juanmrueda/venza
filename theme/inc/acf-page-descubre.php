@@ -19,6 +19,19 @@ add_action('acf/init', function () {
         ];
     };
 
+    $file_field = static function ($key, $label, $name, $instructions = '') {
+        return [
+            'key'           => $key,
+            'label'         => $label,
+            'name'          => $name,
+            'type'          => 'file',
+            'return_format' => 'id',
+            'library'       => 'all',
+            'mime_types'    => 'mp4,webm,mov',
+            'instructions'  => $instructions,
+        ];
+    };
+
     $textarea_field = static function ($key, $label, $name, $rows = 4, $instructions = '') {
         return [
             'key'          => $key,
@@ -31,11 +44,19 @@ add_action('acf/init', function () {
     };
 
     $video_card_fields = [];
-    for ($i = 1; $i <= 4; $i++) {
+    for ($i = 1; $i <= 6; $i++) {
         $video_card_fields[] = $image_field(
             'field_venza_descubre_video_' . $i . '_image',
-            'Video card ' . $i . ' - Imagen',
-            'descubre_video_' . $i . '_image_id'
+            'Video card ' . $i . ' - Poster',
+            'descubre_video_' . $i . '_image_id',
+            'Imagen previa del video. Recomendado si el video se sube como archivo pesado.'
+        );
+
+        $video_card_fields[] = $file_field(
+            'field_venza_descubre_video_' . $i . '_file',
+            'Video card ' . $i . ' - Archivo video',
+            'descubre_video_' . $i . '_file_id',
+            'Opcional. Para videos pesados, idealmente optimizar a menos de 80 MB o usar la URL externa.'
         );
 
         $video_card_fields[] = [
@@ -118,12 +139,18 @@ add_action('acf/init', function () {
                     'descubre_video_poster_id',
                     'Imagen del bloque grande de video.'
                 ),
+                $file_field(
+                    'field_venza_descubre_video_file',
+                    'Video principal - Archivo video',
+                    'descubre_video_file_id',
+                    'Sube un MP4/WebM/MOV o usa la URL externa del campo siguiente.'
+                ),
                 [
                     'key'          => 'field_venza_descubre_video_url',
-                    'label'        => 'Video principal - URL',
+                    'label'        => 'Video principal - URL externa',
                     'name'         => 'descubre_video_url',
                     'type'         => 'url',
-                    'instructions' => 'URL de YouTube, Vimeo u otro destino del video.',
+                    'instructions' => 'Alternativa recomendada para videos pesados: YouTube, Vimeo u otro destino.',
                 ],
                 [
                     'key'   => 'field_venza_descubre_tab_videos',
@@ -145,10 +172,11 @@ add_action('acf/init', function () {
                     'default_value' => 'Visita nuestro canal de Youtube',
                 ],
                 [
-                    'key'   => 'field_venza_descubre_cta_url',
-                    'label' => 'Videos - URL CTA YouTube',
-                    'name'  => 'descubre_cta_url',
-                    'type'  => 'url',
+                    'key'           => 'field_venza_descubre_cta_url',
+                    'label'         => 'Videos - URL CTA YouTube',
+                    'name'          => 'descubre_cta_url',
+                    'type'          => 'url',
+                    'default_value' => 'https://www.youtube.com/@jabonvenza',
                 ],
             ],
             $video_card_fields

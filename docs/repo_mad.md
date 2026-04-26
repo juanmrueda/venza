@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Blog single unified + Descubre Venza video template
+Current phase: Descubre Venza video admin controls
 
 ## Purpose
 
@@ -114,6 +114,31 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Descubre Venza video uploads and six video cards
+
+- Updated `Descubre Venza` so the large media block under the intro can be a real uploaded video:
+  - `Video principal - Archivo video`
+  - `Video principal - Poster`
+  - `Video principal - URL externa` remains as fallback/recommended option for hosted video.
+- Set default YouTube CTA URL to `https://www.youtube.com/@jabonvenza`.
+- Expanded the lower video section from 4 to 6 editable video cards.
+- Each lower card now supports:
+  - title
+  - poster image
+  - uploaded MP4/WebM/MOV file
+  - external URL fallback
+  - optional meta and duration
+- Frontend renders uploaded card videos inline with native controls and `preload="none"` to avoid loading all heavy videos at page load.
+- Tuned desktop/mobile grid so the six videos display as 3 columns on desktop, 2 columns on tablet, and 1 column on mobile.
+- Production upload limits adjusted for the admin:
+  - PHP-FPM `upload_max_filesize` and `post_max_size`: `256M`
+  - Nginx `client_max_body_size`: `256M`
+- Files updated:
+  - `theme/page-descubre-venza.php`
+  - `theme/inc/acf-page-descubre.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Blog single unified and Descubre Venza video template
 

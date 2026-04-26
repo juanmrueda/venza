@@ -142,7 +142,7 @@ $demo_media = [
                                     <?php if ($preview_text !== '') : ?>
                                         <p><?php echo esc_html($preview_text); ?></p>
                                     <?php endif; ?>
-                                    <a class="btn noticias-btn" href="<?php the_permalink(); ?>">Conoce mas</a>
+                                    <a class="btn noticias-btn" href="<?php the_permalink(); ?>">Conoce más</a>
                                 </div>
                             </article>
                         <?php endwhile; ?>

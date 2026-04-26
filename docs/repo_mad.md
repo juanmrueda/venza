@@ -105,6 +105,19 @@ And additionally:
 
 ## Action Log
 
+### 2026-04-26 - Noticias category listing card tuning
+
+- Tuned the general `noticia_cat` template cards to match the supplied category reference:
+  - smaller hero subtitle and tighter spacing above listing
+  - white card with softer radius and shadow
+  - left image ratio adjusted to reference
+  - title, excerpt, and CTA sizes reduced
+  - CTA text normalized to `Conoce más`
+- Files updated:
+  - `theme/taxonomy-noticia_cat.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
+
 ### 2026-04-26 - Noticias tab labels stacked
 
 - Adjusted `/noticias/` card tabs so the light label line stacks above the bold label line.

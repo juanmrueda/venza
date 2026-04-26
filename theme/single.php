@@ -219,6 +219,21 @@ $get_image_url = static function ($image_id, $size = 'full') {
                             if (!in_array($block_style, ['light', 'blue'], true)) {
                                 $block_style = in_array($i, [1, 3], true) ? 'blue' : 'light';
                             }
+                            $overlay_image_id = $get_image_id('blog_t1_block_' . $i . '_overlay_image_id', $post_id);
+                            $overlay_position = trim((string) venza_get_meta_value('blog_t1_block_' . $i . '_overlay_position', $post_id));
+                            $allowed_overlay_positions = [
+                                'top-left',
+                                'top-center',
+                                'top-right',
+                                'center-left',
+                                'center-right',
+                                'bottom-left',
+                                'bottom-center',
+                                'bottom-right',
+                            ];
+                            if (!in_array($overlay_position, $allowed_overlay_positions, true)) {
+                                $overlay_position = in_array($i, [1, 3], true) ? 'bottom-left' : 'top-right';
+                            }
                             $image_cell = '<div class="blog-t1-cell blog-t1-cell--image">';
                             if ($block_image_id > 0) {
                                 $image_cell .= wp_get_attachment_image($block_image_id, 'full', false, ['loading' => 'lazy']);
@@ -228,8 +243,18 @@ $get_image_url = static function ($image_id, $size = 'full') {
                             $image_cell .= '</div>';
 
                             $text_cell = '<div class="blog-t1-cell blog-t1-cell--text blog-t1-cell--' . esc_attr($block_style) . '">'
-                                . wp_kses_post(wpautop($block_text))
-                                . '</div>';
+                                . '<div class="blog-t1-cell__copy">' . wp_kses_post(wpautop($block_text)) . '</div>';
+
+                            if ($overlay_image_id > 0) {
+                                $text_cell .= '<div class="blog-t1-cell__overlay blog-t1-cell__overlay--' . esc_attr($overlay_position) . '">'
+                                    . wp_get_attachment_image($overlay_image_id, 'large', false, [
+                                        'class'   => 'blog-t1-cell__overlay-img',
+                                        'loading' => 'lazy',
+                                    ])
+                                    . '</div>';
+                            }
+
+                            $text_cell .= '</div>';
                             ?>
                             <?php
                             if ($i % 2 === 1) {

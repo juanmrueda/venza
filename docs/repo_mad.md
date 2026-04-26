@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Background performance cleanup for internal pages and Blog
+Current phase: Blog type 1 visual QA and admin overlay fields
 
 ## Purpose
 
@@ -106,6 +106,23 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Blog type 1 hero and overlay image controls
+
+- Tuned Blog `Interna tipo 1 editorial` based on the supplied reference:
+  - right hero image now starts flush under the header
+  - title scale reduced
+  - highlighted intro and body text reduced
+  - editorial block row heights and text sizes tightened
+- Added optional admin-controlled overlay images per type 1 block:
+  - `Interna Tipo 1 - Bloque N imagen encima del texto`
+  - `Interna Tipo 1 - Bloque N posicion imagen encima`
+  - If no overlay image is selected, no overlay markup renders.
+- Files updated:
+  - `theme/single.php`
+  - `theme/inc/acf-blog.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Heavy background cleanup for Blog and internal pages
 

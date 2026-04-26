@@ -59,6 +59,32 @@ add_action('acf/init', function () {
             'default_value' => in_array($i, [1, 3], true) ? 'blue' : 'light',
             'ui'            => 1,
         ];
+
+        $type_one_fields[] = $image_field(
+            'field_venza_blog_t1_block_' . $i . '_overlay_image',
+            'Interna Tipo 1 - Bloque ' . $i . ' imagen encima del texto',
+            'blog_t1_block_' . $i . '_overlay_image_id',
+            'Opcional. Si queda vacia no se muestra ninguna imagen encima del texto.'
+        );
+
+        $type_one_fields[] = [
+            'key'           => 'field_venza_blog_t1_block_' . $i . '_overlay_position',
+            'label'         => 'Interna Tipo 1 - Bloque ' . $i . ' posicion imagen encima',
+            'name'          => 'blog_t1_block_' . $i . '_overlay_position',
+            'type'          => 'select',
+            'choices'       => [
+                'top-left'      => 'Arriba izquierda',
+                'top-center'    => 'Arriba centro',
+                'top-right'     => 'Arriba derecha',
+                'center-left'   => 'Centro izquierda',
+                'center-right'  => 'Centro derecha',
+                'bottom-left'   => 'Abajo izquierda',
+                'bottom-center' => 'Abajo centro',
+                'bottom-right'  => 'Abajo derecha',
+            ],
+            'default_value' => in_array($i, [1, 3], true) ? 'bottom-left' : 'top-right',
+            'ui'            => 1,
+        ];
     }
 
     $video_card_fields = [];

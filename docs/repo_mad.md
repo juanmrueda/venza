@@ -125,6 +125,14 @@ And additionally:
   - type 2 video poster, CTA, and video card fields
 - Applied editor stability fix to standard posts by disabling Gutenberg for `post`, matching the product/home approach.
 - Updated global navigation active state so `Blog` remains active on archive, post single, category, tag, date, and author routes.
+- Production configured after deploy:
+  - Page `Blog` created and assigned as `page_for_posts`.
+  - Default `Hello world!` post moved to draft.
+  - Demo posts published for visual QA:
+    - `no-puedes-dormir` (type 2 video)
+    - `como-trabajar-menos-y-ser-productivo` (type 1 editorial)
+    - `autocuidado-es-mas-que-solo-consentirte` (type 1 editorial)
+    - `corre-al-ritmo-de-tu-playlist` (type 1 editorial)
 - Files updated:
   - `theme/home.php`
   - `theme/single.php`

@@ -1018,8 +1018,12 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 .home-hero {
     min-height: auto;
     padding: 0;
-    background: #eef4ff;
+    background: #f8fbff url('../images/backgroundhome.png') center top / 100% auto repeat-y;
     overflow: hidden;
+}
+
+main.home {
+    background: #f8fbff url('../images/backgroundhome.png') center top / 100% auto repeat-y;
 }
 
 .home-hero__carousel {
@@ -1101,14 +1105,14 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 .home-hero__dots {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    padding: 16px 0 20px;
-    background: #f5f7fd;
+    gap: 7px;
+    padding: 14px 0 42px;
+    background: transparent;
 }
 
 .home-hero__dot {
-    width: 11px;
-    height: 11px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: #9fc2e0;
 }
@@ -1118,20 +1122,24 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 .home-claim {
-    background: radial-gradient(circle at 18% 35%, rgba(166, 205, 228, 0.22), transparent 38%),
-        radial-gradient(circle at 82% 20%, rgba(166, 205, 228, 0.22), transparent 44%),
-        #f8fbff;
-    padding: 1.5rem 0 2.8rem;
+    background: transparent;
+    padding: 0 0 2.9rem;
+}
+
+.home-claim .container {
+    max-width: 1360px;
 }
 
 .home-claim__box {
-    border: 2px solid #2f5b93;
-    border-radius: 24px;
-    padding: 2rem 2.5rem;
+    border: 1.5px solid #2f5b93;
+    border-radius: 20px;
+    padding: 1.45rem clamp(1.35rem, 4vw, 5rem);
     color: var(--color-navy);
-    font-size: clamp(1.05rem, 1.8vw, 1.8rem);
-    line-height: 1.35;
+    font-size: clamp(1.08rem, 1.35vw, 1.45rem);
+    line-height: 1.23;
     text-align: center;
+    max-width: 1290px;
+    margin-inline: auto;
 }
 
 .home-claim__box strong {
@@ -2082,32 +2090,34 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
    HOME - PRODUCTOS (Ajuste Pixel Perfect Pagina 01)
    ============================================================ */
 .home-productos {
-    padding: 4.8rem 0 5.2rem;
-    background:
-        radial-gradient(circle at 12% 20%, rgba(176, 214, 233, 0.26), transparent 44%),
-        radial-gradient(circle at 88% 84%, rgba(176, 214, 233, 0.16), transparent 40%),
-        #f8fbff;
+    padding: 1.65rem 0 5.2rem;
+    background: transparent;
+}
+
+.home-productos .container {
+    max-width: 1280px;
 }
 
 .home-productos .section-title {
-    margin-bottom: 3.1rem;
-    font-size: clamp(3.1rem, 5.4vw, 5.4rem);
-    line-height: 0.9;
+    margin-bottom: 2rem;
+    font-size: clamp(3rem, 4.35vw, 4.5rem);
+    line-height: 0.95;
 }
 
 .home-productos .section-title--lined::after {
-    width: 230px;
-    margin-top: 0.95rem;
-    background: #9eb8d8;
+    width: 190px;
+    height: 1.5px;
+    margin-top: 0.75rem;
+    background: #2b255e;
 }
 
 .home-productos .home-producto-row {
     display: grid;
-    grid-template-columns: minmax(300px, 1fr) minmax(300px, 1fr);
+    grid-template-columns: minmax(300px, 0.96fr) minmax(300px, 1fr);
     align-items: center;
-    gap: clamp(2rem, 4vw, 3.5rem);
-    padding: 3rem clamp(1.8rem, 3vw, 3.2rem) 2.4rem;
-    margin-bottom: 2.6rem;
+    gap: clamp(2.2rem, 5.5vw, 6rem);
+    padding: 2.25rem clamp(2rem, 3.7vw, 4rem) 1.8rem;
+    margin-bottom: clamp(3.2rem, 5.7vw, 5.2rem);
     position: relative;
     overflow: hidden;
     background-color: #fbfcff;
@@ -2121,7 +2131,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.4);
     pointer-events: none;
 }
 
@@ -2136,18 +2146,21 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 
 .home-productos .home-producto-row--alt {
     background-color: #dbeef9;
+    background-image:
+        var(--home-producto-bg-image, none),
+        linear-gradient(90deg, #d5ebfb 0%, #eaf6fd 42%, rgba(255, 255, 255, 0.94) 66%, #ffffff 100%);
 }
 
 .home-productos .home-producto-row--alt::before {
-    background: rgba(219, 238, 249, 0.62);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .home-productos .home-producto-row--has-bg::before {
-    background: rgba(255, 255, 255, 0.58);
+    background: rgba(255, 255, 255, 0.16);
 }
 
 .home-productos .home-producto-row--alt.home-producto-row--has-bg::before {
-    background: rgba(216, 233, 247, 0.48);
+    background: rgba(255, 255, 255, 0.06);
 }
 
 .home-productos .home-producto-row--reverse {
@@ -2160,7 +2173,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: clamp(290px, 36vw, 440px);
+    min-height: clamp(250px, 29vw, 360px);
 }
 
 .home-productos .home-producto-row__rotator {
@@ -2171,8 +2184,8 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 .home-productos .home-producto-row__img {
-    width: min(100%, 455px);
-    max-height: 390px;
+    width: min(100%, 395px);
+    max-height: 330px;
     object-fit: contain;
     filter: none;
     transition: opacity 0.28s ease, transform 0.3s ease;
@@ -2183,10 +2196,10 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 
 .home-productos .home-producto-row__caption {
-    margin-top: 1.35rem;
+    margin-top: 0.8rem;
     color: #8f9eb2;
     font-family: 'Gotham', 'Satoshi', sans-serif;
-    font-size: clamp(1.55rem, 2.3vw, 2.45rem);
+    font-size: clamp(1.05rem, 1.25vw, 1.35rem);
     font-weight: 300;
     line-height: 1.1;
     transition: opacity 0.24s ease;
@@ -2200,29 +2213,30 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 1.3rem;
+    gap: 1.05rem;
 }
 
 .home-productos .home-producto-nombre {
     color: var(--color-navy);
     font-family: var(--font-display);
-    font-size: clamp(2.3rem, 3.8vw, 4rem);
-    line-height: 1.04;
+    font-size: clamp(1.75rem, 2.25vw, 2.35rem);
+    line-height: 1.1;
 }
 
 .home-productos .home-producto-desc {
     margin: 0;
-    max-width: 650px;
+    max-width: 430px;
     color: #111111;
-    font-size: clamp(1.45rem, 2.2vw, 2.45rem);
+    font-size: clamp(1.05rem, 1.5vw, 1.45rem);
     font-weight: 700;
-    line-height: 1.18;
+    line-height: 1.26;
 }
 
 .home-productos .btn.btn--primary {
-    margin-top: 0.35rem;
-    padding: 0.5rem 2.35rem;
-    font-size: clamp(1.05rem, 1.15vw, 1.25rem);
+    margin-top: 0.55rem;
+    align-self: center;
+    padding: 0.34rem 1.75rem;
+    font-size: clamp(0.9rem, 1vw, 1.05rem);
     line-height: 1;
 }
 
@@ -2233,7 +2247,7 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     }
 
     .home-productos .home-producto-desc {
-        font-size: clamp(1.2rem, 2vw, 1.8rem);
+        font-size: clamp(1rem, 1.45vw, 1.28rem);
     }
 }
 
@@ -2267,11 +2281,11 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     }
 
     .home-productos .home-producto-nombre {
-        font-size: clamp(1.95rem, 6.2vw, 2.65rem);
+        font-size: clamp(1.75rem, 5.8vw, 2.25rem);
     }
 
     .home-productos .home-producto-desc {
-        font-size: clamp(1rem, 4.6vw, 1.42rem);
+        font-size: clamp(1rem, 4.3vw, 1.25rem);
         line-height: 1.25;
     }
 }

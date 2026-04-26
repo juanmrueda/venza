@@ -1,6 +1,6 @@
 # Repo MAD - Venza
 
-Last updated: 2026-04-24
+Last updated: 2026-04-26
 Current phase: Home refinements with admin-enablement workflow
 
 ## Purpose
@@ -104,6 +104,26 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-26 - Home background and product block visual tuning
+
+- Added `Assets/backgroundhome.png` to the theme as `theme/assets/images/backgroundhome.png`.
+- Applied the background from below the hero video through the claim and products area.
+- Tuned Home product blocks toward the provided reference:
+  - smaller product section title rhythm
+  - reduced product line title, description, caption, and CTA sizes
+  - tighter row heights and spacing
+  - first product block now uses a blue-to-white treatment when no admin background is set
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `theme/assets/images/backgroundhome.png`
+  - `docs/repo_mad.md`
+
+### 2026-04-24 - Deploy standard switched to root
+
+- Deploy workflow normalized to use `root@142.93.15.66` always.
+- `deploy/deploy.sh` now pulls from server repo root (`/var/repo/venza`) instead of theme path.
+- This aligns script behavior with the manual deploy command currently used in production.
 
 ### 2026-04-24 - Home fully editable + front-page editor stability fix
 

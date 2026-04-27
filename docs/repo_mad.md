@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Descubre Venza quiz images admin controls
+Current phase: Contact page implementation
 
 ## Purpose
 
@@ -114,6 +114,34 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-27 - Contact page visual/admin implementation
+
+- Rebuilt `page-contacto.php` based on `Assets/Venza WB_Pagina_17.jpg`.
+- Kept the approved composition:
+  - centered `CONTACTO / venza` hero
+  - large rounded white form card
+  - country and reason selectors
+  - personal data fields
+- Avoided the heavy aqueous background image by default.
+- Added editable contact background color through ACF:
+  - `Background - Color`
+- Added editable contact page copy:
+  - hero top text
+  - hero brand text
+  - form title
+  - form note
+  - countries list
+  - reasons list
+- Prepared future email sending through an editable `Formulario - Shortcode` field for Contact Form 7.
+- Current fallback form is visual/static and does not send email until the shortcode is configured.
+- Disabled Gutenberg for the contact page template to keep ACF editing stable.
+- Files updated:
+  - `theme/page-contacto.php`
+  - `theme/inc/acf-page-contacto.php`
+  - `theme/functions.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-27 - Quiz images editable from Descubre Venza admin
 

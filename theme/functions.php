@@ -14,6 +14,7 @@ require_once VENZA_DIR . '/inc/acf-noticia.php';
 require_once VENZA_DIR . '/inc/acf-home.php';
 require_once VENZA_DIR . '/inc/acf-blog.php';
 require_once VENZA_DIR . '/inc/acf-page-descubre.php';
+require_once VENZA_DIR . '/inc/acf-page-contacto.php';
 
 // Soporte del tema
 add_action('after_setup_theme', function () {
@@ -54,7 +55,7 @@ add_filter('use_block_editor_for_post', function ($use_block_editor, $post) {
             return false;
         }
 
-        if (get_page_template_slug($post) === 'page-descubre-venza.php') {
+        if (in_array(get_page_template_slug($post), ['page-descubre-venza.php', 'page-contacto.php'], true)) {
             return false;
         }
     }

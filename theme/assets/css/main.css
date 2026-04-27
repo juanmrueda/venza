@@ -1347,60 +1347,192 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 /* ============================================================
    CONTACTO
    ============================================================ */
-.contacto-page { min-height: 80vh; }
-.contacto-bg {
-    background: var(--color-bg-light);
-    padding: 4rem 0;
+.contacto-page {
     min-height: 80vh;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.78), transparent 28%),
+        radial-gradient(circle at 82% 20%, rgba(140, 188, 225, 0.18), transparent 26%),
+        var(--contacto-bg, #eaf3fb);
 }
-.contacto-header { text-align: center; margin-bottom: 3rem; }
+.contacto-hero {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(5rem, 8vw, 9rem) 0 clamp(5rem, 8vw, 8.5rem);
+}
+.contacto-hero::before,
+.contacto-hero::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.42;
+}
+.contacto-hero::before {
+    inset: 0;
+    background:
+        linear-gradient(115deg, transparent 0 18%, rgba(255,255,255,0.38) 24%, transparent 34%),
+        linear-gradient(150deg, transparent 0 55%, rgba(255,255,255,0.32) 63%, transparent 72%);
+}
+.contacto-hero::after {
+    width: min(38vw, 520px);
+    height: min(38vw, 520px);
+    left: -12vw;
+    bottom: 8%;
+    border-radius: 50%;
+    border: 1px solid rgba(140, 188, 225, 0.32);
+}
+.contacto-hero__container {
+    position: relative;
+    z-index: 1;
+}
+.contacto-header {
+    text-align: center;
+    margin-bottom: clamp(4rem, 7vw, 7.2rem);
+}
 .contacto-header__title {
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-size: clamp(4.8rem, 10vw, 10rem);
     color: var(--color-navy);
-    line-height: 1;
+    line-height: 0.78;
+    letter-spacing: -0.045em;
+    margin: 0;
 }
-.contacto-header__title span { color: var(--color-blue-mid); }
+.contacto-header__eyebrow,
+.contacto-header__brand {
+    display: block;
+}
+.contacto-header__brand {
+    font-family: var(--font-body);
+    font-size: 0.75em;
+    font-weight: 900;
+    letter-spacing: -0.06em;
+}
 .contacto-form-wrap {
     background: var(--color-white);
-    border-radius: var(--radius-lg);
-    padding: 2.5rem;
-    max-width: 620px;
+    border-radius: clamp(1.8rem, 3vw, 3.6rem);
+    padding: clamp(3.2rem, 6vw, 6rem) clamp(2rem, 6vw, 5.7rem);
+    width: min(74vw, 1260px);
+    max-width: calc(100vw - 2rem);
     margin: 0 auto;
-    box-shadow: var(--shadow-card);
+    box-shadow: 0 28px 80px rgba(43, 37, 94, 0.08);
 }
-.contacto-note { font-size: 0.875rem; color: var(--color-text-light); margin-block: 0.5rem 1.5rem; }
+.contacto-form-wrap h2 {
+    max-width: 960px;
+    margin: 0 auto clamp(1.5rem, 2.4vw, 2.4rem);
+    color: var(--color-navy);
+    font-family: var(--font-body);
+    font-size: clamp(2.3rem, 4.2vw, 5rem);
+    font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    text-align: center;
+}
+.contacto-note {
+    color: var(--color-navy);
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.15vw, 2.45rem);
+    line-height: 1.25;
+    text-align: center;
+    margin-block: 0 clamp(3rem, 5.3vw, 5.5rem);
+}
+.contacto-form {
+    width: min(100%, 960px);
+    margin-inline: auto;
+}
+.contacto-field {
+    display: block;
+    margin-bottom: clamp(1.8rem, 3.2vw, 3.4rem);
+    color: var(--color-navy);
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 2.3vw, 2.7rem);
+    line-height: 1.15;
+}
+.contacto-field > span:not(.screen-reader-text) {
+    display: block;
+    margin-bottom: clamp(0.8rem, 1.3vw, 1.1rem);
+}
+.contacto-field input,
+.contacto-field select,
+.contacto-field textarea,
+.contacto-form .wpcf7 input[type="text"],
+.contacto-form .wpcf7 input[type="email"],
+.contacto-form .wpcf7 input[type="tel"],
+.contacto-form .wpcf7 select,
+.contacto-form .wpcf7 textarea {
+    width: 100%;
+    min-height: clamp(5rem, 7.4vw, 7.5rem);
+    padding: 0 clamp(1.25rem, 2vw, 1.9rem);
+    border: 2px solid #7fa0d2;
+    border-radius: clamp(1rem, 1.5vw, 1.55rem);
+    background: #fff;
+    color: var(--color-navy);
+    font-family: var(--font-display);
+    font-size: clamp(1.28rem, 2.2vw, 2.45rem);
+    line-height: 1.2;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+.contacto-field select,
+.contacto-form .wpcf7 select {
+    appearance: none;
+    background-image:
+        linear-gradient(45deg, transparent 50%, var(--color-navy) 50%),
+        linear-gradient(135deg, var(--color-navy) 50%, transparent 50%);
+    background-position:
+        calc(100% - 2rem) 50%,
+        calc(100% - 1.55rem) 50%;
+    background-size: 0.45rem 0.45rem, 0.45rem 0.45rem;
+    background-repeat: no-repeat;
+}
+.contacto-field textarea,
+.contacto-form .wpcf7 textarea {
+    min-height: 190px;
+    padding-top: 1.3rem;
+    resize: vertical;
+}
+.contacto-field input:focus,
+.contacto-field select:focus,
+.contacto-field textarea:focus,
+.contacto-form .wpcf7 input:focus,
+.contacto-form .wpcf7 select:focus,
+.contacto-form .wpcf7 textarea:focus {
+    outline: none;
+    border-color: var(--color-navy);
+    box-shadow: 0 0 0 4px rgba(140, 188, 225, 0.24);
+}
+.contacto-field ::placeholder {
+    color: var(--color-navy);
+    opacity: 0.92;
+}
+.contacto-form__section-title {
+    margin: clamp(2rem, 4vw, 4rem) 0 clamp(1.2rem, 2vw, 1.8rem);
+    color: var(--color-navy);
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 2.5vw, 2.85rem);
+}
+.contacto-submit,
+.contacto-form .wpcf7 input[type="submit"] {
+    display: block;
+    min-width: 220px;
+    min-height: 58px;
+    margin: clamp(1.5rem, 3vw, 2.8rem) auto 0;
+    padding: 0.85rem 2.5rem;
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-navy);
+    color: var(--color-white);
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 1.3vw, 1.25rem);
+    font-weight: 900;
+    cursor: pointer;
+    transition: background 180ms ease, transform 180ms ease;
+}
+.contacto-submit:hover,
+.contacto-form .wpcf7 input[type="submit"]:hover {
+    background: var(--color-blue-btn);
+    transform: translateY(-2px);
+}
 
 /* CF7 custom styles */
 .wpcf7-form .wpcf7-form-control-wrap { display: block; margin-bottom: 1rem; }
-.wpcf7-form input[type="text"],
-.wpcf7-form input[type="email"],
-.wpcf7-form input[type="tel"],
-.wpcf7-form select {
-    width: 100%;
-    padding: 0.85rem 1rem;
-    border: 1.5px solid #d1e3f0;
-    border-radius: var(--radius-sm);
-    font-family: var(--font-body);
-    font-size: 0.95rem;
-    color: var(--color-navy);
-    background: var(--color-white);
-    transition: border-color var(--transition);
-}
-.wpcf7-form input:focus,
-.wpcf7-form select:focus { outline: none; border-color: var(--color-blue-btn); }
-.wpcf7-form input[type="submit"] {
-    background: var(--color-blue-btn);
-    color: white;
-    padding: 0.85rem 2.5rem;
-    border-radius: var(--radius-pill);
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background var(--transition);
-    margin-top: 0.5rem;
-}
-.wpcf7-form input[type="submit"]:hover { background: var(--color-blue-btn-hover); }
 
 /* ============================================================
    HOME â€” BENEFICIOS STRIP

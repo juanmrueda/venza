@@ -35,11 +35,11 @@ $form_shortcode = trim((string) venza_get_meta_value('contacto_form_shortcode', 
 
 $countries = $parse_lines(
     venza_get_meta_value('contacto_countries', $page_id),
-    "Guatemala\nEl Salvador\nHonduras\nNicaragua\nCosta Rica\nRepublica Dominicana"
+    "Honduras\nGuatemala\nCosta Rica\nEl Salvador\nNicaragua\nRepublica Dominicana"
 );
 $reasons = $parse_lines(
     venza_get_meta_value('contacto_reasons', $page_id),
-    "Quiero saber mas sobre productos\nDistribucion y ventas\nAtencion al cliente\nAlianzas comerciales\nOtro"
+    "Soy Cliente\nQuiero Ser Cliente\nExportaciones\nQuiero Ser Proveedor\nSoy Periodista o Medio\nInvitaciones, Donaciones, Otros"
 );
 ?>
 <main class="contacto-page" style="<?php echo esc_attr('--contacto-bg:' . $bg_color . ';'); ?>">

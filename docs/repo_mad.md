@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
-Last updated: 2026-04-26
-Current phase: Contact page implementation
+Last updated: 2026-04-27
+Current phase: Contact page scale and options adjustment
 
 ## Purpose
 
@@ -114,6 +114,34 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-27 - Contact page scale and option lists adjusted
+
+- Reduced the visual scale of the Contact page to avoid oversized typography and form fields:
+  - smaller hero title
+  - smaller form card
+  - reduced form title/note sizes
+  - reduced label, input, select, textarea, and button sizes
+  - added mobile width override so the form remains usable on small screens
+- Updated Contact defaults for country select:
+  - Honduras
+  - Guatemala
+  - Costa Rica
+  - El Salvador
+  - Nicaragua
+  - Republica Dominicana
+- Updated Contact defaults for reason select:
+  - Soy Cliente
+  - Quiero Ser Cliente
+  - Exportaciones
+  - Quiero Ser Proveedor
+  - Soy Periodista o Medio
+  - Invitaciones, Donaciones, Otros
+- Files updated:
+  - `theme/inc/acf-page-contacto.php`
+  - `theme/page-contacto.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-27 - Contact page visual/admin implementation
 

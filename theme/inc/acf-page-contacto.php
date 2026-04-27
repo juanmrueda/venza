@@ -70,7 +70,7 @@ add_action('acf/init', function () {
                 'name'          => 'contacto_countries',
                 'type'          => 'textarea',
                 'rows'          => 6,
-                'default_value' => "Guatemala\nEl Salvador\nHonduras\nNicaragua\nCosta Rica\nRepublica Dominicana",
+                'default_value' => "Honduras\nGuatemala\nCosta Rica\nEl Salvador\nNicaragua\nRepublica Dominicana",
                 'instructions'  => 'Un pais por linea.',
             ],
             [
@@ -79,7 +79,7 @@ add_action('acf/init', function () {
                 'name'          => 'contacto_reasons',
                 'type'          => 'textarea',
                 'rows'          => 5,
-                'default_value' => "Quiero saber mas sobre productos\nDistribucion y ventas\nAtencion al cliente\nAlianzas comerciales\nOtro",
+                'default_value' => "Soy Cliente\nQuiero Ser Cliente\nExportaciones\nQuiero Ser Proveedor\nSoy Periodista o Medio\nInvitaciones, Donaciones, Otros",
                 'instructions'  => 'Un motivo por linea.',
             ],
         ],

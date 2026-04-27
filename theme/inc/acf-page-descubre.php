@@ -99,6 +99,100 @@ add_action('acf/init', function () {
         ];
     }
 
+    $quiz_image_groups = [
+        'Pregunta 1 - Tipo de piel' => [
+            'quiz_image_piel_normal'   => 'Normal',
+            'quiz_image_piel_seca'     => 'Seca',
+            'quiz_image_piel_grasa'    => 'Grasa',
+            'quiz_image_piel_sensible' => 'Sensible',
+            'quiz_image_piel_mixta'    => 'Mixta',
+        ],
+        'Pregunta 2 - Color de cabello' => [
+            'quiz_image_cabello_negro'          => 'Negro',
+            'quiz_image_cabello_rubio'          => 'Rubio',
+            'quiz_image_cabello_castano_claro'  => 'Castano claro',
+            'quiz_image_cabello_pelirrojo'      => 'Pelirrojo',
+            'quiz_image_cabello_castano_oscuro' => 'Castano oscuro',
+            'quiz_image_cabello_gris'           => 'Gris',
+        ],
+        'Pregunta 3 - Aroma favorito' => [
+            'quiz_image_aroma_eucalipto'       => 'Eucalipto',
+            'quiz_image_aroma_manzana'         => 'Manzana',
+            'quiz_image_aroma_coco'            => 'Coco',
+            'quiz_image_aroma_menta'           => 'Menta',
+            'quiz_image_aroma_sabila'          => 'Sabila',
+            'quiz_image_aroma_frutas_citricas' => 'Frutas citricas',
+        ],
+        'Pregunta 5 - Paisaje' => [
+            'quiz_image_paisaje_playa_tropical'  => 'Playa tropical',
+            'quiz_image_paisaje_huerto_manzanas' => 'Huerto de manzanas',
+            'quiz_image_paisaje_bosque_verde'    => 'Bosque verde',
+            'quiz_image_paisaje_jardin_aloe'     => 'Jardin de aloe',
+            'quiz_image_paisaje_campo_avena'     => 'Campo de avena',
+            'quiz_image_paisaje_montana'         => 'Montana',
+        ],
+    ];
+
+    $quiz_image_fields = [
+        [
+            'key'   => 'field_venza_descubre_tab_quiz_images',
+            'label' => 'Quiz - Imagenes',
+            'type'  => 'tab',
+        ],
+        [
+            'key'     => 'field_venza_descubre_quiz_images_help',
+            'label'   => 'Imagenes del quiz',
+            'name'    => '',
+            'type'    => 'message',
+            'message' => 'Estas imagenes alimentan las opciones visuales del quiz que vive en /descubre-venza/quiz/. Si un campo queda vacio, el frontend muestra una opcion de texto sin imagen rota.',
+        ],
+    ];
+
+    foreach ($quiz_image_groups as $group_label => $items) {
+        $group_key = str_replace('-', '_', sanitize_key($group_label));
+
+        $quiz_image_fields[] = [
+            'key'   => 'field_venza_descubre_' . $group_key . '_message',
+            'label' => $group_label,
+            'name'  => '',
+            'type'  => 'message',
+            'message' => 'Sube las imagenes para esta pregunta.',
+        ];
+
+        foreach ($items as $name => $label) {
+            $quiz_image_fields[] = $image_field(
+                'field_venza_descubre_' . $name,
+                $group_label . ' - ' . $label,
+                'descubre_' . $name,
+                'Imagen usada en la opcion "' . $label . '".'
+            );
+        }
+    }
+
+    $quiz_image_fields[] = [
+        'key'   => 'field_venza_descubre_quiz_results_message',
+        'label' => 'Resultados - Imagenes',
+        'name'  => '',
+        'type'  => 'message',
+        'message' => 'Opcional. Permite reemplazar la imagen del producto recomendado en el resultado del quiz.',
+    ];
+
+    foreach ([
+        'frescura_extrema' => 'Frescura Extrema',
+        'crema_humectante' => 'Crema Humectante',
+        'vitamina_e'       => 'Vitamina E',
+        'sabila'           => 'Sabila',
+        'coco'             => 'Coco',
+        'avena'            => 'Avena',
+    ] as $slug => $label) {
+        $quiz_image_fields[] = $image_field(
+            'field_venza_descubre_quiz_result_image_' . $slug,
+            'Resultado - ' . $label,
+            'descubre_quiz_result_image_' . $slug,
+            'Imagen opcional para el resultado "' . $label . '".'
+        );
+    }
+
     acf_add_local_field_group([
         'key'    => 'group_venza_page_descubre',
         'title'  => 'Pagina - Descubre Venza',
@@ -173,6 +267,7 @@ add_action('acf/init', function () {
                     'default_value' => home_url('/descubre-venza/quiz/'),
                     'instructions'  => 'Por defecto abre la vista del quiz dentro de Descubre Venza.',
                 ],
+                ...$quiz_image_fields,
                 [
                     'key'   => 'field_venza_descubre_tab_video',
                     'label' => 'Video principal',

@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-26
-Current phase: Descubre Venza quiz entry module
+Current phase: Descubre Venza quiz images admin controls
 
 ## Purpose
 
@@ -114,6 +114,31 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-27 - Quiz images editable from Descubre Venza admin
+
+- Added editable quiz image controls inside `Pagina - Descubre Venza`:
+  - question 1: skin type option images
+  - question 2: hair color option images
+  - question 3: aroma option images
+  - question 5: landscape option images
+  - result image override per recommended product
+- Updated `page-quiz.php` to read those image fields from the `Descubre Venza` page and expose them to `quiz.js`.
+- Added `venza_get_descubre_page_id()` so the virtual route `/descubre-venza/quiz/` can still use the editable fields from the real Descubre page.
+- Updated `quiz.js`:
+  - uses admin-uploaded option images when available
+  - avoids broken images if a field is empty
+  - supports result image overrides per product
+  - aligns quiz option labels closer to the supplied quiz reference
+  - fixes scoring recalculation when users go back and change answers
+- Tuned quiz option CSS so uploaded images display as visual cards with overlay labels.
+- Files updated:
+  - `theme/inc/acf-page-descubre.php`
+  - `theme/page-quiz.php`
+  - `theme/assets/js/quiz.js`
+  - `theme/assets/css/main.css`
+  - `theme/functions.php`
+  - `docs/repo_mad.md`
 
 ### 2026-04-26 - Descubre Venza floating quiz entry
 

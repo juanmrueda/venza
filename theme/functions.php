@@ -72,6 +72,35 @@ function venza_is_descubre_quiz_route() {
     return $request === 'descubre-venza/quiz' || (string) get_query_var('venza_descubre_quiz') === '1';
 }
 
+function venza_get_descubre_page_id() {
+    static $page_id = null;
+
+    if ($page_id !== null) {
+        return $page_id;
+    }
+
+    $page_id = 0;
+    $page = get_page_by_path('descubre-venza');
+    if ($page instanceof WP_Post) {
+        $page_id = (int) $page->ID;
+        return $page_id;
+    }
+
+    $pages = get_posts([
+        'post_type'   => 'page',
+        'meta_key'    => '_wp_page_template',
+        'meta_value'  => 'page-descubre-venza.php',
+        'posts_per_page' => 1,
+        'post_status' => ['publish', 'draft', 'private'],
+    ]);
+
+    if (!empty($pages) && $pages[0] instanceof WP_Post) {
+        $page_id = (int) $pages[0]->ID;
+    }
+
+    return $page_id;
+}
+
 function venza_is_descubre_context() {
     $request = trim((string) ($GLOBALS['wp']->request ?? ''), '/');
 

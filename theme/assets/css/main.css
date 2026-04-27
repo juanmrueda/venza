@@ -3234,10 +3234,12 @@ main.home {
     font-family: var(--font-body);
     font-weight: 300;
     font-size: clamp(1.7rem, 3.9vw, 3.9rem);
-    line-height: 1;
+    line-height: 1.08;
     color: #2b255e;
     text-align: right;
-    white-space: nowrap;
+    white-space: normal;
+    max-width: min(42vw, 880px);
+    text-wrap: balance;
 }
 
 .producto-frescura-identidad {
@@ -3432,6 +3434,7 @@ main.home {
     .producto-frescura-hero__claim {
         right: clamp(1rem, 6vw, 5rem);
         font-size: clamp(1.5rem, 3.3vw, 3.2rem);
+        max-width: min(46vw, 740px);
     }
 
     .producto-frescura-descripcion__texto-inner,
@@ -3443,6 +3446,7 @@ main.home {
 @media (max-width: 980px) {
     .producto-frescura-hero__claim {
         font-size: clamp(1.4rem, 3.2vw, 2.3rem);
+        max-width: min(48vw, 520px);
     }
 
     .producto-frescura-descripcion {
@@ -3464,6 +3468,7 @@ main.home {
         position: static;
         transform: none;
         white-space: normal;
+        max-width: none;
         text-align: center;
         padding: 1rem 1rem 1.4rem;
     }

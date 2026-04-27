@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-27
-Current phase: Contact page scale and options adjustment
+Current phase: Product hero claim line break admin adjustment
 
 ## Purpose
 
@@ -72,7 +72,19 @@ Main goals:
 
 ## Current Focus
 
-Starting now: **Blog + Descubre Venza separation**.
+Current task: **Product internal hero claim line breaks**.
+
+When touching Product internals, prioritize only these files unless required:
+
+- `theme/single-producto.php`
+- `theme/template-parts/producto/single-frescura-extrema.php`
+- `theme/template-parts/producto/*`
+- `theme/inc/acf-producto-home.php`
+- `theme/assets/css/main.css`
+
+Previous focus retained for Blog/Descubre work:
+
+**Blog + Descubre Venza separation**.
 
 When touching Blog, prioritize only these files unless required:
 
@@ -114,6 +126,16 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-27 - Product hero claim supports manual line breaks
+
+- Updated product admin field `Hero interno - Texto destacado` to a 2-row textarea so product claims can be entered on two lines.
+- Updated the product internal hero template to render admin line breaks as visible line breaks.
+- Removed forced single-line rendering from the product hero claim and added a max-width guard so long claims stay on the right side of the banner instead of overlapping the product pack.
+- Files updated:
+  - `theme/inc/acf-producto-home.php`
+  - `theme/template-parts/producto/single-frescura-extrema.php`
+  - `theme/assets/css/main.css`
 
 ### 2026-04-27 - Contact page scale and option lists adjusted
 

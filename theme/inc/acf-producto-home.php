@@ -192,8 +192,10 @@ add_action('acf/init', function () {
                 'key'          => 'field_venza_producto_single_claim_texto',
                 'label'        => 'Hero interno - Texto destacado',
                 'name'         => 'producto_single_claim_texto',
-                'type'         => 'text',
-                'instructions' => 'Texto corto sobre el banner del hero interno.',
+                'type'         => 'textarea',
+                'instructions' => 'Texto corto sobre el banner del hero interno. Usa Enter para partirlo en dos lineas si el producto lo necesita.',
+                'rows'         => 2,
+                'new_lines'    => '',
             ],
             [
                 'key'           => 'field_venza_producto_single_intro_imagen',

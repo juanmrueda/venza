@@ -347,7 +347,7 @@ if (!empty($tamanos_finales)) {
 <section class="producto-frescura-hero">
     <img src="<?php echo esc_url($hero_banner); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
     <?php if ($hero_claim) : ?>
-        <div class="producto-frescura-hero__claim"><?php echo esc_html($hero_claim); ?></div>
+        <div class="producto-frescura-hero__claim"><?php echo nl2br(esc_html($hero_claim)); ?></div>
     <?php endif; ?>
 </section>
 

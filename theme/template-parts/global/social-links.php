@@ -1,9 +1,15 @@
 <ul class="social-links" aria-label="Redes sociales">
     <?php
+    $social_defaults = [
+        'facebook'  => 'https://www.facebook.com/jabonvenza/',
+        'instagram' => 'https://www.instagram.com/jabonvenza/',
+        'youtube'   => 'https://www.youtube.com/@jabonvenza',
+    ];
+
     $redes = [
-        'facebook'  => ['url' => get_option('venza_facebook', '#'),  'label' => 'Facebook',  'icon' => VENZA_URI . '/assets/images/logos/facebook.png'],
-        'instagram' => ['url' => get_option('venza_instagram', '#'), 'label' => 'Instagram', 'icon' => VENZA_URI . '/assets/images/logos/instagram.png'],
-        'youtube'   => ['url' => get_option('venza_youtube', '#'),   'label' => 'YouTube',   'icon' => VENZA_URI . '/assets/images/logos/youtube.png'],
+        'facebook'  => ['url' => trim((string) get_option('venza_facebook', '')) ?: $social_defaults['facebook'],  'label' => 'Facebook',  'icon' => VENZA_URI . '/assets/images/logos/facebook.png'],
+        'instagram' => ['url' => trim((string) get_option('venza_instagram', '')) ?: $social_defaults['instagram'], 'label' => 'Instagram', 'icon' => VENZA_URI . '/assets/images/logos/instagram.png'],
+        'youtube'   => ['url' => trim((string) get_option('venza_youtube', '')) ?: $social_defaults['youtube'],   'label' => 'YouTube',   'icon' => VENZA_URI . '/assets/images/logos/youtube.png'],
     ];
     foreach ($redes as $red => $data) : ?>
         <li>

@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-27
-Current phase: Product hero claim line break admin adjustment
+Current phase: Header social icons aligned with footer style
 
 ## Purpose
 
@@ -126,6 +126,25 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-27 - Header/footer social links connected
+
+- Wired the global social links component used by both header and footer to Venza official URLs.
+- Added safe fallback behavior so if WP options are empty, links still point to:
+  - Facebook: `https://www.facebook.com/jabonvenza/`
+  - Instagram: `https://www.instagram.com/jabonvenza/`
+  - YouTube: `https://www.youtube.com/@jabonvenza`
+- File updated:
+  - `theme/template-parts/global/social-links.php`
+
+### 2026-04-27 - Header social icons matched to footer icons
+
+- Updated header social icon styling to match footer icon presentation exactly:
+  - 36x36 circular navy background
+  - 18x18 white icon treatment (invert filter)
+  - same hover offset behavior
+- File updated:
+  - `theme/assets/css/main.css`
 
 ### 2026-04-27 - Product hero claim supports manual line breaks
 

@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-28
-Current phase: Quiz result and footer mobile products link ready for deploy
+Current phase: Product archive banner size deployed
 
 ## Purpose
 
@@ -126,6 +126,19 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-28 - Production deploy for product archive banner size
+
+- Deployed the `/productos/` banner sizing adjustment to production.
+- Verified production `/productos/` responds successfully after deploy.
+
+### 2026-04-28 - Product archive banner size aligned
+
+- Matched the `/productos/` home banner sizing to product internal banners.
+- Applied the same `1922 / 815` aspect ratio and `object-fit: cover` used by internal product heroes.
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-28 - Footer mobile products link fix
 

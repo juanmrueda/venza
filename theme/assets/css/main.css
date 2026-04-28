@@ -2444,12 +2444,15 @@ main.home {
 
 .productos-archive--editable .producto-hero--home-banner {
     margin: 0;
+    aspect-ratio: 1922 / 815;
+    overflow: hidden;
 }
 
 .productos-archive--editable .producto-hero__home-banner-image {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
 }
 
 .producto-home-beneficios {

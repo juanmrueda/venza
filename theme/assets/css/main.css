@@ -2596,15 +2596,22 @@ main.home {
 }
 
 .productos-archive--editable .producto-disponibilidad {
-    padding: 1.9rem 1rem 2.4rem;
+    padding: 2.1rem 1rem 2.8rem;
     background: #eef4ff;
     color: #1a1a1a;
     text-align: center;
-    font-size: clamp(1rem, 1.45vw, 1.95rem);
+}
+
+.productos-archive--editable .producto-disponibilidad p {
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: clamp(1.2rem, 1.9vw, 2.25rem);
+    line-height: 1.25;
 }
 
 .productos-archive--editable .producto-disponibilidad strong {
-    color: var(--color-navy);
+    color: #2b255e;
+    font-weight: 700;
 }
 
 .mas-productos--venza {

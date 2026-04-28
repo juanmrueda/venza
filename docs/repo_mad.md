@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-28
-Current phase: Product archive banner size deployed
+Current phase: Product archive availability flags deployed
 
 ## Purpose
 
@@ -126,6 +126,19 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-28 - Production deploy for product archive availability flags
+
+- Deployed the `/productos/` availability row sizing adjustment to production.
+- Verified production `/productos/` responds successfully after deploy.
+
+### 2026-04-28 - Product archive availability flags aligned
+
+- Matched the `/productos/` availability row typography to product internal pages.
+- The `Disponible en:` label and flag emojis now use the same paragraph font scale, line-height, and weight treatment as `.producto-single`.
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-28 - Production deploy for product archive banner size
 

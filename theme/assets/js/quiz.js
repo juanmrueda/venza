@@ -9,6 +9,7 @@
     const productImages = config.productImages || {};
     const textConfig = config.texts || {};
     const buttonTexts = textConfig.buttons || {};
+    const resultUrls = textConfig.urls || {};
     const stepTexts = textConfig.steps || {};
     const productTexts = textConfig.products || {};
     const progressTemplate = textConfig.progressLabel || 'Pregunta {current} de {total}';
@@ -68,6 +69,7 @@
 
         PRODUCTOS[slug].nombre = textOr(productText.nombre, PRODUCTOS[slug].nombre);
         PRODUCTOS[slug].descripcion = textOr(productText.descripcion, PRODUCTOS[slug].descripcion);
+        PRODUCTOS[slug].url = textOr(productText.url, PRODUCTOS[slug].url);
     });
 
     const PASOS = [
@@ -178,6 +180,7 @@
                 state.pasoActual = 0;
                 state.respuestas = {};
                 resetSelections();
+                app.classList.remove('is-result');
                 resultEl.hidden = true;
                 stepsEl.style.display = '';
                 toggleProgress(false);
@@ -187,6 +190,7 @@
 
         if (allProductsLink) {
             allProductsLink.textContent = textOr(buttonTexts.allProducts, allProductsLink.textContent);
+            allProductsLink.href = textOr(resultUrls.allProducts, allProductsLink.getAttribute('href') || '/productos/');
         }
 
         mostrarPaso(0, false);
@@ -305,6 +309,7 @@
     }
 
     function mostrarPaso(index, shouldScroll = true) {
+        app.classList.remove('is-result');
         state.pasoActual = index;
         document.querySelectorAll('.quiz-step').forEach((el, i) => {
             el.classList.toggle('is-active', i === index);
@@ -337,6 +342,7 @@
         const producto = PRODUCTOS[ganador];
 
         stepsEl.style.display = 'none';
+        app.classList.add('is-result');
         toggleProgress(true);
         resultEl.hidden = false;
 

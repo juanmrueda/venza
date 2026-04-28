@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-28
-Current phase: Quiz background removed and deployed
+Current phase: Quiz result and footer mobile products link ready for deploy
 
 ## Purpose
 
@@ -126,6 +126,39 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-28 - Footer mobile products link fix
+
+- Scoped the mobile submenu click handler to the header navigation only.
+- This lets the `Productos` item in the footer keep its normal link behavior on mobile and redirect to `/productos/`.
+- Files updated:
+  - `theme/assets/js/main.js`
+  - `docs/repo_mad.md`
+
+### 2026-04-28 - Quiz result card pixel adjustment
+
+- Tuned the Quiz result card toward the supplied reference:
+  - full-width visual result card with 1626/780 aspect ratio on desktop
+  - large rounded corners and left-side mint overlay
+  - white copy panel with matching desktop offset, size, radius, and typography scale
+  - tablet/mobile fallbacks to prevent text clipping or horizontal overflow
+- Added editable result URLs in `Pagina - Descubre Venza`:
+  - global `Ver todos los productos` URL
+  - per-product `Conoce mas` URL
+- Confirmed existing editable result fields remain wired:
+  - result image per product
+  - result title per product
+  - result description per product
+  - result button texts
+- Local checks:
+  - `node --check theme/assets/js/quiz.js`
+  - Playwright fixture at 390, 768, 1024, and 1776px confirmed no horizontal overflow and no clipped copy panel.
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `theme/assets/js/quiz.js`
+  - `theme/page-quiz.php`
+  - `theme/inc/acf-page-descubre.php`
+  - `docs/repo_mad.md`
 
 ### 2026-04-28 - Quiz heavy background removed
 

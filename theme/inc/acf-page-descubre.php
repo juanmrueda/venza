@@ -175,31 +175,37 @@ add_action('acf/init', function () {
             'label'       => 'Crema Humectante',
             'title'       => 'Crema Humectante',
             'description' => 'Tu piel pide nutricion constante. El jabon Crema Humectante es tu aliado diario para mantenerla hidratada, suave y protegida.',
+            'url'         => '/productos/crema-humectante/',
         ],
         'frescura_extrema' => [
             'label'       => 'Frescura Extrema',
             'title'       => 'Eucalipto',
             'description' => 'Tu piel pide frescura y energia. El jabon Eucalipto es tu match: ligero, herbal y perfecto para sentirte renovado cada dia.',
+            'url'         => '/productos/frescura-extrema/',
         ],
         'vitamina_e' => [
             'label'       => 'Vitamina E',
             'title'       => 'Vitamina E',
             'description' => 'Tu energia necesita un boost de vitalidad. El jabon Vitamina E nutre tu piel y la deja luminosa, lista para brillar cada dia.',
+            'url'         => '/productos/vitamina-e/',
         ],
         'sabila' => [
             'label'       => 'Sabila',
             'title'       => 'Sabila',
             'description' => 'Frescura calmante, asi eres tu. El jabon Sabila refresca tu piel, la cuida y la mantiene en equilibrio con un toque natural.',
+            'url'         => '/productos/sabila/',
         ],
         'coco' => [
             'label'       => 'Coco',
             'title'       => 'Coco',
             'description' => 'Eres tropical y lleno de vida. Tu piel merece el jabon Coco: hidratacion profunda con aroma dulce que te transporta al paraiso.',
+            'url'         => '/productos/coco/',
         ],
         'avena' => [
             'label'       => 'Avena',
             'title'       => 'Avena',
             'description' => 'Tu match es el jabon Avena: suave, natural y perfecto para piel sensible. Te cuida con delicadeza mientras te da bienestar diario.',
+            'url'         => '/productos/avena/',
         ],
     ];
 
@@ -277,6 +283,14 @@ add_action('acf/init', function () {
             'default_value' => 'Ver todos los productos',
         ],
         [
+            'key'           => 'field_venza_descubre_quiz_all_products_url',
+            'label'         => 'Resultado - URL ver todos',
+            'name'          => 'descubre_quiz_all_products_url',
+            'type'          => 'text',
+            'default_value' => '/productos/',
+            'instructions'  => 'Permite URL relativa o absoluta.',
+        ],
+        [
             'key'           => 'field_venza_descubre_quiz_restart_text',
             'label'         => 'Resultado - Boton intentar de nuevo',
             'name'          => 'descubre_quiz_restart_text',
@@ -337,6 +351,15 @@ add_action('acf/init', function () {
             'type'          => 'textarea',
             'rows'          => 4,
             'default_value' => $result['description'],
+        ];
+
+        $quiz_text_fields[] = [
+            'key'           => 'field_venza_descubre_quiz_result_url_' . $result_key,
+            'label'         => 'Resultado ' . $result['label'] . ' - URL conoce mas',
+            'name'          => 'descubre_quiz_result_url_' . $result_key,
+            'type'          => 'text',
+            'default_value' => $result['url'],
+            'instructions'  => 'Permite URL relativa o absoluta.',
         ];
     }
 

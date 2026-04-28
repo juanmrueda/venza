@@ -25,7 +25,7 @@
     // --- Dropdown tactil en movil ---
     const isMobileNav = () => window.matchMedia('(max-width: 1100px)').matches;
 
-    document.querySelectorAll('.menu-item-has-children > a').forEach((link) => {
+    document.querySelectorAll('.site-nav .menu-item-has-children > a').forEach((link) => {
         link.addEventListener('click', function (e) {
             if (isMobileNav()) {
                 e.preventDefault();

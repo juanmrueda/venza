@@ -148,31 +148,37 @@ $quiz_result_defaults = [
         'field'       => 'crema_humectante',
         'nombre'      => 'Crema Humectante',
         'descripcion' => 'Tu piel pide nutrición constante. El jabón Crema Humectante es tu aliado diario para mantenerla hidratada, suave y protegida.',
+        'url'         => '/productos/crema-humectante/',
     ],
     'frescura-extrema' => [
         'field'       => 'frescura_extrema',
         'nombre'      => 'Eucalipto',
         'descripcion' => 'Tu piel pide frescura y energía. El jabón Eucalipto es tu match: ligero, herbal y perfecto para sentirte renovado cada día.',
+        'url'         => '/productos/frescura-extrema/',
     ],
     'vitamina-e' => [
         'field'       => 'vitamina_e',
         'nombre'      => 'Vitamina E',
         'descripcion' => 'Tu energía necesita un boost de vitalidad. El jabón Vitamina E nutre tu piel y la deja luminosa, lista para brillar cada día.',
+        'url'         => '/productos/vitamina-e/',
     ],
     'sabila' => [
         'field'       => 'sabila',
         'nombre'      => 'Sábila',
         'descripcion' => 'Frescura calmante, así eres tú. El jabón Sábila refresca tu piel, la cuida y la mantiene en equilibrio con un toque natural.',
+        'url'         => '/productos/sabila/',
     ],
     'coco' => [
         'field'       => 'coco',
         'nombre'      => 'Coco',
         'descripcion' => 'Eres tropical y lleno de vida. Tu piel merece el jabón Coco: hidratación profunda con aroma dulce que te transporta al paraíso.',
+        'url'         => '/productos/coco/',
     ],
     'avena' => [
         'field'       => 'avena',
         'nombre'      => 'Avena',
         'descripcion' => 'Tu match es el jabón Avena: suave, natural y perfecto para piel sensible. Te cuida con delicadeza mientras te da bienestar diario.',
+        'url'         => '/productos/avena/',
     ],
 ];
 
@@ -192,6 +198,9 @@ $quiz_config = [
             'knowMore'    => $get_text('descubre_quiz_know_more_text', 'Conoce más'),
             'allProducts' => $get_text('descubre_quiz_all_products_text', 'Ver todos los productos'),
             'restart'     => $get_text('descubre_quiz_restart_text', 'Intentar de nuevo'),
+        ],
+        'urls'          => [
+            'allProducts' => $get_text('descubre_quiz_all_products_url', home_url('/productos/')),
         ],
         'steps'         => [],
         'products'      => [],
@@ -231,6 +240,7 @@ foreach ($quiz_result_defaults as $slug => $result) {
     $quiz_config['texts']['products'][$slug] = [
         'nombre'      => $get_text('descubre_quiz_result_title_' . $field_key, $result['nombre']),
         'descripcion' => $get_text('descubre_quiz_result_description_' . $field_key, $result['descripcion']),
+        'url'         => $get_text('descubre_quiz_result_url_' . $field_key, home_url($result['url'])),
     ];
 }
 ?>
@@ -265,7 +275,7 @@ window.venzaQuizConfig = <?php echo wp_json_encode($quiz_config, JSON_UNESCAPED_
                 <div class="quiz-result__producto" id="quiz-result-producto"></div>
                 <div class="quiz-result__actions">
                     <a href="#" class="btn btn--primary" id="quiz-result-link"><?php echo esc_html($quiz_config['texts']['buttons']['knowMore']); ?></a>
-                    <a href="<?php echo esc_url(home_url('/productos/')); ?>" class="btn btn--primary" id="quiz-all-products"><?php echo esc_html($quiz_config['texts']['buttons']['allProducts']); ?></a>
+                    <a href="<?php echo esc_url($quiz_config['texts']['urls']['allProducts']); ?>" class="btn btn--primary" id="quiz-all-products"><?php echo esc_html($quiz_config['texts']['buttons']['allProducts']); ?></a>
                 </div>
                 <button class="btn btn--ghost quiz-result__restart" id="quiz-restart" type="button"><?php echo esc_html($quiz_config['texts']['buttons']['restart']); ?></button>
             </div>

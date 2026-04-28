@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-28
-Current phase: Quiz graphic/admin adjustments and mobile products nav
+Current phase: Quiz responsive/admin block deployed
 
 ## Purpose
 
@@ -126,6 +126,16 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-28 - Production deploy for responsive quiz block
+
+- Committed and pushed responsive/quiz/mobile-products-nav changes to `main`.
+- Pulled the latest `main` on the production server at `/var/repo/venza`.
+- Server-side PHP lint passed for:
+  - `theme/page-quiz.php`
+  - `theme/inc/acf-page-descubre.php`
+  - `theme/functions.php`
+- Verified `https://venza.ipalmera.com/descubre-venza/quiz/` responds with HTTP 200.
 
 ### 2026-04-28 - Quiz graphic/admin adjustments and mobile products nav
 

@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-28
-Current phase: Product archive availability flags deployed
+Current phase: Blog dynamic editorial blocks deployed
 
 ## Purpose
 
@@ -72,7 +72,7 @@ Main goals:
 
 ## Current Focus
 
-Current task: **Product internal hero claim line breaks**.
+Current task: **Blog dynamic editorial blocks from admin**.
 
 When touching Product internals, prioritize only these files unless required:
 
@@ -126,6 +126,22 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-28 - Production deploy for blog dynamic editorial blocks
+
+- Deployed the dynamic Blog type 1 editorial block editor to production.
+- Production now supports adding, removing, and reordering image/text blocks per blog post from the WordPress admin.
+
+### 2026-04-28 - Blog dynamic editorial blocks
+
+- Converted the Blog type 1 internal editorial grid from fixed 4 hardcoded block pairs to dynamic admin-managed blocks.
+- Added a custom post metabox, `Blog - Bloques dinamicos`, where editors can add, remove, reorder, and choose each block as image or text.
+- Text blocks support editable copy, light/blue background style, optional overlay image, and overlay position.
+- Existing fixed ACF block values remain available as a fallback until a post is saved with the new dynamic block editor.
+- Files updated:
+  - `theme/inc/acf-blog.php`
+  - `theme/single.php`
+  - `docs/repo_mad.md`
 
 ### 2026-04-28 - Production deploy for product archive availability flags
 

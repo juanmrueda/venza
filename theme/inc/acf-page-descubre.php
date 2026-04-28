@@ -99,6 +99,247 @@ add_action('acf/init', function () {
         ];
     }
 
+    $quiz_steps_defaults = [
+        'piel' => [
+            'label' => 'Pregunta 1 - Tipo de piel',
+            'title' => '1. Como describes tu tipo de piel?',
+            'options' => [
+                'piel_normal'   => 'Normal',
+                'piel_seca'     => 'Seca',
+                'piel_grasa'    => 'Grasa',
+                'piel_sensible' => 'Sensible',
+                'piel_mixta'    => 'Mixta',
+            ],
+        ],
+        'cabello' => [
+            'label' => 'Pregunta 2 - Color de cabello',
+            'title' => '2. Color de cabello',
+            'options' => [
+                'cabello_negro'          => 'Negro',
+                'cabello_rubio'          => 'Rubio',
+                'cabello_castano_claro'  => 'Castano claro',
+                'cabello_pelirrojo'      => 'Pelirrojo',
+                'cabello_castano_oscuro' => 'Castano oscuro',
+                'cabello_gris'           => 'Gris',
+            ],
+        ],
+        'aroma' => [
+            'label' => 'Pregunta 3 - Aroma favorito',
+            'title' => '3. Cual es tu aroma favorito?',
+            'options' => [
+                'aroma_eucalipto'       => 'Eucalipto',
+                'aroma_manzana'         => 'Manzana',
+                'aroma_coco'            => 'Coco',
+                'aroma_menta'           => 'Menta',
+                'aroma_sabila'          => 'Sabila',
+                'aroma_frutas_citricas' => 'Frutas citricas',
+            ],
+        ],
+        'sensacion' => [
+            'label' => 'Pregunta 4 - Sensacion',
+            'title' => '4. Despues de banarte, quieres sentir tu piel...',
+            'options' => [
+                'sensacion_hidratada'    => 'Muy hidratada y protegida',
+                'sensacion_refrescada'   => 'Refrescada y ligera',
+                'sensacion_calmante'     => 'Calmante y cuidada',
+                'sensacion_nutritiva'    => 'Nutritiva y revitalizada',
+                'sensacion_tropical'     => 'Suave y tropical',
+            ],
+        ],
+        'paisaje' => [
+            'label' => 'Pregunta 5 - Paisaje',
+            'title' => '5. Elige el paisaje que mas te relaja',
+            'options' => [
+                'paisaje_playa_tropical'  => 'Playa tropical',
+                'paisaje_huerto_manzanas' => 'Huerto de manzanas',
+                'paisaje_bosque_verde'    => 'Bosque verde',
+                'paisaje_jardin_aloe'     => 'Jardin de aloe',
+                'paisaje_campo_avena'     => 'Campo de avena',
+                'paisaje_montana'         => 'Montana',
+            ],
+        ],
+        'frecuencia' => [
+            'label' => 'Pregunta 6 - Frecuencia',
+            'title' => '6. Con que frecuencia te das un bano',
+            'options' => [
+                'frecuencia_una_vez'    => 'Una vez al dia',
+                'frecuencia_dos_veces'  => 'Dos veces al dia',
+                'frecuencia_cuatro'     => '4 veces por semana',
+                'frecuencia_necesario'  => 'Solo cuando hace falta',
+            ],
+        ],
+    ];
+
+    $quiz_result_defaults = [
+        'crema_humectante' => [
+            'label'       => 'Crema Humectante',
+            'title'       => 'Crema Humectante',
+            'description' => 'Tu piel pide nutricion constante. El jabon Crema Humectante es tu aliado diario para mantenerla hidratada, suave y protegida.',
+        ],
+        'frescura_extrema' => [
+            'label'       => 'Frescura Extrema',
+            'title'       => 'Eucalipto',
+            'description' => 'Tu piel pide frescura y energia. El jabon Eucalipto es tu match: ligero, herbal y perfecto para sentirte renovado cada dia.',
+        ],
+        'vitamina_e' => [
+            'label'       => 'Vitamina E',
+            'title'       => 'Vitamina E',
+            'description' => 'Tu energia necesita un boost de vitalidad. El jabon Vitamina E nutre tu piel y la deja luminosa, lista para brillar cada dia.',
+        ],
+        'sabila' => [
+            'label'       => 'Sabila',
+            'title'       => 'Sabila',
+            'description' => 'Frescura calmante, asi eres tu. El jabon Sabila refresca tu piel, la cuida y la mantiene en equilibrio con un toque natural.',
+        ],
+        'coco' => [
+            'label'       => 'Coco',
+            'title'       => 'Coco',
+            'description' => 'Eres tropical y lleno de vida. Tu piel merece el jabon Coco: hidratacion profunda con aroma dulce que te transporta al paraiso.',
+        ],
+        'avena' => [
+            'label'       => 'Avena',
+            'title'       => 'Avena',
+            'description' => 'Tu match es el jabon Avena: suave, natural y perfecto para piel sensible. Te cuida con delicadeza mientras te da bienestar diario.',
+        ],
+    ];
+
+    $quiz_text_fields = [
+        [
+            'key'   => 'field_venza_descubre_tab_quiz_texts',
+            'label' => 'Quiz - Textos',
+            'type'  => 'tab',
+        ],
+        [
+            'key'           => 'field_venza_descubre_quiz_title',
+            'label'         => 'Quiz - Titulo principal',
+            'name'          => 'descubre_quiz_title',
+            'type'          => 'text',
+            'default_value' => 'Descubre que jabon Venza es ideal para tu piel',
+        ],
+        [
+            'key'           => 'field_venza_descubre_quiz_intro',
+            'label'         => 'Quiz - Texto bajo titulo',
+            'name'          => 'descubre_quiz_intro',
+            'type'          => 'textarea',
+            'rows'          => 3,
+            'default_value' => 'Responde con imagenes y descubre que jabon Venza te hace match.',
+            'instructions'  => 'Caja con borde debajo del titulo principal.',
+        ],
+        [
+            'key'           => 'field_venza_descubre_quiz_progress_label',
+            'label'         => 'Quiz - Texto progreso',
+            'name'          => 'descubre_quiz_progress_label',
+            'type'          => 'text',
+            'default_value' => 'Pregunta {current} de {total}',
+            'instructions'  => 'Usa {current} y {total} para mantener el contador dinamico.',
+        ],
+        [
+            'key'           => 'field_venza_descubre_quiz_back_text',
+            'label'         => 'Boton - Atras',
+            'name'          => 'descubre_quiz_back_text',
+            'type'          => 'text',
+            'default_value' => 'Atras',
+        ],
+        [
+            'key'           => 'field_venza_descubre_quiz_next_text',
+            'label'         => 'Boton - Siguiente',
+            'name'          => 'descubre_quiz_next_text',
+            'type'          => 'text',
+            'default_value' => 'Siguiente',
+        ],
+        [
+            'key'           => 'field_venza_descubre_quiz_result_step_text',
+            'label'         => 'Boton - Ver resultado',
+            'name'          => 'descubre_quiz_result_step_text',
+            'type'          => 'text',
+            'default_value' => 'Ver mi resultado',
+        ],
+        [
+            'key'           => 'field_venza_descubre_quiz_result_heading',
+            'label'         => 'Resultado - Encabezado',
+            'name'          => 'descubre_quiz_result_heading',
+            'type'          => 'text',
+            'default_value' => '',
+            'instructions'  => 'Opcional. Si queda vacio, el resultado inicia directamente con la tarjeta visual.',
+        ],
+        [
+            'key'           => 'field_venza_descubre_quiz_know_more_text',
+            'label'         => 'Resultado - Boton conoce mas',
+            'name'          => 'descubre_quiz_know_more_text',
+            'type'          => 'text',
+            'default_value' => 'Conoce mas',
+        ],
+        [
+            'key'           => 'field_venza_descubre_quiz_all_products_text',
+            'label'         => 'Resultado - Boton ver todos',
+            'name'          => 'descubre_quiz_all_products_text',
+            'type'          => 'text',
+            'default_value' => 'Ver todos los productos',
+        ],
+        [
+            'key'           => 'field_venza_descubre_quiz_restart_text',
+            'label'         => 'Resultado - Boton intentar de nuevo',
+            'name'          => 'descubre_quiz_restart_text',
+            'type'          => 'text',
+            'default_value' => 'Intentar de nuevo',
+        ],
+    ];
+
+    foreach ($quiz_steps_defaults as $step_id => $step) {
+        $quiz_text_fields[] = [
+            'key'     => 'field_venza_descubre_quiz_text_' . $step_id . '_message',
+            'label'   => $step['label'],
+            'name'    => '',
+            'type'    => 'message',
+            'message' => 'Edita el titulo y los textos de opciones de esta pregunta.',
+        ];
+
+        $quiz_text_fields[] = [
+            'key'           => 'field_venza_descubre_quiz_question_' . $step_id,
+            'label'         => $step['label'] . ' - Titulo',
+            'name'          => 'descubre_quiz_question_' . $step_id,
+            'type'          => 'text',
+            'default_value' => $step['title'],
+        ];
+
+        foreach ($step['options'] as $option_key => $option_label) {
+            $quiz_text_fields[] = [
+                'key'           => 'field_venza_descubre_quiz_option_' . $option_key,
+                'label'         => $step['label'] . ' - Opcion: ' . $option_label,
+                'name'          => 'descubre_quiz_option_' . $option_key,
+                'type'          => 'text',
+                'default_value' => $option_label,
+            ];
+        }
+    }
+
+    $quiz_text_fields[] = [
+        'key'     => 'field_venza_descubre_quiz_result_texts_message',
+        'label'   => 'Resultados - Textos por producto',
+        'name'    => '',
+        'type'    => 'message',
+        'message' => 'Estos textos se muestran dentro de la tarjeta final del quiz.',
+    ];
+
+    foreach ($quiz_result_defaults as $result_key => $result) {
+        $quiz_text_fields[] = [
+            'key'           => 'field_venza_descubre_quiz_result_title_' . $result_key,
+            'label'         => 'Resultado ' . $result['label'] . ' - Titulo',
+            'name'          => 'descubre_quiz_result_title_' . $result_key,
+            'type'          => 'text',
+            'default_value' => $result['title'],
+        ];
+
+        $quiz_text_fields[] = [
+            'key'           => 'field_venza_descubre_quiz_result_description_' . $result_key,
+            'label'         => 'Resultado ' . $result['label'] . ' - Descripcion',
+            'name'          => 'descubre_quiz_result_description_' . $result_key,
+            'type'          => 'textarea',
+            'rows'          => 4,
+            'default_value' => $result['description'],
+        ];
+    }
+
     $quiz_image_groups = [
         'Pregunta 1 - Tipo de piel' => [
             'quiz_image_piel_normal'   => 'Normal',
@@ -267,6 +508,7 @@ add_action('acf/init', function () {
                     'default_value' => home_url('/descubre-venza/quiz/'),
                     'instructions'  => 'Por defecto abre la vista del quiz dentro de Descubre Venza.',
                 ],
+                ...$quiz_text_fields,
                 ...$quiz_image_fields,
                 [
                     'key'   => 'field_venza_descubre_tab_video',

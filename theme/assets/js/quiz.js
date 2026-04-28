@@ -1,5 +1,5 @@
 /* Venza - Quiz de tipo de piel
- * La lógica vive en frontend; las imágenes pueden venir desde ACF en Descubre Venza.
+ * La logica vive en frontend; textos e imagenes pueden venir desde ACF en Descubre Venza.
  */
 (function () {
     'use strict';
@@ -7,41 +7,48 @@
     const config = window.venzaQuizConfig || {};
     const optionImages = config.optionImages || {};
     const productImages = config.productImages || {};
+    const textConfig = config.texts || {};
+    const buttonTexts = textConfig.buttons || {};
+    const stepTexts = textConfig.steps || {};
+    const productTexts = textConfig.products || {};
+    const progressTemplate = textConfig.progressLabel || 'Pregunta {current} de {total}';
+
+    const textOr = (value, fallback) => (typeof value === 'string' && value.trim() !== '' ? value.trim() : fallback);
 
     const PRODUCTOS = {
         'crema-humectante': {
             nombre: 'Crema Humectante',
-            descripcion: 'Tu piel pide nutrición constante. El jabón Crema Humectante es tu aliado diario para mantenerla hidratada, suave y protegida.',
+            descripcion: 'Tu piel pide nutricion constante. El jabon Crema Humectante es tu aliado diario para mantenerla hidratada, suave y protegida.',
             imagen: '/wp-content/themes/venza/assets/images/productos/crema-humectante.png',
             url: '/productos/crema-humectante/',
         },
         'frescura-extrema': {
-            nombre: 'Frescura Extrema',
-            descripcion: 'Tu piel pide frescura y energía. El jabón Frescura Extrema es tu match: ligero, herbal y perfecto para sentirte renovado cada día.',
+            nombre: 'Eucalipto',
+            descripcion: 'Tu piel pide frescura y energia. El jabon Eucalipto es tu match: ligero, herbal y perfecto para sentirte renovado cada dia.',
             imagen: '/wp-content/themes/venza/assets/images/productos/frescura-extrema.png',
             url: '/productos/frescura-extrema/',
         },
         'vitamina-e': {
             nombre: 'Vitamina E',
-            descripcion: 'Tu energía necesita un boost de vitalidad. El jabón Vitamina E nutre tu piel y la deja luminosa, lista para brillar cada día.',
+            descripcion: 'Tu energia necesita un boost de vitalidad. El jabon Vitamina E nutre tu piel y la deja luminosa, lista para brillar cada dia.',
             imagen: '/wp-content/themes/venza/assets/images/productos/vitamina-e.png',
             url: '/productos/vitamina-e/',
         },
-        'sabila': {
-            nombre: 'Sábila',
-            descripcion: 'Frescura calmante, así eres tú. El jabón Sábila refresca tu piel, la cuida y la mantiene en equilibrio con un toque natural.',
+        sabila: {
+            nombre: 'Sabila',
+            descripcion: 'Frescura calmante, asi eres tu. El jabon Sabila refresca tu piel, la cuida y la mantiene en equilibrio con un toque natural.',
             imagen: '/wp-content/themes/venza/assets/images/productos/sabila.png',
             url: '/productos/sabila/',
         },
-        'coco': {
+        coco: {
             nombre: 'Coco',
-            descripcion: 'Eres tropical y lleno de vida. Tu piel merece el jabón Coco: hidratación profunda con aroma dulce que te transporta al paraíso.',
+            descripcion: 'Eres tropical y lleno de vida. Tu piel merece el jabon Coco: hidratacion profunda con aroma dulce que te transporta al paraiso.',
             imagen: '/wp-content/themes/venza/assets/images/productos/coco.png',
             url: '/productos/coco/',
         },
-        'avena': {
+        avena: {
             nombre: 'Avena',
-            descripcion: 'Tu match es el jabón Avena: suave, natural y perfecto para piel sensible. Te cuida con delicadeza mientras te da bienestar diario.',
+            descripcion: 'Tu match es el jabon Avena: suave, natural y perfecto para piel sensible. Te cuida con delicadeza mientras te da bienestar diario.',
             imagen: '/wp-content/themes/venza/assets/images/productos/avena.png',
             url: '/productos/avena/',
         },
@@ -50,79 +57,99 @@
     Object.entries(productImages).forEach(([slug, imageUrl]) => {
         if (PRODUCTOS[slug] && typeof imageUrl === 'string' && imageUrl !== '') {
             PRODUCTOS[slug].imagen = imageUrl;
+            PRODUCTOS[slug].customResultImage = true;
         }
+    });
+
+    Object.entries(productTexts).forEach(([slug, productText]) => {
+        if (!PRODUCTOS[slug] || !productText || typeof productText !== 'object') {
+            return;
+        }
+
+        PRODUCTOS[slug].nombre = textOr(productText.nombre, PRODUCTOS[slug].nombre);
+        PRODUCTOS[slug].descripcion = textOr(productText.descripcion, PRODUCTOS[slug].descripcion);
     });
 
     const PASOS = [
         {
             id: 'piel',
-            titulo: '1. ¿Cómo describes tu tipo de piel?',
+            titulo: '1. Como describes tu tipo de piel?',
             opciones: [
-                { texto: 'Normal', imageKey: 'piel_normal', color: '#d9b28c', puntos: { avena: 2, coco: 1 } },
-                { texto: 'Seca', imageKey: 'piel_seca', color: '#c88f69', puntos: { 'crema-humectante': 3, avena: 1 } },
-                { texto: 'Grasa', imageKey: 'piel_grasa', color: '#b97b57', puntos: { 'frescura-extrema': 2, sabila: 1 } },
-                { texto: 'Sensible', imageKey: 'piel_sensible', color: '#d18c8c', puntos: { sabila: 2, avena: 2 } },
-                { texto: 'Mixta', imageKey: 'piel_mixta', color: '#c57a55', puntos: { 'vitamina-e': 2, 'frescura-extrema': 1 } },
+                { key: 'piel_normal', texto: 'Normal', imageKey: 'piel_normal', color: '#d9b28c', puntos: { avena: 2, coco: 1 } },
+                { key: 'piel_seca', texto: 'Seca', imageKey: 'piel_seca', color: '#c88f69', puntos: { 'crema-humectante': 3, avena: 1 } },
+                { key: 'piel_grasa', texto: 'Grasa', imageKey: 'piel_grasa', color: '#b97b57', puntos: { 'frescura-extrema': 2, sabila: 1 } },
+                { key: 'piel_sensible', texto: 'Sensible', imageKey: 'piel_sensible', color: '#d18c8c', puntos: { sabila: 2, avena: 2 } },
+                { key: 'piel_mixta', texto: 'Mixta', imageKey: 'piel_mixta', color: '#c57a55', puntos: { 'vitamina-e': 2, 'frescura-extrema': 1 } },
             ],
         },
         {
             id: 'cabello',
             titulo: '2. Color de cabello',
             opciones: [
-                { texto: 'Negro', imageKey: 'cabello_negro', color: '#25201e', puntos: { 'frescura-extrema': 1, coco: 1 } },
-                { texto: 'Rubio', imageKey: 'cabello_rubio', color: '#d6b36f', puntos: { 'vitamina-e': 1, 'crema-humectante': 1 } },
-                { texto: 'Castaño claro', imageKey: 'cabello_castano_claro', color: '#845638', puntos: { avena: 1, 'vitamina-e': 1 } },
-                { texto: 'Pelirrojo', imageKey: 'cabello_pelirrojo', color: '#a33f24', puntos: { 'vitamina-e': 2, 'frescura-extrema': 1 } },
-                { texto: 'Castaño oscuro', imageKey: 'cabello_castano_oscuro', color: '#3f2a21', puntos: { coco: 1, 'frescura-extrema': 1 } },
-                { texto: 'Gris', imageKey: 'cabello_gris', color: '#bfc1c0', puntos: { 'crema-humectante': 2, avena: 1 } },
+                { key: 'cabello_negro', texto: 'Negro', imageKey: 'cabello_negro', color: '#25201e', puntos: { 'frescura-extrema': 1, coco: 1 } },
+                { key: 'cabello_rubio', texto: 'Rubio', imageKey: 'cabello_rubio', color: '#d6b36f', puntos: { 'vitamina-e': 1, 'crema-humectante': 1 } },
+                { key: 'cabello_castano_claro', texto: 'Castano claro', imageKey: 'cabello_castano_claro', color: '#845638', puntos: { avena: 1, 'vitamina-e': 1 } },
+                { key: 'cabello_pelirrojo', texto: 'Pelirrojo', imageKey: 'cabello_pelirrojo', color: '#a33f24', puntos: { 'vitamina-e': 2, 'frescura-extrema': 1 } },
+                { key: 'cabello_castano_oscuro', texto: 'Castano oscuro', imageKey: 'cabello_castano_oscuro', color: '#3f2a21', puntos: { coco: 1, 'frescura-extrema': 1 } },
+                { key: 'cabello_gris', texto: 'Gris', imageKey: 'cabello_gris', color: '#bfc1c0', puntos: { 'crema-humectante': 2, avena: 1 } },
             ],
         },
         {
             id: 'aroma',
-            titulo: '3. ¿Cuál es tu aroma favorito?',
+            titulo: '3. Cual es tu aroma favorito?',
             opciones: [
-                { texto: 'Eucalipto', imageKey: 'aroma_eucalipto', puntos: { 'frescura-extrema': 3 } },
-                { texto: 'Manzana', imageKey: 'aroma_manzana', puntos: { 'crema-humectante': 2, 'vitamina-e': 1 } },
-                { texto: 'Coco', imageKey: 'aroma_coco', puntos: { coco: 3 } },
-                { texto: 'Menta', imageKey: 'aroma_menta', puntos: { 'frescura-extrema': 3 } },
-                { texto: 'Sábila', imageKey: 'aroma_sabila', puntos: { sabila: 3 } },
-                { texto: 'Frutas cítricas', imageKey: 'aroma_frutas_citricas', puntos: { 'vitamina-e': 3, 'frescura-extrema': 1 } },
+                { key: 'aroma_eucalipto', texto: 'Eucalipto', imageKey: 'aroma_eucalipto', puntos: { 'frescura-extrema': 3 } },
+                { key: 'aroma_manzana', texto: 'Manzana', imageKey: 'aroma_manzana', puntos: { 'crema-humectante': 2, 'vitamina-e': 1 } },
+                { key: 'aroma_coco', texto: 'Coco', imageKey: 'aroma_coco', puntos: { coco: 3 } },
+                { key: 'aroma_menta', texto: 'Menta', imageKey: 'aroma_menta', puntos: { 'frescura-extrema': 3 } },
+                { key: 'aroma_sabila', texto: 'Sabila', imageKey: 'aroma_sabila', puntos: { sabila: 3 } },
+                { key: 'aroma_frutas_citricas', texto: 'Frutas citricas', imageKey: 'aroma_frutas_citricas', puntos: { 'vitamina-e': 3, 'frescura-extrema': 1 } },
             ],
         },
         {
             id: 'sensacion',
-            titulo: '4. Después de bañarte, quieres sentir tu piel...',
+            titulo: '4. Despues de banarte, quieres sentir tu piel...',
             opciones: [
-                { texto: 'Muy hidratada y protegida', puntos: { 'crema-humectante': 3 } },
-                { texto: 'Refrescada y ligera', puntos: { 'frescura-extrema': 3 } },
-                { texto: 'Calmante y cuidada', puntos: { sabila: 3, avena: 1 } },
-                { texto: 'Nutritiva y revitalizada', puntos: { 'vitamina-e': 3 } },
-                { texto: 'Suave y tropical', puntos: { coco: 3 } },
+                { key: 'sensacion_hidratada', texto: 'Muy hidratada y protegida', puntos: { 'crema-humectante': 3 } },
+                { key: 'sensacion_refrescada', texto: 'Refrescada y ligera', puntos: { 'frescura-extrema': 3 } },
+                { key: 'sensacion_calmante', texto: 'Calmante y cuidada', puntos: { sabila: 3, avena: 1 } },
+                { key: 'sensacion_nutritiva', texto: 'Nutritiva y revitalizada', puntos: { 'vitamina-e': 3 } },
+                { key: 'sensacion_tropical', texto: 'Suave y tropical', puntos: { coco: 3 } },
             ],
         },
         {
             id: 'paisaje',
-            titulo: '5. Elige el paisaje que más te relaja',
+            titulo: '5. Elige el paisaje que mas te relaja',
             opciones: [
-                { texto: 'Playa tropical', imageKey: 'paisaje_playa_tropical', puntos: { coco: 3 } },
-                { texto: 'Huerto de manzanas', imageKey: 'paisaje_huerto_manzanas', puntos: { 'crema-humectante': 2, 'vitamina-e': 1 } },
-                { texto: 'Bosque verde', imageKey: 'paisaje_bosque_verde', puntos: { sabila: 2, avena: 1 } },
-                { texto: 'Jardín de aloe', imageKey: 'paisaje_jardin_aloe', puntos: { sabila: 3 } },
-                { texto: 'Campo de avena', imageKey: 'paisaje_campo_avena', puntos: { avena: 3 } },
-                { texto: 'Montaña', imageKey: 'paisaje_montana', puntos: { 'frescura-extrema': 2, 'vitamina-e': 1 } },
+                { key: 'paisaje_playa_tropical', texto: 'Playa tropical', imageKey: 'paisaje_playa_tropical', puntos: { coco: 3 } },
+                { key: 'paisaje_huerto_manzanas', texto: 'Huerto de manzanas', imageKey: 'paisaje_huerto_manzanas', puntos: { 'crema-humectante': 2, 'vitamina-e': 1 } },
+                { key: 'paisaje_bosque_verde', texto: 'Bosque verde', imageKey: 'paisaje_bosque_verde', puntos: { sabila: 2, avena: 1 } },
+                { key: 'paisaje_jardin_aloe', texto: 'Jardin de aloe', imageKey: 'paisaje_jardin_aloe', puntos: { sabila: 3 } },
+                { key: 'paisaje_campo_avena', texto: 'Campo de avena', imageKey: 'paisaje_campo_avena', puntos: { avena: 3 } },
+                { key: 'paisaje_montana', texto: 'Montana', imageKey: 'paisaje_montana', puntos: { 'frescura-extrema': 2, 'vitamina-e': 1 } },
             ],
         },
         {
             id: 'frecuencia',
-            titulo: '6. Con qué frecuencia te das un baño',
+            titulo: '6. Con que frecuencia te das un bano',
             opciones: [
-                { texto: 'Una vez al día', puntos: { 'crema-humectante': 1, 'vitamina-e': 1 } },
-                { texto: 'Dos veces al día', puntos: { 'frescura-extrema': 2, sabila: 1 } },
-                { texto: '4 veces por semana', puntos: { avena: 2, coco: 1 } },
-                { texto: 'Solo cuando hace falta', puntos: { avena: 2, 'crema-humectante': 1 } },
+                { key: 'frecuencia_una_vez', texto: 'Una vez al dia', puntos: { 'crema-humectante': 1, 'vitamina-e': 1 } },
+                { key: 'frecuencia_dos_veces', texto: 'Dos veces al dia', puntos: { 'frescura-extrema': 2, sabila: 1 } },
+                { key: 'frecuencia_cuatro', texto: '4 veces por semana', puntos: { avena: 2, coco: 1 } },
+                { key: 'frecuencia_necesario', texto: 'Solo cuando hace falta', puntos: { avena: 2, 'crema-humectante': 1 } },
             ],
         },
     ];
+
+    PASOS.forEach((paso) => {
+        const overrides = stepTexts[paso.id] || {};
+        paso.titulo = textOr(overrides.titulo, paso.titulo);
+
+        const optionOverrides = overrides.opciones || {};
+        paso.opciones.forEach((opcion) => {
+            opcion.texto = textOr(optionOverrides[opcion.key], opcion.texto);
+        });
+    });
 
     const state = {
         pasoActual: 0,
@@ -133,8 +160,10 @@
     const stepsEl = document.getElementById('quiz-steps');
     const resultEl = document.getElementById('quiz-result');
     const progressBar = document.getElementById('quiz-progress-bar');
-    const currentStepEl = document.getElementById('quiz-current-step');
+    const progressLabelEl = document.getElementById('quiz-progress-label');
     const restartBtn = document.getElementById('quiz-restart');
+    const resultLink = document.getElementById('quiz-result-link');
+    const allProductsLink = document.getElementById('quiz-all-products');
 
     if (!app || !stepsEl || !resultEl) return;
 
@@ -143,9 +172,8 @@
             stepsEl.appendChild(renderStep(paso, i));
         });
 
-        mostrarPaso(0);
-
         if (restartBtn) {
+            restartBtn.textContent = textOr(buttonTexts.restart, restartBtn.textContent);
             restartBtn.addEventListener('click', () => {
                 state.pasoActual = 0;
                 state.respuestas = {};
@@ -156,6 +184,12 @@
                 mostrarPaso(0);
             });
         }
+
+        if (allProductsLink) {
+            allProductsLink.textContent = textOr(buttonTexts.allProducts, allProductsLink.textContent);
+        }
+
+        mostrarPaso(0, false);
     }
 
     function renderStep(paso, index) {
@@ -173,6 +207,9 @@
 
         const grid = document.createElement('div');
         grid.className = 'quiz-options';
+        if (paso.opciones.some((op) => getOptionImage(op))) {
+            grid.classList.add('quiz-options--visual');
+        }
         div.appendChild(grid);
 
         paso.opciones.forEach((op, opIndex) => {
@@ -222,7 +259,7 @@
             const back = document.createElement('button');
             back.className = 'btn btn--ghost';
             back.type = 'button';
-            back.textContent = 'Atrás';
+            back.textContent = textOr(buttonTexts.back, 'Atras');
             back.addEventListener('click', () => mostrarPaso(index - 1));
             nav.appendChild(back);
         }
@@ -230,7 +267,9 @@
         const next = document.createElement('button');
         next.className = 'btn btn--primary quiz-btn-next';
         next.type = 'button';
-        next.textContent = index < PASOS.length - 1 ? 'Siguiente' : 'Ver mi resultado';
+        next.textContent = index < PASOS.length - 1
+            ? textOr(buttonTexts.next, 'Siguiente')
+            : textOr(buttonTexts.result, 'Ver mi resultado');
         next.disabled = true;
         next.addEventListener('click', () => avanzar(index));
         nav.appendChild(next);
@@ -265,7 +304,7 @@
         mostrarResultado();
     }
 
-    function mostrarPaso(index) {
+    function mostrarPaso(index, shouldScroll = true) {
         state.pasoActual = index;
         document.querySelectorAll('.quiz-step').forEach((el, i) => {
             el.classList.toggle('is-active', i === index);
@@ -273,7 +312,7 @@
 
         const pct = Math.round((index / PASOS.length) * 100);
         if (progressBar) progressBar.style.width = pct + '%';
-        if (currentStepEl) currentStepEl.textContent = index + 1;
+        updateProgressLabel(index + 1);
 
         const paso = PASOS[index];
         const prevRespuesta = state.respuestas[paso.id];
@@ -287,7 +326,9 @@
             }
         }
 
-        app.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (shouldScroll) {
+            app.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 
     function mostrarResultado() {
@@ -300,15 +341,49 @@
         resultEl.hidden = false;
 
         const contenido = document.getElementById('quiz-result-producto');
-        contenido.innerHTML = `
-            <img src="${producto.imagen}" alt="${producto.nombre}" loading="lazy">
-            <h3>${producto.nombre}</h3>
-            <p>${producto.descripcion}</p>
-            <a href="${producto.url}" class="btn btn--primary" style="margin-top:1rem">Conoce más</a>
-        `;
+        contenido.innerHTML = '';
+        contenido.appendChild(renderResultCard(producto));
+
+        if (resultLink) {
+            resultLink.href = producto.url;
+            resultLink.textContent = textOr(buttonTexts.knowMore, 'Conoce mas');
+        }
 
         if (progressBar) progressBar.style.width = '100%';
         resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function renderResultCard(producto) {
+        const card = document.createElement('article');
+        card.className = 'quiz-result__card';
+        const safeImage = String(producto.imagen || '').replace(/"/g, '\\"');
+        if (safeImage) {
+            card.style.setProperty('--quiz-result-image', `url("${safeImage}")`);
+        }
+
+        const copy = document.createElement('div');
+        copy.className = 'quiz-result__copy';
+
+        const title = document.createElement('h3');
+        title.textContent = producto.nombre;
+        copy.appendChild(title);
+
+        const description = document.createElement('p');
+        description.textContent = producto.descripcion;
+        copy.appendChild(description);
+
+        card.appendChild(copy);
+
+        if (!producto.customResultImage && producto.imagen) {
+            const image = document.createElement('img');
+            image.className = 'quiz-result__image';
+            image.src = producto.imagen;
+            image.alt = producto.nombre;
+            image.loading = 'lazy';
+            card.appendChild(image);
+        }
+
+        return card;
     }
 
     function calcularPuntajes() {
@@ -327,6 +402,13 @@
         });
 
         return puntajes;
+    }
+
+    function updateProgressLabel(current) {
+        if (!progressLabelEl) return;
+        progressLabelEl.textContent = progressTemplate
+            .replace('{current}', String(current))
+            .replace('{total}', String(PASOS.length));
     }
 
     function toggleProgress(hidden) {

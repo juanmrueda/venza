@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
-Last updated: 2026-04-27
-Current phase: Header social icons aligned with footer style
+Last updated: 2026-04-28
+Current phase: Quiz graphic/admin adjustments and mobile products nav
 
 ## Purpose
 
@@ -126,6 +126,63 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-28 - Quiz graphic/admin adjustments and mobile products nav
+
+- Updated Quiz page hero to match the provided reference more closely:
+  - large centered title
+  - bordered intro text box below the title
+  - water-style background using the existing theme background asset
+- Added editable Quiz text controls to `Pagina - Descubre Venza` admin:
+  - main title and intro
+  - progress label
+  - back/next/result/action/restart button labels
+  - every question title
+  - every option label
+  - result title and description per product recommendation
+- Updated Quiz frontend config so `page-quiz.php` sends those admin texts to `quiz.js`.
+- Updated visual quiz option layout:
+  - image-based questions render in 3 columns
+  - mobile keeps compact 3-column visual cards to avoid the old 2/2/1 layout
+- Reworked Quiz result layout to match the supplied direction:
+  - large rounded visual result card
+  - white text panel over the product/result image
+  - `Conoce mas` and `Ver todos los productos` aligned together
+  - `Intentar de nuevo` below the two primary actions
+- Fixed mobile Products navigation by adding a visible mobile submenu link:
+  - `Ver todos los productos`
+  - keeps parent `Productos` tap behavior for expanding the submenu
+  - provides direct access to `/productos/` from the mobile menu
+- Local checks:
+  - `node --check theme/assets/js/quiz.js`
+  - `node --check theme/assets/js/main.js`
+  - `git diff --check`
+  - Playwright fixture confirmed 3-column image grid, result render, and mobile products overview link.
+- PHP CLI was not available locally on this Windows environment, so PHP lint could not be run.
+- Files updated:
+  - `theme/page-quiz.php`
+  - `theme/assets/js/quiz.js`
+  - `theme/assets/js/main.js`
+  - `theme/assets/css/main.css`
+  - `theme/inc/acf-page-descubre.php`
+  - `theme/functions.php`
+  - `docs/repo_mad.md`
+
+### 2026-04-28 - Responsive QA local pass
+
+- Ran a local responsive fixture against the real theme CSS at 390, 768, 1024, and 1366px.
+- Confirmed no horizontal overflow after adjustments across the tested breakpoints.
+- Fixed the tablet header breakpoint so navigation switches to the hamburger layout at 1100px and below, preventing the desktop menu/social area from crowding around 1024px.
+- Synced mobile submenu JavaScript with the new 1100px breakpoint so product dropdowns work correctly on tablet navigation.
+- Added final responsive hardening for:
+  - accidental page-level horizontal overflow
+  - mobile hero media height
+  - Descubre Venza floating quiz bottom spacing
+  - quiz button stacking on narrow screens
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `theme/assets/js/main.js`
+  - `docs/repo_mad.md`
 
 ### 2026-04-27 - Header/footer social links connected
 

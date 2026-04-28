@@ -223,6 +223,11 @@ function venza_primary_menu_fallback($args = []) {
 
         if (!empty($children)) {
             echo '<ul class="sub-menu">';
+            if (isset($item['label']) && strtolower((string) $item['label']) === 'productos') {
+                echo '<li class="nav-menu__overview-item">';
+                echo '<a href="' . esc_url($item['url']) . '">' . esc_html__('Ver todos los productos', 'venza') . '</a>';
+                echo '</li>';
+            }
             foreach ($children as $child) {
                 $child_url = isset($child['url']) ? trailingslashit($child['url']) : '';
                 $child_id = isset($child['id']) ? (int) $child['id'] : 0;
@@ -300,6 +305,27 @@ add_filter('wp_nav_menu_objects', function ($items, $args) {
             }
             $item->classes = $classes;
             $result[] = $item;
+
+            $overview_child = clone $item;
+            $overview_child->ID = $virtual_id--;
+            $overview_child->db_id = 0;
+            $overview_child->menu_item_parent = (string) $parent_id;
+            $overview_child->object_id = '0';
+            $overview_child->object = 'custom';
+            $overview_child->type = 'custom';
+            $overview_child->type_label = 'Custom Link';
+            $overview_child->title = __('Ver todos los productos', 'venza');
+            $overview_child->url = home_url('/productos/');
+            $overview_child->classes = ['menu-item', 'menu-item-type-custom', 'nav-menu__overview-item'];
+            $overview_child->current = is_post_type_archive('producto');
+            $overview_child->current_item_ancestor = false;
+            $overview_child->current_item_parent = false;
+            $overview_child->target = '';
+            $overview_child->attr_title = '';
+            $overview_child->description = '';
+            $overview_child->xfn = '';
+            $overview_child->menu_order = isset($item->menu_order) ? ((int) $item->menu_order + 1) : 0;
+            $result[] = $overview_child;
 
             foreach ($productos as $producto) {
                 $permalink = get_permalink($producto);

@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-28
-Current phase: Quiz responsive/admin block deployed
+Current phase: Quiz background removed and deployed
 
 ## Purpose
 
@@ -126,6 +126,14 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-28 - Quiz heavy background removed
+
+- Removed `backgroundhome.png` from the Quiz page background for a lighter load.
+- Kept the Quiz page on a flat `#eef4ff` background so the layout stays visually aligned without the heavy image asset.
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-28 - Production deploy for responsive quiz block
 

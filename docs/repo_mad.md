@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
-Last updated: 2026-04-28
-Current phase: Blog dynamic editorial blocks deployed
+Last updated: 2026-04-29
+Current phase: Blog mobile editorial spacing deployed
 
 ## Purpose
 
@@ -72,7 +72,7 @@ Main goals:
 
 ## Current Focus
 
-Current task: **Blog dynamic editorial blocks from admin**.
+Current task: **Blog mobile editorial spacing**.
 
 When touching Product internals, prioritize only these files unless required:
 
@@ -126,6 +126,19 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-29 - Production deploy for blog mobile editorial spacing
+
+- Deployed the Blog type 1 mobile spacing adjustment to production.
+- Verified the production blog and the affected internal blog URL respond successfully.
+
+### 2026-04-28 - Blog mobile editorial block spacing
+
+- Adjusted Blog type 1 mobile editorial grid so image/text cells render as separated stacked cards instead of a continuous strip.
+- Added mobile spacing, side padding, rounded corners, and tighter text sizing for the blog internal block section.
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-28 - Production deploy for blog dynamic editorial blocks
 

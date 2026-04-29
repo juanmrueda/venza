@@ -1761,8 +1761,36 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     .blog-t1-hero__intro p,
     .blog-t1-hero__body p,
     .blog-t1-cell--text p { font-size: 1.35rem; }
-    .blog-t1-cell--text { padding: 2rem; }
-    .blog-t1-cell { min-height: 320px; }
+    .blog-t1-blocks {
+        background: #eaf3fb;
+        padding: 0 1rem 3rem;
+    }
+    .blog-t1-grid {
+        gap: 1.15rem;
+        overflow: visible;
+        background: transparent;
+    }
+    .blog-t1-cell {
+        min-height: 0;
+        border-radius: 18px;
+    }
+    .blog-t1-cell--image {
+        min-height: 280px;
+        overflow: hidden;
+    }
+    .blog-t1-cell--image img,
+    .blog-t1-cell__placeholder {
+        min-height: 280px;
+        display: block;
+    }
+    .blog-t1-cell--text {
+        min-height: auto;
+        overflow: hidden;
+        padding: 1.65rem 1.55rem;
+    }
+    .blog-t1-cell--text p {
+        line-height: 1.38;
+    }
     .blog-t2-hero { padding-block: 3rem 2.2rem; }
     .blog-t2-hero__container { max-width: 88vw; }
     .blog-t2-hero h1 { font-size: clamp(2.9rem, 12vw, 4rem); margin-bottom: 2rem; }
@@ -1784,6 +1812,23 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     .pills-grid { gap: 0.5rem; }
     .pill { font-size: 0.8rem; padding: 0.5rem 0.9rem; }
     .quiz-options { grid-template-columns: 1fr; }
+    .blog-t1-blocks {
+        padding-inline: 0.85rem;
+    }
+    .blog-t1-grid {
+        gap: 1rem;
+    }
+    .blog-t1-cell--image,
+    .blog-t1-cell--image img,
+    .blog-t1-cell__placeholder {
+        min-height: 240px;
+    }
+    .blog-t1-cell--text {
+        padding: 1.35rem 1.25rem;
+    }
+    .blog-t1-cell--text p {
+        font-size: 1.05rem;
+    }
 }
 
 /* ============================================================

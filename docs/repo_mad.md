@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-30
-Current phase: Descubre Venza dynamic videos deployed
+Current phase: Product mobile name wrapping deployed
 
 ## Purpose
 
@@ -72,7 +72,7 @@ Main goals:
 
 ## Current Focus
 
-Current task: **Descubre Venza dynamic videos**.
+Current task: **Product mobile name wrapping**.
 
 When touching Product internals, prioritize only these files unless required:
 
@@ -126,6 +126,21 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-30 - Production deploy for product mobile name wrapping
+
+- Deployed the mobile product name wrapping adjustment to production.
+- Preserved existing production theme editor changes while pulling the updated CSS.
+- Verified production product URLs respond successfully after deploy.
+
+### 2026-04-30 - Product mobile name wrapping
+
+- Adjusted shared product title wrapping so product names do not overlap on mobile.
+- Reserved more vertical space in the reusable `mas-productos` card visual and tightened the mobile image/name placement.
+- Applied safe wrapping to product titles in home rows, product cards, product heroes, product size labels, and quiz results.
+- Files updated:
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-30 - Production deploy for Descubre Venza dynamic videos
 

@@ -476,7 +476,13 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 }
 .mas-producto-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
 .mas-producto-card img { margin: 0 auto 1rem; max-height: 140px; object-fit: contain; }
-.mas-producto-card h3 { font-size: 0.9rem; margin-bottom: 1rem; }
+.mas-producto-card h3 {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: auto;
+}
 
 /* ============================================================
    NOTICIAS
@@ -2797,6 +2803,9 @@ main.home {
     right: 0;
     bottom: 54px;
     z-index: 2;
+    width: min(92%, 320px);
+    margin-inline: auto;
+    padding-inline: 0.35rem;
     text-align: center;
     font-family: var(--font-display);
     font-size: clamp(1.32rem, 1.7vw, 2rem);
@@ -2804,6 +2813,19 @@ main.home {
     line-height: 1.02;
     color: var(--color-navy);
     margin: 0;
+}
+
+.producto-hero h1,
+.home-productos .home-producto-row__caption,
+.home-productos .home-producto-nombre,
+.mas-productos--venza .mas-producto-card__nombre,
+.producto-frescura-identidad__titulo-pill h1,
+.producto-frescura-tamanos__item h3,
+.quiz-result__copy h3 {
+    overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: auto;
+    text-wrap: balance;
 }
 
 .mas-productos--venza .mas-producto-card .btn {
@@ -2852,12 +2874,19 @@ main.home {
     }
 
     .mas-productos--venza .mas-producto-card__visual {
-        min-height: 300px;
+        min-height: 336px;
+    }
+
+    .mas-productos--venza .mas-producto-card img {
+        top: -10px;
+        max-height: 270px;
     }
 
     .mas-productos--venza .mas-producto-card__nombre {
         font-size: clamp(1.24rem, 2.9vw, 1.7rem);
-        bottom: 52px;
+        bottom: 24px;
+        line-height: 1.05;
+        width: min(88%, 300px);
     }
 
     .mas-productos--venza .mas-productos-grid--five .mas-producto-card:nth-child(1),
@@ -2876,17 +2905,24 @@ main.home {
     }
 
     .mas-productos--venza .mas-producto-card__visual {
-        min-height: 286px;
+        min-height: 330px;
     }
 
     .mas-productos--venza .mas-producto-card__media-luna {
-        top: 114px;
-        height: 168px;
+        top: 116px;
+        height: 176px;
+    }
+
+    .mas-productos--venza .mas-producto-card img {
+        top: -6px;
+        width: min(100%, 460px);
+        max-height: 268px;
     }
 
     .mas-productos--venza .mas-producto-card__nombre {
-        bottom: 50px;
-        font-size: 1.42rem;
+        bottom: 22px;
+        width: min(86%, 280px);
+        font-size: clamp(1.18rem, 6vw, 1.38rem);
     }
 }
 

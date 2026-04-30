@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
-Last updated: 2026-04-29
-Current phase: Blog mobile editorial spacing deployed
+Last updated: 2026-04-30
+Current phase: Theme editor permissions fixed on production
 
 ## Purpose
 
@@ -72,7 +72,7 @@ Main goals:
 
 ## Current Focus
 
-Current task: **Blog mobile editorial spacing**.
+Current task: **Theme editor write permissions**.
 
 When touching Product internals, prioritize only these files unless required:
 
@@ -126,6 +126,14 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-30 - Production theme editor write permissions
+
+- Fixed WordPress Theme File Editor save error by making the deployed theme files writable by the PHP-FPM user `www-data`.
+- Applied `www-data:www-data` ownership and group-writable permissions to `/var/repo/venza/theme`.
+- Added a production `.git/hooks/post-merge` hook so future `git pull` deploys reapply theme ownership and permissions.
+- Verified `www-data` can write `theme/functions.php`, `theme/assets/css/main.css`, and create files inside the theme directory.
+- Verified the public site still responds successfully after the permission change.
 
 ### 2026-04-29 - Production deploy for blog mobile editorial spacing
 

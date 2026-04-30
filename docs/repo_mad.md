@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-30
-Current phase: Blog optional editable closing deployed
+Current phase: Descubre Venza video card playback deployed
 
 ## Purpose
 
@@ -72,7 +72,7 @@ Main goals:
 
 ## Current Focus
 
-Current task: **Blog optional editable closing**.
+Current task: **Descubre Venza video card playback**.
 
 When touching Product internals, prioritize only these files unless required:
 
@@ -126,6 +126,23 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-30 - Production deploy for Descubre Venza video card playback
+
+- Deployed the Descubre Venza lower video card playback fix to production.
+- Verified the modified page template passes PHP syntax checks before production pull.
+- Verified the Descubre Venza page responds successfully after deploy.
+
+### 2026-04-30 - Descubre Venza video card playback
+
+- Fixed Descubre Venza lower video cards so YouTube links and local video files can load into the main featured video area.
+- Added robust YouTube URL parsing for watch, short, live, embed, and youtu.be formats.
+- Added active-card styling for the selected video card.
+- Files updated:
+  - `theme/page-descubre-venza.php`
+  - `theme/assets/js/main.js`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-30 - Production deploy for blog optional editable closing
 

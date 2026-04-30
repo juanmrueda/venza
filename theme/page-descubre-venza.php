@@ -158,7 +158,7 @@ $get_link_attrs = static function ($url) {
                 </div>
             </section>
 
-            <section class="blog-t2-feature-video">
+            <section class="blog-t2-feature-video" data-descubre-feature-video>
                 <?php if ($video_file_url !== '') : ?>
                     <div class="blog-t2-feature-video__link blog-t2-feature-video__link--video">
                         <video controls preload="metadata">
@@ -166,7 +166,7 @@ $get_link_attrs = static function ($url) {
                         </video>
                     </div>
                 <?php elseif ($video_url !== '') : ?>
-                    <a class="blog-t2-feature-video__link blog-t2-feature-video__link--external" href="<?php echo esc_url($video_url); ?>"<?php echo $get_link_attrs($video_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+                    <a class="blog-t2-feature-video__link blog-t2-feature-video__link--external" href="<?php echo esc_url($video_url); ?>" data-feature-video-url="<?php echo esc_url($video_url); ?>"<?php echo $get_link_attrs($video_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                         <span class="blog-t2-feature-video__placeholder"></span>
                         <span class="blog-play blog-t2-feature-video__play" aria-hidden="true"></span>
                     </a>
@@ -207,11 +207,13 @@ $get_link_attrs = static function ($url) {
                                 $card_duration = trim((string) venza_get_meta_value('descubre_video_' . $i . '_duration', $page_id));
                                 $card_video_file_id = $get_image_id('descubre_video_' . $i . '_file_id', $page_id);
                                 $card_video_file_url = $get_file_url($card_video_file_id);
+                                $card_video_mime = $card_video_file_url !== '' ? $get_video_type($card_video_file_id, $card_video_file_url) : '';
                                 $card_url = trim((string) venza_get_meta_value('descubre_video_' . $i . '_url', $page_id));
                                 $card_href = $card_video_file_url !== '' ? $card_video_file_url : $card_url;
+                                $card_poster_url = $get_image_url($card_image_id, 'full');
                                 ?>
                                 <?php if ($card_href !== '') : ?>
-                                    <a class="blog-t2-video-card" href="<?php echo esc_url($card_href); ?>"<?php echo $get_link_attrs($card_href); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+                                    <a class="blog-t2-video-card" href="<?php echo esc_url($card_href); ?>" data-descubre-video-card data-video-url="<?php echo esc_url($card_href); ?>" data-video-mime="<?php echo esc_attr($card_video_mime); ?>" data-video-title="<?php echo esc_attr($card_title); ?>" data-video-poster="<?php echo esc_url($card_poster_url); ?>"<?php echo $get_link_attrs($card_href); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
                                         <span class="blog-t2-video-card__media">
                                             <?php if ($card_image_id > 0) : ?>
                                                 <?php echo wp_get_attachment_image($card_image_id, 'noticia-card', false, ['loading' => 'lazy']); ?>

@@ -296,6 +296,115 @@
         updateButtons();
     });
 
+    // --- Selector de video destacado (Descubre Venza) ---
+    const escapeAttr = (value) => String(value || '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    }[char]));
+
+    const getYouTubeId = (rawUrl) => {
+        const value = String(rawUrl || '').trim();
+        if (!value) return '';
+
+        try {
+            const url = new URL(value, window.location.href);
+            const host = url.hostname.replace(/^www\./, '').toLowerCase();
+            const parts = url.pathname.split('/').filter(Boolean);
+
+            if (host === 'youtu.be') {
+                return /^[A-Za-z0-9_-]{6,}$/.test(parts[0] || '') ? parts[0] : '';
+            }
+
+            if (host === 'youtube.com' || host === 'm.youtube.com' || host === 'youtube-nocookie.com') {
+                const watchId = url.searchParams.get('v');
+                if (watchId && /^[A-Za-z0-9_-]{6,}$/.test(watchId)) {
+                    return watchId;
+                }
+
+                const route = parts[0] || '';
+                if (['embed', 'shorts', 'live'].includes(route) && /^[A-Za-z0-9_-]{6,}$/.test(parts[1] || '')) {
+                    return parts[1];
+                }
+            }
+        } catch (err) {
+            return /^[A-Za-z0-9_-]{6,}$/.test(value) ? value : '';
+        }
+
+        return '';
+    };
+
+    const isVideoFileUrl = (rawUrl) => {
+        try {
+            const url = new URL(String(rawUrl || ''), window.location.href);
+            return /\.(mp4|webm|mov)$/i.test(url.pathname);
+        } catch (err) {
+            return /\.(mp4|webm|mov)(\?|#|$)/i.test(String(rawUrl || ''));
+        }
+    };
+
+    const renderDescubreFeatureVideo = (feature, rawUrl, options = {}) => {
+        if (!feature || !rawUrl) return false;
+
+        const youtubeId = getYouTubeId(rawUrl);
+        const title = escapeAttr(options.title || 'Video Venza');
+
+        if (youtubeId) {
+            feature.innerHTML = `
+                <div class="blog-t2-feature-video__link blog-t2-feature-video__link--embed">
+                    <iframe
+                        src="https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0"
+                        title="${title}"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            `;
+            return true;
+        }
+
+        if (!isVideoFileUrl(rawUrl)) {
+            return false;
+        }
+
+        const src = escapeAttr(rawUrl);
+        const mime = escapeAttr(options.mime || 'video/mp4');
+        const poster = options.poster ? ` poster="${escapeAttr(options.poster)}"` : '';
+
+        feature.innerHTML = `
+            <div class="blog-t2-feature-video__link blog-t2-feature-video__link--video">
+                <video controls autoplay playsinline${poster}>
+                    <source src="${src}" type="${mime}">
+                </video>
+            </div>
+        `;
+        return true;
+    };
+
+    document.querySelectorAll('[data-descubre-video-card]').forEach((card) => {
+        card.addEventListener('click', (event) => {
+            const feature = document.querySelector('[data-descubre-feature-video]');
+            const url = card.dataset.videoUrl || card.getAttribute('href') || '';
+            const rendered = renderDescubreFeatureVideo(feature, url, {
+                mime: card.dataset.videoMime,
+                poster: card.dataset.videoPoster,
+                title: card.dataset.videoTitle
+            });
+
+            if (!rendered) {
+                return;
+            }
+
+            event.preventDefault();
+            document.querySelectorAll('[data-descubre-video-card]').forEach((item) => {
+                item.classList.toggle('is-active', item === card);
+            });
+            feature.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
     // --- Modal de video (YouTube o archivo local) ---
     document.querySelectorAll('.video-play-btn').forEach((btn) => {
         btn.addEventListener('click', function () {

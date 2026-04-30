@@ -47,6 +47,8 @@ $get_featured_or_meta_image_id = static function ($key, $post_id) use ($get_imag
 
         $blog_blocks = function_exists('venza_blog_t1_get_blocks') ? venza_blog_t1_get_blocks($post_id, $hero_image_id) : [];
         $allowed_overlay_positions = function_exists('venza_blog_t1_allowed_overlay_positions') ? venza_blog_t1_allowed_overlay_positions() : [];
+        $closing_enabled = (bool) venza_get_meta_value('blog_closing_enabled', $post_id);
+        $closing_text = trim((string) venza_get_meta_value('blog_closing_text', $post_id));
         ?>
         <article class="blog-single-page blog-single-page--type1">
             <section class="blog-t1-hero">
@@ -107,6 +109,14 @@ $get_featured_or_meta_image_id = static function ($key, $post_id) use ($get_imag
                             </div>
                         <?php endif; ?>
                         <?php endforeach; ?>
+                    </div>
+                </section>
+            <?php endif; ?>
+
+            <?php if ($closing_enabled && $closing_text !== '') : ?>
+                <section class="blog-t1-closing">
+                    <div class="container blog-t1-closing__container">
+                        <?php $render_rich_text($closing_text, 'blog-t1-closing__text'); ?>
                     </div>
                 </section>
             <?php endif; ?>

@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-30
-Current phase: Theme editor permissions fixed on production
+Current phase: Blog optional editable closing deployed
 
 ## Purpose
 
@@ -72,7 +72,7 @@ Main goals:
 
 ## Current Focus
 
-Current task: **Theme editor write permissions**.
+Current task: **Blog optional editable closing**.
 
 When touching Product internals, prioritize only these files unless required:
 
@@ -126,6 +126,23 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-30 - Production deploy for blog optional editable closing
+
+- Deployed the optional editable blog closing section to production.
+- Verified PHP syntax for the modified blog ACF and single templates before pulling production.
+- Verified production blog URLs respond successfully after deploy.
+
+### 2026-04-30 - Blog optional editable closing
+
+- Added an optional per-post blog closing section.
+- Editors can enable the closing only on selected blog posts and edit the closing text from admin.
+- The closing renders after the dynamic editorial blocks when enabled and text is present.
+- Files updated:
+  - `theme/inc/acf-blog.php`
+  - `theme/single.php`
+  - `theme/assets/css/main.css`
+  - `docs/repo_mad.md`
 
 ### 2026-04-30 - Production theme editor write permissions
 

@@ -142,6 +142,27 @@ add_action('acf/init', function () {
                 'type'    => 'message',
                 'message' => 'Agrega, quita y ordena los bloques desde la caja "Blog - Bloques dinamicos" de esta misma pantalla. Los campos antiguos siguen funcionando como respaldo si aun no guardas bloques dinamicos.',
             ],
+            [
+                'key'   => 'field_venza_blog_tab_closing',
+                'label' => 'Cierre',
+                'type'  => 'tab',
+            ],
+            [
+                'key'           => 'field_venza_blog_closing_enabled',
+                'label'         => 'Mostrar cierre',
+                'name'          => 'blog_closing_enabled',
+                'type'          => 'true_false',
+                'ui'            => 1,
+                'default_value' => 0,
+                'instructions'  => 'Activalo solo en los blogs donde quieras mostrar un texto de cierre.',
+            ],
+            $textarea_field(
+                'field_venza_blog_closing_text',
+                'Texto de cierre',
+                'blog_closing_text',
+                6,
+                'Texto editable para el cierre del blog. Acepta HTML basico como <strong> y saltos de linea.'
+            ),
         ],
         'location' => [
             [

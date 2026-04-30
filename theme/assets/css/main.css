@@ -755,6 +755,25 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
 .blog-t1-cell__overlay--bottom-left { bottom: -13%; left: -10%; }
 .blog-t1-cell__overlay--bottom-center { bottom: -14%; left: 50%; transform: translateX(-50%); }
 .blog-t1-cell__overlay--bottom-right { right: -10%; bottom: -13%; }
+.blog-t1-closing {
+    background: #eaf3fb;
+    padding: clamp(3rem, 6vw, 6rem) 0 clamp(4rem, 7vw, 7rem);
+}
+.blog-t1-closing__container {
+    max-width: min(82vw, 1060px);
+}
+.blog-t1-closing__text {
+    color: var(--color-navy);
+    text-align: center;
+}
+.blog-t1-closing__text p {
+    font-size: clamp(1.35rem, 2vw, 2.25rem);
+    font-weight: 300;
+    line-height: 1.28;
+}
+.blog-t1-closing__text strong {
+    font-weight: 700;
+}
 
 .blog-single-page--type2 {
     background-color: #eaf3fb;
@@ -1791,6 +1810,16 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     .blog-t1-cell--text p {
         line-height: 1.38;
     }
+    .blog-t1-closing {
+        padding: 2.75rem 1rem 4rem;
+    }
+    .blog-t1-closing__container {
+        max-width: 100%;
+    }
+    .blog-t1-closing__text p {
+        font-size: 1.45rem;
+        line-height: 1.32;
+    }
     .blog-t2-hero { padding-block: 3rem 2.2rem; }
     .blog-t2-hero__container { max-width: 88vw; }
     .blog-t2-hero h1 { font-size: clamp(2.9rem, 12vw, 4rem); margin-bottom: 2rem; }
@@ -1828,6 +1857,12 @@ p  { font-size: clamp(0.9rem, 1.5vw, 1rem); }
     }
     .blog-t1-cell--text p {
         font-size: 1.05rem;
+    }
+    .blog-t1-closing {
+        padding: 2.35rem 0.85rem 3.4rem;
+    }
+    .blog-t1-closing__text p {
+        font-size: 1.18rem;
     }
 }
 

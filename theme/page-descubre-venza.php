@@ -145,6 +145,7 @@ $get_link_attrs = static function ($url) {
             'Respira, renueva y vuelve a empezar',
             'Rutinas de cuidado para cada dia',
         ];
+        $video_cards = function_exists('venza_descubre_get_videos') ? venza_descubre_get_videos($page_id) : [];
         ?>
         <article class="blog-single-page blog-single-page--type2 descubre-video-page__content" style="<?php echo esc_attr($page_style); ?>">
             <section class="blog-t2-hero">
@@ -187,28 +188,27 @@ $get_link_attrs = static function ($url) {
                         <button class="blog-t2-video-strip__arrow blog-t2-video-strip__arrow--prev" type="button" aria-label="Anterior"></button>
                         <div class="blog-t2-video-strip__viewport">
                             <div class="blog-t2-video-strip__track">
-                            <?php for ($i = 1; $i <= 6; $i++) : ?>
+                            <?php foreach ($video_cards as $video_index => $video_card) : ?>
                                 <?php
-                                $enabled_raw = get_post_meta($page_id, 'descubre_video_' . $i . '_enabled', true);
-                                $is_enabled = $enabled_raw === '' ? $i <= 4 : (bool) $enabled_raw;
+                                $is_enabled = !empty($video_card['enabled']);
                                 if (!$is_enabled) {
                                     continue;
                                 }
 
-                                $card_image_id = $get_image_id('descubre_video_' . $i . '_image_id', $page_id);
+                                $card_image_id = isset($video_card['image_id']) ? (int) $video_card['image_id'] : 0;
                                 if ($card_image_id <= 0) {
                                     $card_image_id = $video_poster_id;
                                 }
-                                $card_title = trim((string) venza_get_meta_value('descubre_video_' . $i . '_title', $page_id));
+                                $card_title = isset($video_card['title']) ? trim((string) $video_card['title']) : '';
                                 if ($card_title === '') {
-                                    $card_title = $fallback_video_titles[$i - 1] ?? 'Video Venza';
+                                    $card_title = $fallback_video_titles[$video_index] ?? 'Video Venza';
                                 }
-                                $card_meta = trim((string) venza_get_meta_value('descubre_video_' . $i . '_meta', $page_id));
-                                $card_duration = trim((string) venza_get_meta_value('descubre_video_' . $i . '_duration', $page_id));
-                                $card_video_file_id = $get_image_id('descubre_video_' . $i . '_file_id', $page_id);
+                                $card_meta = isset($video_card['meta']) ? trim((string) $video_card['meta']) : '';
+                                $card_duration = isset($video_card['duration']) ? trim((string) $video_card['duration']) : '';
+                                $card_video_file_id = isset($video_card['file_id']) ? (int) $video_card['file_id'] : 0;
                                 $card_video_file_url = $get_file_url($card_video_file_id);
                                 $card_video_mime = $card_video_file_url !== '' ? $get_video_type($card_video_file_id, $card_video_file_url) : '';
-                                $card_url = trim((string) venza_get_meta_value('descubre_video_' . $i . '_url', $page_id));
+                                $card_url = isset($video_card['url']) ? trim((string) $video_card['url']) : '';
                                 $card_href = $card_video_file_url !== '' ? $card_video_file_url : $card_url;
                                 $card_poster_url = $get_image_url($card_image_id, 'full');
                                 ?>
@@ -251,7 +251,7 @@ $get_link_attrs = static function ($url) {
                                         <?php endif; ?>
                                     </article>
                                 <?php endif; ?>
-                            <?php endfor; ?>
+                            <?php endforeach; ?>
                             </div>
                         </div>
                         <button class="blog-t2-video-strip__arrow blog-t2-video-strip__arrow--next" type="button" aria-label="Siguiente"></button>

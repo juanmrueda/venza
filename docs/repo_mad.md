@@ -1,7 +1,7 @@
 # Repo MAD - Venza
 
 Last updated: 2026-04-30
-Current phase: Descubre Venza video card playback deployed
+Current phase: Descubre Venza dynamic videos deployed
 
 ## Purpose
 
@@ -72,7 +72,7 @@ Main goals:
 
 ## Current Focus
 
-Current task: **Descubre Venza video card playback**.
+Current task: **Descubre Venza dynamic videos**.
 
 When touching Product internals, prioritize only these files unless required:
 
@@ -126,6 +126,23 @@ And additionally:
   4. Deploy when user requests `despliega`.
 
 ## Action Log
+
+### 2026-04-30 - Production deploy for Descubre Venza dynamic videos
+
+- Deployed the unlimited dynamic Descubre Venza video carousel editor to production.
+- Verified PHP syntax for the modified Descubre ACF and page template before deploy.
+- Verified the Descubre Venza page responds successfully after deploy.
+
+### 2026-04-30 - Descubre Venza dynamic videos
+
+- Converted the Descubre Venza video carousel from a fixed 6-card setup to an unlimited dynamic admin metabox.
+- Added `Descubre Venza - Videos dinamicos` with add/remove/reorder controls, poster, local video file, title, URL, meta, duration, and show/hide toggle.
+- New videos are inserted at the top of the list automatically so previous videos move down.
+- The frontend reads the dynamic list and falls back to the legacy 6 ACF video cards until the dynamic metabox is saved.
+- Files updated:
+  - `theme/inc/acf-page-descubre.php`
+  - `theme/page-descubre-venza.php`
+  - `docs/repo_mad.md`
 
 ### 2026-04-30 - Production deploy for Descubre Venza video card playback
 

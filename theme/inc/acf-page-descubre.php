@@ -583,8 +583,14 @@ add_action('acf/init', function () {
                     'type'          => 'url',
                     'default_value' => 'https://www.youtube.com/@jabonvenza',
                 ],
-            ],
-            $video_card_fields
+                [
+                    'key'     => 'field_venza_descubre_videos_dynamic_message',
+                    'label'   => 'Videos del carrusel',
+                    'name'    => '',
+                    'type'    => 'message',
+                    'message' => 'Agrega, quita y ordena videos desde la caja "Descubre Venza - Videos dinamicos". El boton "Agregar video" lo coloca de primero automaticamente.',
+                ],
+            ]
         ),
         'location' => [
             [
@@ -598,4 +604,377 @@ add_action('acf/init', function () {
         'position' => 'normal',
         'style'    => 'default',
     ]);
+});
+
+function venza_descubre_default_video_titles() {
+    return [
+        'Manos limpias, piel protegida',
+        'Deja que creen libremente, mientras Venza cuida su piel',
+        'Tu piel tambien necesita su momento',
+        'Entrena duro y limpia tu piel con jabones Venza',
+        'Respira, renueva y vuelve a empezar',
+        'Rutinas de cuidado para cada dia',
+    ];
+}
+
+function venza_descubre_resolve_attachment_id($value) {
+    if (is_numeric($value)) {
+        return absint($value);
+    }
+
+    if (is_array($value)) {
+        foreach (['ID', 'id', 'attachment_id'] as $key) {
+            if (isset($value[$key]) && is_numeric($value[$key])) {
+                return absint($value[$key]);
+            }
+        }
+    }
+
+    if (is_object($value) && isset($value->ID) && is_numeric($value->ID)) {
+        return absint($value->ID);
+    }
+
+    return 0;
+}
+
+function venza_descubre_sanitize_video_card($video) {
+    if (!is_array($video)) {
+        return null;
+    }
+
+    $clean = [
+        'enabled'  => isset($video['enabled']) && (string) $video['enabled'] === '1' ? 1 : 0,
+        'image_id' => isset($video['image_id']) ? venza_descubre_resolve_attachment_id($video['image_id']) : 0,
+        'file_id'  => isset($video['file_id']) ? venza_descubre_resolve_attachment_id($video['file_id']) : 0,
+        'title'    => isset($video['title']) ? sanitize_text_field((string) $video['title']) : '',
+        'meta'     => isset($video['meta']) ? sanitize_text_field((string) $video['meta']) : '',
+        'duration' => isset($video['duration']) ? sanitize_text_field((string) $video['duration']) : '',
+        'url'      => isset($video['url']) ? esc_url_raw((string) $video['url']) : '',
+    ];
+
+    $has_content = $clean['image_id'] > 0
+        || $clean['file_id'] > 0
+        || $clean['title'] !== ''
+        || $clean['meta'] !== ''
+        || $clean['duration'] !== ''
+        || $clean['url'] !== '';
+
+    return $has_content ? $clean : null;
+}
+
+function venza_descubre_get_legacy_videos($page_id) {
+    $videos = [];
+    $fallback_titles = venza_descubre_default_video_titles();
+
+    for ($i = 1; $i <= 6; $i++) {
+        $enabled_raw = get_post_meta($page_id, 'descubre_video_' . $i . '_enabled', true);
+        $is_enabled = $enabled_raw === '' ? $i <= 4 : (bool) $enabled_raw;
+
+        $video = [
+            'enabled'  => $is_enabled ? 1 : 0,
+            'image_id' => venza_descubre_resolve_attachment_id(venza_get_meta_value('descubre_video_' . $i . '_image_id', $page_id)),
+            'file_id'  => venza_descubre_resolve_attachment_id(venza_get_meta_value('descubre_video_' . $i . '_file_id', $page_id)),
+            'title'    => trim((string) venza_get_meta_value('descubre_video_' . $i . '_title', $page_id)),
+            'meta'     => trim((string) venza_get_meta_value('descubre_video_' . $i . '_meta', $page_id)),
+            'duration' => trim((string) venza_get_meta_value('descubre_video_' . $i . '_duration', $page_id)),
+            'url'      => trim((string) venza_get_meta_value('descubre_video_' . $i . '_url', $page_id)),
+        ];
+
+        if ($video['title'] === '') {
+            $video['title'] = $fallback_titles[$i - 1] ?? 'Video Venza';
+        }
+
+        if (!$is_enabled && $video['image_id'] <= 0 && $video['file_id'] <= 0 && $video['url'] === '') {
+            continue;
+        }
+
+        $videos[] = $video;
+    }
+
+    return $videos;
+}
+
+function venza_descubre_get_videos($page_id) {
+    $is_dynamic = get_post_meta($page_id, 'descubre_videos_dynamic_enabled', true) === '1';
+    $saved = get_post_meta($page_id, 'descubre_videos', true);
+
+    if (is_array($saved)) {
+        $videos = [];
+        foreach ($saved as $video) {
+            $clean = venza_descubre_sanitize_video_card($video);
+            if ($clean) {
+                $videos[] = $clean;
+            }
+        }
+
+        if (!empty($videos) || $is_dynamic) {
+            return $videos;
+        }
+    }
+
+    if ($is_dynamic) {
+        return [];
+    }
+
+    return venza_descubre_get_legacy_videos($page_id);
+}
+
+add_action('add_meta_boxes_page', function ($post) {
+    if (!$post instanceof WP_Post || get_page_template_slug($post) !== 'page-descubre-venza.php') {
+        return;
+    }
+
+    add_meta_box(
+        'venza_descubre_dynamic_videos',
+        'Descubre Venza - Videos dinamicos',
+        'venza_descubre_render_dynamic_videos_metabox',
+        'page',
+        'normal',
+        'high'
+    );
+});
+
+function venza_descubre_render_dynamic_videos_metabox($post) {
+    wp_nonce_field('venza_descubre_videos_save', 'venza_descubre_videos_nonce');
+    wp_enqueue_media();
+
+    $videos = venza_descubre_get_videos($post->ID);
+    ?>
+    <div class="venza-descubre-videos" data-next-index="<?php echo esc_attr((string) max(0, count($videos))); ?>">
+        <p class="description">Agrega todos los videos que necesites. El boton "Agregar video" coloca el nuevo item de primero y empuja los anteriores hacia abajo.</p>
+        <div class="venza-descubre-videos__actions">
+            <button type="button" class="button button-primary" data-venza-add-descubre-video>Agregar video</button>
+        </div>
+        <div class="venza-descubre-videos__list">
+            <?php foreach ($videos as $index => $video) : ?>
+                <?php venza_descubre_render_dynamic_video_row($index, $video); ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <template id="venza-descubre-video-template">
+        <?php
+        venza_descubre_render_dynamic_video_row('__INDEX__', [
+            'enabled'  => 1,
+            'image_id' => 0,
+            'file_id'  => 0,
+            'title'    => '',
+            'meta'     => '',
+            'duration' => '',
+            'url'      => '',
+        ]);
+        ?>
+    </template>
+    <style>
+        .venza-descubre-videos__actions { margin: 12px 0; }
+        .venza-descubre-videos__list { display: grid; gap: 12px; }
+        .venza-descubre-video { border: 1px solid #dcdcde; background: #fff; padding: 12px; border-radius: 4px; }
+        .venza-descubre-video__head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .venza-descubre-video__title { font-weight: 700; color: #1d2327; }
+        .venza-descubre-video__move { display: inline-flex; gap: 4px; align-items: center; }
+        .venza-descubre-video__grid { display: grid; grid-template-columns: minmax(180px, 260px) 1fr; gap: 14px; align-items: start; }
+        .venza-descubre-video__field { display: grid; gap: 5px; margin-bottom: 10px; }
+        .venza-descubre-video__field label { font-weight: 600; }
+        .venza-descubre-video input[type="text"],
+        .venza-descubre-video input[type="url"] { width: 100%; }
+        .venza-descubre-video__preview { width: 100%; min-height: 120px; display: grid; place-items: center; background: #f0f0f1; border: 1px dashed #c3c4c7; margin-bottom: 8px; overflow: hidden; }
+        .venza-descubre-video__preview img { width: 100%; height: auto; display: block; }
+        @media (max-width: 782px) { .venza-descubre-video__grid { grid-template-columns: 1fr; } }
+    </style>
+    <script>
+    (function () {
+        const root = document.currentScript.closest('.inside').querySelector('.venza-descubre-videos');
+        if (!root || root.dataset.bound === '1') return;
+        root.dataset.bound = '1';
+
+        const list = root.querySelector('.venza-descubre-videos__list');
+        const template = document.getElementById('venza-descubre-video-template');
+
+        const refreshIndexes = () => {
+            list.querySelectorAll('.venza-descubre-video').forEach((video, index) => {
+                video.querySelector('.venza-descubre-video__title').textContent = 'Video ' + (index + 1);
+            });
+        };
+
+        const setPreview = (field, id, url, label) => {
+            field.querySelector('input[type="hidden"]').value = id || '';
+            const preview = field.querySelector('[data-venza-media-preview]');
+            if (url) {
+                preview.innerHTML = field.dataset.venzaMediaType === 'video'
+                    ? '<span>' + (label || url) + '</span>'
+                    : '<img src="' + url + '" alt="">';
+                return;
+            }
+            preview.innerHTML = '<span>Sin archivo</span>';
+        };
+
+        root.addEventListener('click', (event) => {
+            const addButton = event.target.closest('[data-venza-add-descubre-video]');
+            if (addButton) {
+                const index = Number(root.dataset.nextIndex || 0);
+                root.dataset.nextIndex = String(index + 1);
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = template.innerHTML.replaceAll('__INDEX__', String(index)).trim();
+                list.prepend(wrapper.firstElementChild);
+                refreshIndexes();
+                return;
+            }
+
+            const removeButton = event.target.closest('[data-venza-remove-descubre-video]');
+            if (removeButton) {
+                removeButton.closest('.venza-descubre-video').remove();
+                refreshIndexes();
+                return;
+            }
+
+            const moveButton = event.target.closest('[data-venza-move-descubre-video]');
+            if (moveButton) {
+                const video = moveButton.closest('.venza-descubre-video');
+                if (moveButton.dataset.venzaMoveDescubreVideo === 'up' && video.previousElementSibling) {
+                    list.insertBefore(video, video.previousElementSibling);
+                }
+                if (moveButton.dataset.venzaMoveDescubreVideo === 'down' && video.nextElementSibling) {
+                    list.insertBefore(video.nextElementSibling, video);
+                }
+                refreshIndexes();
+                return;
+            }
+
+            const pickButton = event.target.closest('[data-venza-pick-media]');
+            if (pickButton && window.wp && wp.media) {
+                const field = pickButton.closest('[data-venza-media-field]');
+                const mediaType = field.dataset.venzaMediaType === 'video' ? 'video' : 'image';
+                const frame = wp.media({ title: 'Selecciona archivo', multiple: false, library: { type: mediaType } });
+                frame.on('select', () => {
+                    const attachment = frame.state().get('selection').first().toJSON();
+                    const thumb = mediaType === 'image' && attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url;
+                    setPreview(field, attachment.id, thumb, attachment.filename || attachment.title);
+                });
+                frame.open();
+                return;
+            }
+
+            const clearButton = event.target.closest('[data-venza-clear-media]');
+            if (clearButton) {
+                setPreview(clearButton.closest('[data-venza-media-field]'), '', '', '');
+            }
+        });
+
+        refreshIndexes();
+    }());
+    </script>
+    <?php
+}
+
+function venza_descubre_render_dynamic_video_row($index, $video) {
+    $index_attr = (string) $index;
+    $enabled = isset($video['enabled']) ? (int) $video['enabled'] : 1;
+    $image_id = isset($video['image_id']) ? (int) $video['image_id'] : 0;
+    $file_id = isset($video['file_id']) ? (int) $video['file_id'] : 0;
+    $title = isset($video['title']) ? (string) $video['title'] : '';
+    $meta = isset($video['meta']) ? (string) $video['meta'] : '';
+    $duration = isset($video['duration']) ? (string) $video['duration'] : '';
+    $url = isset($video['url']) ? (string) $video['url'] : '';
+    $image_url = $image_id > 0 ? wp_get_attachment_image_url($image_id, 'thumbnail') : '';
+    $file_label = $file_id > 0 ? get_the_title($file_id) : '';
+    ?>
+    <div class="venza-descubre-video">
+        <div class="venza-descubre-video__head">
+            <span class="venza-descubre-video__title">Video</span>
+            <span class="venza-descubre-video__move">
+                <button type="button" class="button" data-venza-move-descubre-video="up">Subir</button>
+                <button type="button" class="button" data-venza-move-descubre-video="down">Bajar</button>
+                <button type="button" class="button-link-delete" data-venza-remove-descubre-video>Eliminar</button>
+            </span>
+        </div>
+        <div class="venza-descubre-video__grid">
+            <div>
+                <div class="venza-descubre-video__field">
+                    <label>
+                        <input type="hidden" name="venza_descubre_videos[<?php echo esc_attr($index_attr); ?>][enabled]" value="0">
+                        <input type="checkbox" name="venza_descubre_videos[<?php echo esc_attr($index_attr); ?>][enabled]" value="1" <?php checked($enabled, 1); ?>>
+                        Mostrar video
+                    </label>
+                </div>
+                <div class="venza-descubre-video__field" data-venza-media-field data-venza-media-type="image">
+                    <label>Poster</label>
+                    <input type="hidden" name="venza_descubre_videos[<?php echo esc_attr($index_attr); ?>][image_id]" value="<?php echo esc_attr((string) $image_id); ?>">
+                    <div class="venza-descubre-video__preview" data-venza-media-preview>
+                        <?php if ($image_url) : ?>
+                            <img src="<?php echo esc_url($image_url); ?>" alt="">
+                        <?php else : ?>
+                            <span>Sin archivo</span>
+                        <?php endif; ?>
+                    </div>
+                    <button type="button" class="button" data-venza-pick-media>Seleccionar poster</button>
+                    <button type="button" class="button-link-delete" data-venza-clear-media>Quitar</button>
+                </div>
+                <div class="venza-descubre-video__field" data-venza-media-field data-venza-media-type="video">
+                    <label>Archivo video</label>
+                    <input type="hidden" name="venza_descubre_videos[<?php echo esc_attr($index_attr); ?>][file_id]" value="<?php echo esc_attr((string) $file_id); ?>">
+                    <div class="venza-descubre-video__preview" data-venza-media-preview>
+                        <?php if ($file_label !== '') : ?>
+                            <span><?php echo esc_html($file_label); ?></span>
+                        <?php else : ?>
+                            <span>Sin archivo</span>
+                        <?php endif; ?>
+                    </div>
+                    <button type="button" class="button" data-venza-pick-media>Seleccionar video</button>
+                    <button type="button" class="button-link-delete" data-venza-clear-media>Quitar</button>
+                </div>
+            </div>
+            <div>
+                <div class="venza-descubre-video__field">
+                    <label>Titulo</label>
+                    <input type="text" name="venza_descubre_videos[<?php echo esc_attr($index_attr); ?>][title]" value="<?php echo esc_attr($title); ?>">
+                </div>
+                <div class="venza-descubre-video__field">
+                    <label>URL externa</label>
+                    <input type="url" name="venza_descubre_videos[<?php echo esc_attr($index_attr); ?>][url]" value="<?php echo esc_url($url); ?>" placeholder="https://youtu.be/...">
+                </div>
+                <div class="venza-descubre-video__field">
+                    <label>Meta</label>
+                    <input type="text" name="venza_descubre_videos[<?php echo esc_attr($index_attr); ?>][meta]" value="<?php echo esc_attr($meta); ?>" placeholder="36 K visualizaciones - hace 2 semanas">
+                </div>
+                <div class="venza-descubre-video__field">
+                    <label>Duracion</label>
+                    <input type="text" name="venza_descubre_videos[<?php echo esc_attr($index_attr); ?>][duration]" value="<?php echo esc_attr($duration); ?>" placeholder="0:30">
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+}
+
+add_action('save_post_page', function ($post_id) {
+    if (!isset($_POST['venza_descubre_videos_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['venza_descubre_videos_nonce'])), 'venza_descubre_videos_save')) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    $incoming = isset($_POST['venza_descubre_videos']) && is_array($_POST['venza_descubre_videos'])
+        ? wp_unslash($_POST['venza_descubre_videos'])
+        : [];
+
+    $videos = [];
+    foreach ($incoming as $video) {
+        $clean = venza_descubre_sanitize_video_card($video);
+        if ($clean) {
+            $videos[] = $clean;
+        }
+    }
+
+    update_post_meta($post_id, 'descubre_videos_dynamic_enabled', '1');
+
+    if (!empty($videos)) {
+        update_post_meta($post_id, 'descubre_videos', $videos);
+    } else {
+        delete_post_meta($post_id, 'descubre_videos');
+    }
 });

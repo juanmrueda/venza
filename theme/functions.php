@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 defined('ABSPATH') || exit;
 
 define('VENZA_VERSION', '1.0.2');
@@ -15,6 +15,7 @@ require_once VENZA_DIR . '/inc/acf-home.php';
 require_once VENZA_DIR . '/inc/acf-blog.php';
 require_once VENZA_DIR . '/inc/acf-page-descubre.php';
 require_once VENZA_DIR . '/inc/acf-page-contacto.php';
+require_once VENZA_DIR . '/inc/noticia-gallery-native.php';
 
 // Soporte del tema
 add_action('after_setup_theme', function () {
@@ -25,7 +26,7 @@ add_action('after_setup_theme', function () {
 
     register_nav_menus([
         'primary' => __('MenÃº Principal', 'venza'),
-        'footer'  => __('MenÃº Footer', 'venza'),
+        'footer' => __('MenÃº Footer', 'venza'),
     ]);
 });
 
@@ -67,13 +68,15 @@ add_filter('use_block_editor_for_post', function ($use_block_editor, $post) {
     return $use_block_editor;
 }, 10, 2);
 
-function venza_is_descubre_quiz_route() {
+function venza_is_descubre_quiz_route()
+{
     $request = trim((string) ($GLOBALS['wp']->request ?? ''), '/');
 
     return $request === 'descubre-venza/quiz' || (string) get_query_var('venza_descubre_quiz') === '1';
 }
 
-function venza_get_descubre_page_id() {
+function venza_get_descubre_page_id()
+{
     static $page_id = null;
 
     if ($page_id !== null) {
@@ -88,9 +91,9 @@ function venza_get_descubre_page_id() {
     }
 
     $pages = get_posts([
-        'post_type'   => 'page',
-        'meta_key'    => '_wp_page_template',
-        'meta_value'  => 'page-descubre-venza.php',
+        'post_type' => 'page',
+        'meta_key' => '_wp_page_template',
+        'meta_value' => 'page-descubre-venza.php',
         'posts_per_page' => 1,
         'post_status' => ['publish', 'draft', 'private'],
     ]);
@@ -102,7 +105,8 @@ function venza_get_descubre_page_id() {
     return $page_id;
 }
 
-function venza_is_descubre_context() {
+function venza_is_descubre_context()
+{
     $request = trim((string) ($GLOBALS['wp']->request ?? ''), '/');
 
     return venza_is_descubre_quiz_route()
@@ -136,17 +140,18 @@ add_action('template_redirect', function () {
 });
 
 // Fallback explÃ­cito para que el header no quede sin navegaciÃ³n
-function venza_primary_menu_fallback($args = []) {
+function venza_primary_menu_fallback($args = [])
+{
     if (!isset($args['theme_location']) || $args['theme_location'] !== 'primary') {
         return;
     }
 
     $productos_menu = get_posts([
-        'post_type'      => 'producto',
+        'post_type' => 'producto',
         'posts_per_page' => -1,
-        'post_status'    => 'publish',
-        'orderby'        => ['menu_order' => 'ASC', 'title' => 'ASC'],
-        'order'          => 'ASC',
+        'post_status' => 'publish',
+        'orderby' => ['menu_order' => 'ASC', 'title' => 'ASC'],
+        'order' => 'ASC',
     ]);
 
     $menu_class = isset($args['menu_class']) && is_string($args['menu_class']) && $args['menu_class'] !== ''
@@ -154,23 +159,23 @@ function venza_primary_menu_fallback($args = []) {
         : 'nav-menu';
 
     $items = [
-        ['label' => 'Inicio',         'url' => home_url('/')],
+        ['label' => 'Inicio', 'url' => home_url('/')],
         [
-            'label'    => 'Productos',
-            'url'      => home_url('/productos/'),
+            'label' => 'Productos',
+            'url' => home_url('/productos/'),
             'children' => array_map(static function ($producto) {
                 return [
                     'label' => get_the_title($producto),
-                    'url'   => get_permalink($producto),
-                    'id'    => (int) $producto->ID,
+                    'url' => get_permalink($producto),
+                    'id' => (int) $producto->ID,
                 ];
             }, $productos_menu),
         ],
-        ['label' => 'Beneficios',     'url' => home_url('/beneficios/')],
-        ['label' => 'Noticias',       'url' => home_url('/noticias/')],
-        ['label' => 'Blog',           'url' => home_url('/blog/')],
+        ['label' => 'Beneficios', 'url' => home_url('/beneficios/')],
+        ['label' => 'Noticias', 'url' => home_url('/noticias/')],
+        ['label' => 'Blog', 'url' => home_url('/blog/')],
         ['label' => 'Descubre Venza', 'url' => home_url('/descubre-venza/')],
-        ['label' => 'Contacto',       'url' => home_url('/contacto/')],
+        ['label' => 'Contacto', 'url' => home_url('/contacto/')],
     ];
 
     $current_url = trailingslashit(home_url(add_query_arg([], $GLOBALS['wp']->request ?? '')));
@@ -270,11 +275,11 @@ add_filter('wp_nav_menu_objects', function ($items, $args) {
     }
 
     $productos = get_posts([
-        'post_type'      => 'producto',
+        'post_type' => 'producto',
         'posts_per_page' => -1,
-        'post_status'    => 'publish',
-        'orderby'        => ['menu_order' => 'ASC', 'title' => 'ASC'],
-        'order'          => 'ASC',
+        'post_status' => 'publish',
+        'orderby' => ['menu_order' => 'ASC', 'title' => 'ASC'],
+        'order' => 'ASC',
     ]);
 
     if (empty($productos)) {
@@ -463,12 +468,12 @@ add_filter('wp_nav_menu_objects', function ($items, $args) {
 // Encolar estilos y scripts
 add_action('wp_enqueue_scripts', function () {
     $main_css_path = VENZA_DIR . '/assets/css/main.css';
-    $main_js_path  = VENZA_DIR . '/assets/js/main.js';
-    $quiz_js_path  = VENZA_DIR . '/assets/js/quiz.js';
+    $main_js_path = VENZA_DIR . '/assets/js/main.js';
+    $quiz_js_path = VENZA_DIR . '/assets/js/quiz.js';
 
     $main_css_ver = file_exists($main_css_path) ? (string) filemtime($main_css_path) : VENZA_VERSION;
-    $main_js_ver  = file_exists($main_js_path) ? (string) filemtime($main_js_path) : VENZA_VERSION;
-    $quiz_js_ver  = file_exists($quiz_js_path) ? (string) filemtime($quiz_js_path) : VENZA_VERSION;
+    $main_js_ver = file_exists($main_js_path) ? (string) filemtime($main_js_path) : VENZA_VERSION;
+    $quiz_js_ver = file_exists($quiz_js_path) ? (string) filemtime($quiz_js_path) : VENZA_VERSION;
 
     wp_enqueue_style('venza-main', VENZA_URI . '/assets/css/main.css', [], $main_css_ver);
     wp_enqueue_script('venza-main', VENZA_URI . '/assets/js/main.js', [], $main_js_ver, true);
@@ -480,12 +485,12 @@ add_action('wp_enqueue_scripts', function () {
 
 // TamaÃ±os de imagen
 add_action('after_setup_theme', function () {
-    add_image_size('producto-hero',    1440, 700, true);
-    add_image_size('producto-thumb',   400,  400, true);
-    add_image_size('noticia-card',     600,  400, true);
-    add_image_size('blog-card',        300,  300, true);
-    add_image_size('blog-card-wide',   720,  520, true);
-    add_image_size('blog-hero',        960,  960, true);
+    add_image_size('producto-hero', 1440, 700, true);
+    add_image_size('producto-thumb', 400, 400, true);
+    add_image_size('noticia-card', 600, 400, true);
+    add_image_size('blog-card', 300, 300, true);
+    add_image_size('blog-card-wide', 720, 520, true);
+    add_image_size('blog-hero', 960, 960, true);
 });
 
 // ACF: cargar campos desde JSON

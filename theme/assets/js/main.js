@@ -459,4 +459,180 @@
             document.addEventListener('keydown', onEsc);
         });
     });
+    // --- Galeria de noticias (Slider Infinito Responsivo) ---
+    const gallerySlider = document.getElementById('noticia-gallery-slider');
+    if (gallerySlider) {
+        const viewport = gallerySlider.querySelector('.noticia-gallery__viewport');
+        const track = gallerySlider.querySelector('.noticia-gallery__track');
+        const originalItems = Array.from(track.querySelectorAll('.noticia-gallery__item'));
+        const prev = gallerySlider.querySelector('.noticia-gallery__arrow--prev');
+        const next = gallerySlider.querySelector('.noticia-gallery__arrow--next');
+
+        if (viewport && track && originalItems.length > 0) {
+            let currentIndex = 0;
+            let isTransitioning = false;
+            
+            const getItemsPerView = () => {
+                if (window.innerWidth <= 600) return 1;
+                if (window.innerWidth <= 1100) return 2;
+                return 4;
+            };
+
+            const itemsToClone = 4; // Clonamos 4 para cubrir el peor caso
+            
+            // Clonar elementos
+            const firstClones = originalItems.slice(0, itemsToClone).map(item => item.cloneNode(true));
+            const lastClones = originalItems.slice(-itemsToClone).map(item => item.cloneNode(true));
+
+            lastClones.forEach(clone => track.insertBefore(clone, track.firstChild));
+            firstClones.forEach(clone => track.appendChild(clone));
+
+            const getMoveAmount = () => {
+                const item = track.querySelector('.noticia-gallery__item');
+                const style = window.getComputedStyle(track);
+                const gap = parseFloat(style.gap) || 24;
+                return item.offsetWidth + gap;
+            };
+
+            const updatePosition = (smooth = true) => {
+                const offset = -(currentIndex + itemsToClone) * getMoveAmount();
+                track.style.transition = smooth ? 'transform 0.5s ease-out' : 'none';
+                track.style.transform = `translateX(${offset}px)`;
+            };
+
+            // Posicion inicial
+            updatePosition(false);
+
+            let autoplayTimer = null;
+            const startAutoplay = () => {
+                stopAutoplay();
+                autoplayTimer = setInterval(() => next.click(), 5000);
+            };
+            const stopAutoplay = () => {
+                if (autoplayTimer) clearInterval(autoplayTimer);
+            };
+
+            startAutoplay();
+            gallerySlider.addEventListener('mouseenter', stopAutoplay);
+            gallerySlider.addEventListener('mouseleave', startAutoplay);
+
+            next.addEventListener('click', () => {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                currentIndex++;
+                updatePosition();
+                stopAutoplay(); // Reset timer on click
+                startAutoplay();
+            });
+
+            prev.addEventListener('click', () => {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                currentIndex--;
+                updatePosition();
+                stopAutoplay(); // Reset timer on click
+                startAutoplay();
+            });
+
+            track.addEventListener('transitionend', () => {
+                isTransitioning = false;
+                if (currentIndex >= originalItems.length) {
+                    currentIndex = 0;
+                    updatePosition(false);
+                } else if (currentIndex <= -originalItems.length) {
+                    currentIndex = 0;
+                    updatePosition(false);
+                } else if (currentIndex < 0 && Math.abs(currentIndex) >= itemsToClone) {
+                    currentIndex = originalItems.length + currentIndex;
+                    updatePosition(false);
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                currentIndex = 0;
+                updatePosition(false);
+            });
+
+            // Soporte touch basico
+            let touchStart = 0;
+            viewport.addEventListener('touchstart', (e) => {
+                touchStart = e.touches[0].clientX;
+                stopAutoplay();
+            }, {passive: true});
+            
+            viewport.addEventListener('touchend', (e) => {
+                const touchEnd = e.changedTouches[0].clientX;
+                if (touchStart - touchEnd > 50) next.click();
+                if (touchStart - touchEnd < -50) prev.click();
+                startAutoplay();
+            }, {passive: true});
+        }
+    }
+
+    // Lightbox Slider
+    const galleryLinks = Array.from(document.querySelectorAll('.js-noticia-gallery-item'));
+    galleryLinks.forEach((link, index) => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            let currentIndex = index;
+
+            const modal = document.createElement('div');
+            modal.className = 'gallery-modal';
+            modal.innerHTML = `
+                <div class="gallery-modal__backdrop"></div>
+                <div class="gallery-modal__content">
+                    <button class="gallery-modal__close" aria-label="Cerrar">&times;</button>
+                    <button class="gallery-modal__nav gallery-modal__nav--prev" aria-label="Anterior">&#10094;</button>
+                    <img src="${galleryLinks[currentIndex].getAttribute('href')}" class="gallery-modal__image" alt="">
+                    <button class="gallery-modal__nav gallery-modal__nav--next" aria-label="Siguiente">&#10095;</button>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+
+            const modalImg = modal.querySelector('.gallery-modal__image');
+            const btnPrev = modal.querySelector('.gallery-modal__nav--prev');
+            const btnNext = modal.querySelector('.gallery-modal__nav--next');
+
+            const updateModalImage = (newIndex) => {
+                currentIndex = (newIndex + galleryLinks.length) % galleryLinks.length;
+                modalImg.style.opacity = '0';
+                setTimeout(() => {
+                    modalImg.src = galleryLinks[currentIndex].getAttribute('href');
+                    modalImg.style.opacity = '1';
+                }, 200);
+            };
+
+            btnPrev.addEventListener('click', (e) => { e.stopPropagation(); updateModalImage(currentIndex - 1); });
+            btnNext.addEventListener('click', (e) => { e.stopPropagation(); updateModalImage(currentIndex + 1); });
+
+            // Forzar reflow
+            modal.offsetWidth;
+            modal.classList.add('is-active');
+
+            const closeLightbox = () => {
+                modal.classList.remove('is-active');
+                setTimeout(() => {
+                    modal.remove();
+                    document.body.style.overflow = '';
+                }, 400);
+            };
+
+            modal.querySelector('.gallery-modal__close').addEventListener('click', closeLightbox);
+            modal.querySelector('.gallery-modal__backdrop').addEventListener('click', closeLightbox);
+            
+            const handleKeys = (e) => {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') updateModalImage(currentIndex - 1);
+                if (e.key === 'ArrowRight') updateModalImage(currentIndex + 1);
+                if (e.key === 'Escape' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    // Limpiar evento si se cierra
+                    if (e.key === 'Escape') document.removeEventListener('keydown', handleKeys);
+                }
+            };
+            document.addEventListener('keydown', handleKeys);
+        });
+    });
+
 })();

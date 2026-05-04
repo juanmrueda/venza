@@ -30,7 +30,7 @@ if ($hero_video_src === '' && file_exists($default_video_file)) {
     $hero_video_src = $default_video_src;
 }
 
-$poster = VENZA_URI . '/assets/images/banners/bannerhomedemo.svg';
+$poster = '';
 $poster_id = (int) $get_home_field('home_hero_slide_1_poster', 0);
 if ($poster_id > 0) {
     $poster_url = wp_get_attachment_image_url($poster_id, 'full');
@@ -69,6 +69,8 @@ $build_image_slide = static function ($index, $fallback_src, $fallback_alt) use 
 };
 
 $slides = [];
+
+// ✅ CAMBIO: Solo agregar Slide 1 si tiene video configurado
 if ($hero_video_src !== '') {
     $slides[] = [
         'type'     => 'video',
@@ -78,17 +80,23 @@ if ($hero_video_src !== '') {
         'wait_end' => $wait_end,
         'loop'     => false,
     ];
-} else {
-    $slides[] = [
-        'type' => 'image',
-        'src'  => $poster,
-        'alt'  => 'Banner Home Demo',
-    ];
 }
 
-$slides[] = $build_image_slide(2, VENZA_URI . '/assets/images/banners/frescura-extrema.jpg', 'Frescura Extrema');
-$slides[] = $build_image_slide(3, VENZA_URI . '/assets/images/banners/vitamina-e.jpg', 'Vitamina E');
-$slides[] = $build_image_slide(4, VENZA_URI . '/assets/images/banners/sabila.jpg', 'Sabila');
+// ✅ CAMBIO: Solo agregar slides 2, 3, 4 si existen en el admin
+// Si el usuario no configura nada en el admin, NO se cargarán los fallbacks
+for ($i = 2; $i <= 4; $i++) {
+    $image_id = (int) $get_home_field('home_hero_slide_' . $i . '_image', 0);
+    
+    // Solo agregar el slide si tiene una imagen configurada en el admin
+    if ($image_id > 0) {
+        $slide = $build_image_slide($i, '', '');
+        
+        // Verificar que la imagen se cargó correctamente
+        if (!empty($slide['src'])) {
+            $slides[] = $slide;
+        }
+    }
+}
 
 $claim_text = (string) $get_home_field('home_claim_text', 'Cada uno de nuestros productos exalta una <strong>sensacion y emocion especial</strong> para los diferentes momentos del dia, ayudandote a ti y a los tuyos a vivir <strong>cada instante plenamente</strong>.');
 if (trim(strip_tags($claim_text)) === '') {
@@ -114,7 +122,7 @@ $claim_html = wp_kses_post($claim_text);
                             <?php echo !empty($slide['loop']) ? 'loop' : ''; ?>
                             playsinline
                             preload="metadata"
-                            poster="<?php echo esc_url($slide['poster']); ?>"
+                            <?php echo !empty($slide['poster']) ? 'poster="' . esc_url($slide['poster']) . '"' : ''; ?>
                             <?php echo !empty($slide['wait_end']) ? 'data-wait-end="1"' : ''; ?>
                         >
                             <source src="<?php echo esc_url($slide['src']); ?>" type="video/mp4">

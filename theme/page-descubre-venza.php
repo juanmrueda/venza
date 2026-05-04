@@ -65,213 +65,250 @@ $get_link_attrs = static function ($url) {
 
     return '';
 };
+
+// función para obtener miniatura de YouTube
+$get_youtube_thumbnail = static function ($url) {
+    $pattern = '/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i';
+    if (preg_match($pattern, $url, $matches)) {
+        return "https://img.youtube.com/vi/{$matches[1]}/hqdefault.jpg";
+    }
+    return '';
+};
 ?>
 <main class="descubre-page descubre-video-page">
-    <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-        <?php
-        $page_id = get_the_ID();
+    <?php if (have_posts()):
+        while (have_posts()):
+            the_post(); ?>
+            <?php
+            $page_id = get_the_ID();
 
-        $hero_title = trim((string) venza_get_meta_value('descubre_titulo', $page_id));
-        if ($hero_title === '') {
-            $hero_title = get_the_title($page_id);
-        }
-
-        $callout = trim((string) venza_get_meta_value('descubre_callout', $page_id));
-        if ($callout === '') {
-            $callout = trim((string) venza_get_meta_value('descubre_subtitulo', $page_id));
-        }
-
-        $video_poster_id = $get_image_id('descubre_video_poster_id', $page_id);
-        if ($video_poster_id <= 0 && has_post_thumbnail($page_id)) {
-            $video_poster_id = (int) get_post_thumbnail_id($page_id);
-        }
-
-        $video_file_id = $get_image_id('descubre_video_file_id', $page_id);
-        $video_file_url = $get_file_url($video_file_id);
-
-        $video_url = trim((string) venza_get_meta_value('descubre_video_url', $page_id));
-        if ($video_url === '') {
-            $legacy_youtube = trim((string) venza_get_meta_value('descubre_video_youtube', $page_id));
-            if ($legacy_youtube !== '') {
-                $video_url = filter_var($legacy_youtube, FILTER_VALIDATE_URL)
-                    ? $legacy_youtube
-                    : 'https://www.youtube.com/watch?v=' . rawurlencode($legacy_youtube);
+            $hero_title = trim((string) venza_get_meta_value('descubre_titulo', $page_id));
+            if ($hero_title === '') {
+                $hero_title = get_the_title($page_id);
             }
-        }
 
-        $videos_title = trim((string) venza_get_meta_value('descubre_videos_title', $page_id));
-        if ($videos_title === '') {
-            $videos_title = 'Videos Venza';
-        }
+            $callout = trim((string) venza_get_meta_value('descubre_callout', $page_id));
+            if ($callout === '') {
+                $callout = trim((string) venza_get_meta_value('descubre_subtitulo', $page_id));
+            }
 
-        $cta_text = trim((string) venza_get_meta_value('descubre_cta_text', $page_id));
-        if ($cta_text === '') {
-            $cta_text = 'Visita nuestro canal de Youtube';
-        }
+            $video_poster_id = $get_image_id('descubre_video_poster_id', $page_id);
+            if ($video_poster_id <= 0 && has_post_thumbnail($page_id)) {
+                $video_poster_id = (int) get_post_thumbnail_id($page_id);
+            }
 
-        $cta_url = trim((string) venza_get_meta_value('descubre_cta_url', $page_id));
-        if ($cta_url === '') {
-            $cta_url = trim((string) venza_get_meta_value('youtube_channel_url', $page_id));
-        }
-        if ($cta_url === '' || $cta_url === '#') {
-            $cta_url = 'https://www.youtube.com/@jabonvenza';
-        }
+            $video_file_id = $get_image_id('descubre_video_file_id', $page_id);
+            $video_file_url = $get_file_url($video_file_id);
 
-        $use_background_image = (bool) venza_get_meta_value('descubre_use_background_image', $page_id);
-        $background_image_id = $use_background_image ? $get_image_id('descubre_background_image_id', $page_id) : 0;
-        $background_url = $get_image_url($background_image_id, 'full');
-        $page_style = $background_url !== '' ? '--blog-bg-image:url(' . esc_url($background_url) . ');' : '';
+            $video_url = trim((string) venza_get_meta_value('descubre_video_url', $page_id));
+            if ($video_url === '') {
+                $legacy_youtube = trim((string) venza_get_meta_value('descubre_video_youtube', $page_id));
+                if ($legacy_youtube !== '') {
+                    $video_url = filter_var($legacy_youtube, FILTER_VALIDATE_URL)
+                        ? $legacy_youtube
+                        : 'https://www.youtube.com/watch?v=' . rawurlencode($legacy_youtube);
+                }
+            }
 
-        $quiz_cta_enabled_raw = get_post_meta($page_id, 'descubre_quiz_cta_enabled', true);
-        $quiz_cta_enabled = $quiz_cta_enabled_raw === '' ? true : (bool) $quiz_cta_enabled_raw;
-        $quiz_cta_text = trim((string) venza_get_meta_value('descubre_quiz_cta_text', $page_id));
-        if ($quiz_cta_text === '') {
-            $quiz_cta_text = '¿Ya sabes cuál jabón va contigo?';
-        }
+            $videos_title = trim((string) venza_get_meta_value('descubre_videos_title', $page_id));
+            if ($videos_title === '') {
+                $videos_title = 'Videos Venza';
+            }
 
-        $quiz_cta_url = trim((string) venza_get_meta_value('descubre_quiz_cta_url', $page_id));
-        if ($quiz_cta_url === '') {
-            $quiz_cta_url = home_url('/descubre-venza/quiz/');
-        }
+            $cta_text = trim((string) venza_get_meta_value('descubre_cta_text', $page_id));
+            if ($cta_text === '') {
+                $cta_text = 'Visita nuestro canal de Youtube';
+            }
 
-        $quiz_cta_image_id = $get_image_id('descubre_quiz_cta_image_id', $page_id);
-        $quiz_cta_fallback_image = VENZA_URI . '/assets/images/productos/frescura-extrema.png';
+            $cta_url = trim((string) venza_get_meta_value('descubre_cta_url', $page_id));
+            if ($cta_url === '') {
+                $cta_url = trim((string) venza_get_meta_value('youtube_channel_url', $page_id));
+            }
+            if ($cta_url === '' || $cta_url === '#') {
+                $cta_url = 'https://www.youtube.com/@jabonvenza';
+            }
 
-        $fallback_video_titles = [
-            'Manos limpias, piel protegida',
-            'Deja que creen libremente, mientras Venza cuida su piel',
-            'Tu piel tambien necesita su momento',
-            'Entrena duro y limpia tu piel con jabones Venza',
-            'Respira, renueva y vuelve a empezar',
-            'Rutinas de cuidado para cada dia',
-        ];
-        $video_cards = function_exists('venza_descubre_get_videos') ? venza_descubre_get_videos($page_id) : [];
-        ?>
-        <article class="blog-single-page blog-single-page--type2 descubre-video-page__content" style="<?php echo esc_attr($page_style); ?>">
-            <section class="blog-t2-hero">
-                <div class="container blog-t2-hero__container">
-                    <h1><?php echo wp_kses_post($hero_title); ?></h1>
-                    <?php if ($callout !== '') : ?>
-                        <div class="blog-t2-hero__callout">
-                            <?php echo wp_kses_post(wpautop($callout)); ?>
+            $use_background_image = (bool) venza_get_meta_value('descubre_use_background_image', $page_id);
+            $background_image_id = $use_background_image ? $get_image_id('descubre_background_image_id', $page_id) : 0;
+            $background_url = $get_image_url($background_image_id, 'full');
+            $page_style = $background_url !== '' ? '--blog-bg-image:url(' . esc_url($background_url) . ');' : '';
+
+            $quiz_cta_enabled_raw = get_post_meta($page_id, 'descubre_quiz_cta_enabled', true);
+            $quiz_cta_enabled = $quiz_cta_enabled_raw === '' ? true : (bool) $quiz_cta_enabled_raw;
+            $quiz_cta_text = trim((string) venza_get_meta_value('descubre_quiz_cta_text', $page_id));
+            if ($quiz_cta_text === '') {
+                $quiz_cta_text = '¿Ya sabes cuál jabón va contigo?';
+            }
+
+            $quiz_cta_url = trim((string) venza_get_meta_value('descubre_quiz_cta_url', $page_id));
+            if ($quiz_cta_url === '') {
+                $quiz_cta_url = home_url('/descubre-venza/quiz/');
+            }
+
+            $quiz_cta_image_id = $get_image_id('descubre_quiz_cta_image_id', $page_id);
+            $quiz_cta_fallback_image = VENZA_URI . '/assets/images/productos/frescura-extrema.png';
+
+            $fallback_video_titles = [
+                'Manos limpias, piel protegida',
+                'Deja que creen libremente, mientras Venza cuida su piel',
+                'Tu piel tambien necesita su momento',
+                'Entrena duro y limpia tu piel con jabones Venza',
+                'Respira, renueva y vuelve a empezar',
+                'Rutinas de cuidado para cada dia',
+            ];
+            $video_cards = function_exists('venza_descubre_get_videos') ? venza_descubre_get_videos($page_id) : [];
+            ?>
+            <article class="blog-single-page blog-single-page--type2 descubre-video-page__content"
+                style="<?php echo esc_attr($page_style); ?>">
+                <section class="blog-t2-hero">
+                    <div class="container blog-t2-hero__container">
+                        <h1><?php echo wp_kses_post($hero_title); ?></h1>
+                        <?php if ($callout !== ''): ?>
+                            <div class="blog-t2-hero__callout">
+                                <?php echo wp_kses_post(wpautop($callout)); ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </section>
+
+                <section class="blog-t2-feature-video" data-descubre-feature-video>
+                    <?php if ($video_file_url !== ''): ?>
+                        <div class="blog-t2-feature-video__link blog-t2-feature-video__link--video">
+                            <video controls preload="metadata">
+                                <source src="<?php echo esc_url($video_file_url); ?>"
+                                    type="<?php echo esc_attr($get_video_type($video_file_id, $video_file_url)); ?>">
+                            </video>
+                        </div>
+                    <?php elseif ($video_url !== ''): ?>
+                        <a class="blog-t2-feature-video__link blog-t2-feature-video__link--external"
+                            href="<?php echo esc_url($video_url); ?>" data-feature-video-url="<?php echo esc_url($video_url); ?>"
+                            <?php echo $get_link_attrs($video_url); ?>>
+                            <span class="blog-t2-feature-video__placeholder"
+                                style="<?php $fb_thumb = $get_youtube_thumbnail($video_url);
+                                echo $fb_thumb ? 'background-image:url(' . esc_url($fb_thumb) . ');background-size:cover;' : ''; ?>"></span>
+                            <span class="blog-play blog-t2-feature-video__play" aria-hidden="true"></span>
+                        </a>
+                    <?php else: ?>
+                        <div class="blog-t2-feature-video__link">
+                            <span class="blog-t2-feature-video__placeholder"></span>
                         </div>
                     <?php endif; ?>
-                </div>
-            </section>
+                </section>
 
-            <section class="blog-t2-feature-video" data-descubre-feature-video>
-                <?php if ($video_file_url !== '') : ?>
-                    <div class="blog-t2-feature-video__link blog-t2-feature-video__link--video">
-                        <video controls preload="metadata">
-                            <source src="<?php echo esc_url($video_file_url); ?>" type="<?php echo esc_attr($get_video_type($video_file_id, $video_file_url)); ?>">
-                        </video>
-                    </div>
-                <?php elseif ($video_url !== '') : ?>
-                    <a class="blog-t2-feature-video__link blog-t2-feature-video__link--external" href="<?php echo esc_url($video_url); ?>" data-feature-video-url="<?php echo esc_url($video_url); ?>"<?php echo $get_link_attrs($video_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-                        <span class="blog-t2-feature-video__placeholder"></span>
-                        <span class="blog-play blog-t2-feature-video__play" aria-hidden="true"></span>
-                    </a>
-                <?php else : ?>
-                    <div class="blog-t2-feature-video__link">
-                        <span class="blog-t2-feature-video__placeholder"></span>
-                    </div>
-                <?php endif; ?>
-            </section>
+                <section class="blog-t2-videos">
+                    <div class="container blog-t2-videos__container">
+                        <span class="blog-t2-videos__icon" aria-hidden="true"></span>
+                        <h2><?php echo esc_html($videos_title); ?></h2>
+                        <a class="blog-t2-videos__cta" href="<?php echo esc_url($cta_url); ?>" <?php echo $get_link_attrs($cta_url); ?>><?php echo esc_html($cta_text); ?></a>
 
-            <section class="blog-t2-videos">
-                <div class="container blog-t2-videos__container">
-                    <span class="blog-t2-videos__icon" aria-hidden="true"></span>
-                    <h2><?php echo esc_html($videos_title); ?></h2>
-                    <a class="blog-t2-videos__cta" href="<?php echo esc_url($cta_url); ?>"<?php echo $get_link_attrs($cta_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>><?php echo esc_html($cta_text); ?></a>
+                        <div class="blog-t2-video-strip">
+                            <button class="blog-t2-video-strip__arrow blog-t2-video-strip__arrow--prev" type="button"
+                                aria-label="Anterior"></button>
+                            <div class="blog-t2-video-strip__viewport">
+                                <div class="blog-t2-video-strip__track">
+                                    <?php foreach ($video_cards as $video_index => $video_card): ?>
+                                        <?php
+                                        $is_enabled = !empty($video_card['enabled']);
+                                        if (!$is_enabled) {
+                                            continue;
+                                        }
 
-                    <div class="blog-t2-video-strip">
-                        <button class="blog-t2-video-strip__arrow blog-t2-video-strip__arrow--prev" type="button" aria-label="Anterior"></button>
-                        <div class="blog-t2-video-strip__viewport">
-                            <div class="blog-t2-video-strip__track">
-                            <?php foreach ($video_cards as $video_index => $video_card) : ?>
-                                <?php
-                                $is_enabled = !empty($video_card['enabled']);
-                                if (!$is_enabled) {
-                                    continue;
-                                }
+                                        $card_image_id = isset($video_card['image_id']) ? (int) $video_card['image_id'] : 0;
 
-                                $card_image_id = isset($video_card['image_id']) ? (int) $video_card['image_id'] : 0;
-                                if ($card_image_id <= 0) {
-                                    $card_image_id = $video_poster_id;
-                                }
-                                $card_title = isset($video_card['title']) ? trim((string) $video_card['title']) : '';
-                                if ($card_title === '') {
-                                    $card_title = $fallback_video_titles[$video_index] ?? 'Video Venza';
-                                }
-                                $card_meta = isset($video_card['meta']) ? trim((string) $video_card['meta']) : '';
-                                $card_duration = isset($video_card['duration']) ? trim((string) $video_card['duration']) : '';
-                                $card_video_file_id = isset($video_card['file_id']) ? (int) $video_card['file_id'] : 0;
-                                $card_video_file_url = $get_file_url($card_video_file_id);
-                                $card_video_mime = $card_video_file_url !== '' ? $get_video_type($card_video_file_id, $card_video_file_url) : '';
-                                $card_url = isset($video_card['url']) ? trim((string) $video_card['url']) : '';
-                                $card_href = $card_video_file_url !== '' ? $card_video_file_url : $card_url;
-                                $card_poster_url = $get_image_url($card_image_id, 'full');
-                                ?>
-                                <?php if ($card_href !== '') : ?>
-                                    <a class="blog-t2-video-card" href="<?php echo esc_url($card_href); ?>" data-descubre-video-card data-video-url="<?php echo esc_url($card_href); ?>" data-video-mime="<?php echo esc_attr($card_video_mime); ?>" data-video-title="<?php echo esc_attr($card_title); ?>" data-video-poster="<?php echo esc_url($card_poster_url); ?>"<?php echo $get_link_attrs($card_href); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-                                        <span class="blog-t2-video-card__media">
-                                            <?php if ($card_image_id > 0) : ?>
-                                                <?php echo wp_get_attachment_image($card_image_id, 'noticia-card', false, ['loading' => 'lazy']); ?>
-                                            <?php else : ?>
-                                                <span class="blog-t2-video-card__placeholder"></span>
-                                            <?php endif; ?>
-                                            <?php if ($card_duration !== '') : ?>
-                                                <span class="blog-t2-video-card__duration"><?php echo esc_html($card_duration); ?></span>
-                                            <?php endif; ?>
-                                            <span class="blog-t2-video-card__play" aria-hidden="true"></span>
-                                        </span>
-                                        <span class="blog-t2-video-card__content">
-                                            <strong><?php echo esc_html($card_title); ?></strong>
-                                            <span class="blog-t2-video-card__menu" aria-hidden="true"></span>
-                                        </span>
-                                        <?php if ($card_meta !== '') : ?>
-                                            <small><?php echo esc_html($card_meta); ?></small>
+                                        $card_title = isset($video_card['title']) ? trim((string) $video_card['title']) : '';
+                                        if ($card_title === '') {
+                                            $card_title = $fallback_video_titles[$video_index] ?? 'Video Venza';
+                                        }
+                                        $card_meta = isset($video_card['meta']) ? trim((string) $video_card['meta']) : '';
+                                        $card_duration = isset($video_card['duration']) ? trim((string) $video_card['duration']) : '';
+                                        $card_video_file_id = isset($video_card['file_id']) ? (int) $video_card['file_id'] : 0;
+                                        $card_video_file_url = $get_file_url($card_video_file_id);
+                                        $card_video_mime = $card_video_file_url !== '' ? $get_video_type($card_video_file_id, $card_video_file_url) : '';
+                                        $card_url = isset($video_card['url']) ? trim((string) $video_card['url']) : '';
+                                        $card_href = $card_video_file_url !== '' ? $card_video_file_url : $card_url;
+
+                                        $card_poster_url = $get_image_url($card_image_id, 'full');
+                                        if (empty($card_poster_url) && $card_href !== '') {
+                                            $card_poster_url = $get_youtube_thumbnail($card_href);
+                                        }
+                                        if (empty($card_poster_url)) {
+                                            $card_poster_url = $get_image_url($video_poster_id, 'full');
+                                        }
+                                        ?>
+                                        <?php if ($card_href !== ''): ?>
+                                            <a class="blog-t2-video-card" href="<?php echo esc_url($card_href); ?>"
+                                                data-descubre-video-card data-video-url="<?php echo esc_url($card_href); ?>"
+                                                data-video-mime="<?php echo esc_attr($card_video_mime); ?>"
+                                                data-video-title="<?php echo esc_attr($card_title); ?>"
+                                                data-video-poster="<?php echo esc_url($card_poster_url); ?>" <?php echo $get_link_attrs($card_href); ?>>
+                                                <span class="blog-t2-video-card__media">
+                                                    <?php if ($card_image_id > 0): ?>
+                                                        <?php echo wp_get_attachment_image($card_image_id, 'noticia-card', false, ['loading' => 'lazy']); ?>
+                                                    <?php elseif ($card_poster_url !== ''): ?>
+                                                        <img src="<?php echo esc_url($card_poster_url); ?>"
+                                                            alt="<?php echo esc_attr($card_title); ?>" loading="lazy"
+                                                            class="attachment-noticia-card size-noticia-card">
+                                                    <?php else: ?>
+                                                        <span class="blog-t2-video-card__placeholder"></span>
+                                                    <?php endif; ?>
+                                                    <?php if ($card_duration !== ''): ?>
+                                                        <span
+                                                            class="blog-t2-video-card__duration"><?php echo esc_html($card_duration); ?></span>
+                                                    <?php endif; ?>
+                                                    <span class="blog-t2-video-card__play" aria-hidden="true"></span>
+                                                </span>
+                                                <span class="blog-t2-video-card__content">
+                                                    <strong><?php echo esc_html($card_title); ?></strong>
+                                                    <span class="blog-t2-video-card__menu" aria-hidden="true"></span>
+                                                </span>
+                                                <?php if ($card_meta !== ''): ?>
+                                                    <small><?php echo esc_html($card_meta); ?></small>
+                                                <?php endif; ?>
+                                            </a>
+                                        <?php else: ?>
+                                            <article class="blog-t2-video-card">
+                                                <span class="blog-t2-video-card__media">
+                                                    <?php if ($card_image_id > 0): ?>
+                                                        <?php echo wp_get_attachment_image($card_image_id, 'noticia-card', false, ['loading' => 'lazy']); ?>
+                                                    <?php elseif ($card_poster_url !== ''): ?>
+                                                        <img src="<?php echo esc_url($card_poster_url); ?>"
+                                                            alt="<?php echo esc_attr($card_title); ?>" loading="lazy"
+                                                            class="attachment-noticia-card size-noticia-card">
+                                                    <?php else: ?>
+                                                        <span class="blog-t2-video-card__placeholder"></span>
+                                                    <?php endif; ?>
+                                                </span>
+                                                <span class="blog-t2-video-card__content">
+                                                    <strong><?php echo esc_html($card_title); ?></strong>
+                                                    <span class="blog-t2-video-card__menu" aria-hidden="true"></span>
+                                                </span>
+                                                <?php if ($card_meta !== ''): ?>
+                                                    <small><?php echo esc_html($card_meta); ?></small>
+                                                <?php endif; ?>
+                                            </article>
                                         <?php endif; ?>
-                                    </a>
-                                <?php else : ?>
-                                    <article class="blog-t2-video-card">
-                                        <span class="blog-t2-video-card__media">
-                                            <?php if ($card_image_id > 0) : ?>
-                                                <?php echo wp_get_attachment_image($card_image_id, 'noticia-card', false, ['loading' => 'lazy']); ?>
-                                            <?php else : ?>
-                                                <span class="blog-t2-video-card__placeholder"></span>
-                                            <?php endif; ?>
-                                        </span>
-                                        <span class="blog-t2-video-card__content">
-                                            <strong><?php echo esc_html($card_title); ?></strong>
-                                            <span class="blog-t2-video-card__menu" aria-hidden="true"></span>
-                                        </span>
-                                        <?php if ($card_meta !== '') : ?>
-                                            <small><?php echo esc_html($card_meta); ?></small>
-                                        <?php endif; ?>
-                                    </article>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
+                            <button class="blog-t2-video-strip__arrow blog-t2-video-strip__arrow--next" type="button"
+                                aria-label="Siguiente"></button>
                         </div>
-                        <button class="blog-t2-video-strip__arrow blog-t2-video-strip__arrow--next" type="button" aria-label="Siguiente"></button>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            <?php if ($quiz_cta_enabled) : ?>
-                <a class="descubre-floating-quiz" href="<?php echo esc_url($quiz_cta_url); ?>"<?php echo $get_link_attrs($quiz_cta_url); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> aria-label="<?php echo esc_attr($quiz_cta_text); ?>">
-                    <span class="descubre-floating-quiz__text"><?php echo esc_html($quiz_cta_text); ?></span>
-                    <span class="descubre-floating-quiz__media" aria-hidden="true">
-                        <?php if ($quiz_cta_image_id > 0) : ?>
-                            <?php echo wp_get_attachment_image($quiz_cta_image_id, 'producto-thumb', false, ['loading' => 'lazy']); ?>
-                        <?php else : ?>
-                            <img src="<?php echo esc_url($quiz_cta_fallback_image); ?>" alt="" loading="lazy">
-                        <?php endif; ?>
-                    </span>
-                </a>
-            <?php endif; ?>
-        </article>
-    <?php endwhile; endif; ?>
+                <?php if ($quiz_cta_enabled): ?>
+                    <a class="descubre-floating-quiz" href="<?php echo esc_url($quiz_cta_url); ?>" <?php echo $get_link_attrs($quiz_cta_url); ?> aria-label="<?php echo esc_attr($quiz_cta_text); ?>">
+                        <span class="descubre-floating-quiz__text"><?php echo esc_html($quiz_cta_text); ?></span>
+                        <span class="descubre-floating-quiz__media" aria-hidden="true">
+                            <?php if ($quiz_cta_image_id > 0): ?>
+                                <?php echo wp_get_attachment_image($quiz_cta_image_id, 'producto-thumb', false, ['loading' => 'lazy']); ?>
+                            <?php else: ?>
+                                <img src="<?php echo esc_url($quiz_cta_fallback_image); ?>" alt="" loading="lazy">
+                            <?php endif; ?>
+                        </span>
+                    </a>
+                <?php endif; ?>
+            </article>
+        <?php endwhile; endif; ?>
 </main>
 <?php get_footer(); ?>
